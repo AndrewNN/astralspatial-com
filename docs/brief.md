@@ -96,5 +96,17 @@ This is the single largest gap on the site.
 
 ## Open questions
 
-Six, going to Andrew now: primary buyer, service emphasis, which proof to
-lead with, tone, the primary call to action, and what must not change.
+Six, sent to Andrew 2026-11-23, unanswered as of this revision. Verbatim:
+
+1. **Audience.** If the site could only win one kind of client next year,
+   which? Immersive venues, galleries and public art, labels and artists, or
+   smaller commercial spaces?
+2. **Services.** Does the site lead with systems and installation, or with
+   spatial design and creative work?
+3. **Proof.** Name two or three projects you'd put on the homepage. Do you
+   have photos or audio from any of them?
+4. **Tone.** Keep the stark black-and-white, or warm it up?
+5. **Call to action.** What's the one thing you want a visitor to do — email,
+   fill out a project form, book a call, something else? And what happens
+   after they do?
+6. **Must-keep.** Anything on the current site that must not change?
