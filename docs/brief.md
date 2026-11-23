@@ -1,112 +1,121 @@
 # Astral Spatial — positioning brief
 
-Status: draft for approval. Drawn from the current site only.
+Status: revised with Andrew's answers, 2026-11-23. For approval.
 
 ## What the business is
 
-A New York City team that designs, builds, and tunes spatial audio systems —
-and creates the work that plays through them. The current site leads with
-installation and design, and positions the team as consultative rather than
-transactional: "we work with our clients to guide them towards the best
-systems to meet their needs."
+A New York studio that designs spatial audio as creative work, and builds the
+systems that carry it. Two halves, deliberately unequal on the site:
 
-Two halves, both real:
-
+- **Creative.** Spatialized sound design, interactive programming, adapting
+  existing works into spatial formats. This leads.
 - **Systems.** Speaker installation, engineering and room tuning, system
   architecture, control systems. Ambisonics, wave field synthesis, Dolby
-  Atmos, ambisonic decoding.
-- **Creative.** Spatialized sound design, interactive programming, adapting
-  existing works into spatial formats.
+  Atmos, ambisonic decoding. This supports.
 
-The systems half is what a client buys. The creative half is what makes the
-team credible at the systems half, and it is the harder thing to find
-elsewhere.
+The systems work is technical but not magical. The creative work is the
+magic, and it is the harder thing to find anywhere else. The site leads with
+the magic and lets the technical credibility sit underneath it.
 
 ## Who it is for
 
-The current site does not say. Inferred from the client list, there are four
-distinct buyers:
+The site is pitched at one buyer and positioned so the rest arrive on their
+own.
 
-| Buyer | Examples on the list | What they need |
-|---|---|---|
-| Immersive venues and experiences | Meow Wolf, MoFE, Life is Beautiful | Permanent large-array systems, control, programming |
-| Galleries, museums, public art | Richard Mosse, BRIC, Green-Wood, Public Art Fund | Multi-channel installs on an exhibition schedule |
-| Labels and artists | Sony, Domino, Mexican Summer, Polyvinyl, Ben Frost, Kaki King | Atmos mixing and spatial adaptation of existing works |
-| Retail, theater, performance spaces | unnamed on the site | Smaller 4–32 speaker systems |
+**Primary: galleries, museums, and public art.** High-end art world. The
+ambition for the coming year is one large gallery or public art commission.
+Everything about the site should read as though it belongs in that world.
 
-These want different things and would not read the same homepage with equal
-interest. Picking a primary buyer is the main open decision.
+**Secondary, arriving from that position:** immersive venues and experiences,
+artists and labels, commercial and retail spaces, and individuals.
+
+These are not separate audiences to be served with separate pitches. The art
+world framing is the filter. If the site reads right to a curator, the
+immersive venue and the label will read it as a step up rather than a step
+sideways.
 
 ## Proof
 
-The strongest asset, and currently the most underused.
+The agency is new. A long list of completed projects does not exist and will
+not exist this year, and the site should not strain to imply otherwise.
 
-- Client list of 12 names with real recognition value.
-- Three deep bios: a 32–148 speaker array specialist and Max Certified
+What is real:
+
+- **Reforesters Laboratory, Brooklyn.** Systems design. Complete. The only
+  finished project, and therefore the one that carries the weight.
+- Further projects in development, unnamed until they can be shown.
+- **The individual CVs.** This is the strongest proof the business has. All
+  three have done significant work elsewhere, and the current site's bios
+  carry the specifics: a 32–148 speaker array specialist and Max Certified
   Trainer who presented to the AES on wave field synthesis; a Dolby Atmos mix
   engineer and former MoFE audio director with commercial label credits; a
   touring production manager and live engineer with Philip Glass Ensemble and
   *32 Sounds* credits.
+- The existing client list, which belongs to the people rather than the
+  agency and should be framed accordingly.
 
-What is missing is any evidence of the work itself. No project pages, no
-photographs of a finished install, no room counts, no before and after. For a
-business whose product is a physical space you stand inside, the site shows
-nothing of any space.
+The bio text is kept. The headshots are kept.
 
-## Tone
+## Tone and design direction
 
-Austere and institutional. White on black, all-caps headers, letter-spaced
-titles, no imagery except three circular portraits. It reads serious and
-unadorned, closer to a studio or an architecture practice than a
-systems-integration vendor. That instinct is right and worth keeping.
+Minimalist, high-end, art world. Thin line as the organising device. Some
+motion, some interactivity, some mystery, some playfulness. Restraint over
+decoration.
 
-The writing is denser than it needs to be. The intro spends two paragraphs
-before saying anything specific, and the bios run long for a homepage.
+Four references, and what each one contributes:
+
+| Reference | Take this | Leave this |
+|---|---|---|
+| **other-people.net** | The overall favourite. Light ground, hairline diagrams used as navigation, catalogue numbering as structure, condensed grotesque type, nothing explained before it is encountered | Near-total absence of motion |
+| **ashley.systems** | Use of line, literally — glowing tubes as the only image, hairline frames, grain, darkness, a technical register that stays mysterious | Its current unfinished state |
+| **publicrecords.nyc** | Typography. Full-bleed layout. Images passing under text. Panels sliding out from the right edge | Mouse-tracked parallax on the images. Dizzying. Too much interactivity |
+| **blankforms.org** | Gallery register, editorial calm, parenthetical category labels, confident use of a serif | Static to the point of inert |
+
+The common thread across all four is thin line, generous space, small type,
+and no resemblance whatsoever to a startup landing page.
+
+The current site's white-on-black austerity was the right instinct but the
+execution is finished. Ground colour is open: three of the four references
+are light, one is dark.
+
+Installation photography warms the site later, once it exists. The design
+must work before it arrives and improve when it does.
 
 ## Call to action
 
-Effectively absent. The only route to contact is `info [at] astralspatial.com`
-as plain text in the middle of the intro paragraph — not a link, not a button,
-not repeated anywhere, and obfuscated against scrapers at the cost of being
-unclickable on a phone. There is no form, no phone number, no booking link,
-and nothing that says what happens after someone reaches out.
+Email. One address, clickable, repeated.
 
-This is the single largest gap on the site.
+Not a booking link and not a calendar. Work gets vetted and scoped before a
+call happens, and handing a stranger a calendar slot inverts that.
+
+The address must survive bots. The site has drawn automated contact before,
+and `info [at] astralspatial.com` as unlinked plain text is the wrong fix: it
+defeats scrapers by also defeating every person on a phone. The replacement
+has to be clickable for a human and uninteresting to a scraper.
 
 ## Must-keep
 
-- The client list.
-- The three bios, in some form. The specific credits are the proof.
-- The black-and-white austerity.
-- `info@astralspatial.com` as the contact route, unless a form replaces it.
+- The bio text, in substance.
+- The three headshots.
+- `info@astralspatial.com` as the contact route.
 
-## Gaps and fixes
+Everything else in the current design is replaceable.
 
-| Item | Note |
+## Corrections carried forward
+
+| Item | Action |
 |---|---|
-| Cam Finley / fabrication | Not on the site at all, though fabrication is part of the offering |
-| No case studies | Highest-value addition. Even three projects with photographs |
-| No real CTA | Needs a clickable, repeated, specific ask |
-| No engagement model | Nothing on how a project starts, scopes, or is priced |
-| "Alanis Morisette" | Misspelled on the live site. Correct is Morissette |
-| `chloe.jpg` 245KB | Unoptimized, six times the other two portraits |
-| No favicon, no social preview | No `og:` or `twitter:` tags, so shared links render bare |
-| Single page, no nav | Fine today; a case-study section will outgrow it |
-| nginx config is port 80 only | The repo's conf has no 443 block. Verify TLS on the server |
+| "Alanis Morisette" | Misspelled live. Correct is Morissette |
+| `chloe.jpg` at 239KB | Six times the other portraits. Recompress |
+| No favicon | Add |
+| No `og:` or `twitter:` tags | Add. Shared links currently render bare |
+| Contact unclickable | Replace per the call to action above |
+| `nginx-astralspatial.conf` port 80 only | Correct as written. TLS terminates at Cloudflare |
 
 ## Open questions
 
-Six, sent to Andrew 2026-11-23, unanswered as of this revision. Verbatim:
-
-1. **Audience.** If the site could only win one kind of client next year,
-   which? Immersive venues, galleries and public art, labels and artists, or
-   smaller commercial spaces?
-2. **Services.** Does the site lead with systems and installation, or with
-   spatial design and creative work?
-3. **Proof.** Name two or three projects you'd put on the homepage. Do you
-   have photos or audio from any of them?
-4. **Tone.** Keep the stark black-and-white, or warm it up?
-5. **Call to action.** What's the one thing you want a visitor to do — email,
-   fill out a project form, book a call, something else? And what happens
-   after they do?
-6. **Must-keep.** Anything on the current site that must not change?
+1. **Cam Finley.** Fabrication is part of the offering and he appears nowhere
+   on the site. Does he go on it, and as a fourth name or as a capability
+   without a bio?
+2. **Reforesters Laboratory.** The client list spells it "Reforesters
+   Laboratory". Confirm before it becomes the flagship credit.
