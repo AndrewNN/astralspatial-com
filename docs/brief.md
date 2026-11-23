@@ -9,13 +9,21 @@ systems that carry it. Two halves, deliberately unequal on the site:
 
 - **Creative.** Spatialized sound design, interactive programming, adapting
   existing works into spatial formats. This leads.
-- **Systems.** Speaker installation, engineering and room tuning, system
-  architecture, control systems. Ambisonics, wave field synthesis, Dolby
-  Atmos, ambisonic decoding. This supports.
+- **Systems.** Control logic, room tuning, system architecture, and the
+  workflows that make a room usable by someone who did not build it. Q-SYS
+  programming, ambisonic templating, Dante routing, speaker installation.
+  Ambisonics, wave field synthesis, Dolby Atmos, ambisonic decoding. This
+  supports.
 
 The systems work is technical but not magical. The creative work is the
 magic, and it is the harder thing to find anywhere else. The site leads with
 the magic and lets the technical credibility sit underneath it.
+
+One qualification on the split, from the Reforesters scope: the systems half
+is less about hanging speakers than about the logic and the artist-facing
+workflow running on top of hardware that may already exist. A room someone
+else built, made usable, is a real and sellable service. The current site's
+services list leads with "Speaker Installation", which undersells it.
 
 ## Who it is for
 
@@ -41,10 +49,22 @@ not exist this year, and the site should not strain to imply otherwise.
 
 What is real:
 
-- **Reforesters Laboratory, Williamsburg.** Systems design. Complete. The only
-  finished project, and therefore the one that carries the weight. Spelling
-  confirmed against `reforesters.io`. The space is a listening room and
-  adaptogen cafe, and its own site describes a 24.2-channel system.
+- **Reforesters Laboratory, Williamsburg.** Complete, and the only finished
+  project, so it carries the weight. Spelling confirmed against
+  `reforesters.io`. A listening room and adaptogen cafe; its own site
+  describes the room as 24.2 channel.
+
+  The scope was software, not hardware. Astral Spatial did not design the
+  physical system. It built the control logic and tuned the room: Q-SYS
+  programming, ambisonic templating, and the signal path that takes a visiting
+  artist from a laptop into an Allen & Heath SQ-5, over Dante, through the
+  amplifiers.
+
+  The deliverable was a workflow. An artist arrives with their own work and
+  can play it in ambisonics without an engineer rebuilding the room for them.
+  That is the thing worth saying, and it is the half of the business that is
+  hardest to buy anywhere else.
+
 - Further projects in development, unnamed until they can be shown.
 - **The individual CVs.** This is the strongest proof the business has. All
   three have done significant work elsewhere, and the current site's bios
