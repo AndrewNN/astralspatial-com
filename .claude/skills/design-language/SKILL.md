@@ -5,17 +5,42 @@ description: This site's design system — colors, type, spacing, breakpoints. U
 
 # Astral Spatial — design language
 
-Dark ground, hairline rules, condensed grotesque in caps for structure, a
+One ground, hairline rules, condensed grotesque in caps for structure, a
 serif for everything a person actually reads. Catalogue numbering carries
 hierarchy instead of boxes, cards, or shadows. Nothing is rounded, nothing is
 shaded, nothing has a gradient.
+
+The ground comes in two themes, `ground-dark` and `ground-light`. They share
+every token name, every type size, every spacing value, every grid column,
+and every motion rule. Only the eight palette values and the photography
+treatment differ.
 
 Every value below is a literal. If a rendered page shows a number that is not
 on one of these scales, it is wrong.
 
 ## Palette
 
-Single dark theme. No light mode, no `prefers-color-scheme` branch. Set
+Two themes, `ground-dark` and `ground-light`. Both are complete sets of the
+same eight tokens, with the same roles and the same assignments in the type
+scale. A build ships exactly one of them: swap the `:root` block and no other
+rule in the stylesheet changes.
+
+There is no `prefers-color-scheme` branch, no theme class, no toggle, and no
+JavaScript. A page is one theme from load to unload.
+
+Common to both themes:
+
+- There is no chromatic accent. Emphasis is contrast, never hue. A coloured
+  button, a tinted panel, or a highlight colour is a defect.
+- Opacity is not a colour. Do not express a lighter or darker grey as
+  `color: var(--fg-primary); opacity: .5`. Use the token.
+- `--line` and `--line-strong` carry no information that is not also carried
+  by position or text, so neither is held to a text contrast threshold.
+- A visible focus ring is 1px `--fg-primary` at 2px offset, in both themes.
+  `--line-strong` is the hover state, not the focus ring.
+
+### `ground-dark`
+
 `color-scheme: dark` on `:root`.
 
 | Token | Hex | Role |
@@ -26,19 +51,91 @@ Single dark theme. No light mode, no `prefers-color-scheme` branch. Set
 | `--fg-body` | `#D6D6D6` | Running serif body copy and lead paragraphs |
 | `--fg-muted` | `#8A8A8A` | Labels, section numbers, captions, plate text, technical term lists, footer status bar |
 | `--line` | `#2E2E2E` | All hairlines at rest: section rules, record separators, image plate borders, grid ticks |
-| `--line-strong` | `#4A4A4A` | Hairline hover and focus state only |
-| `--glow` | `rgba(255,255,255,0.14)` | The only non-flat value in the system. Used once per page at most, as a 40px blur behind a white hairline in the array plot |
+| `--line-strong` | `#4A4A4A` | Hairline hover state only |
+| `--glow` | `rgba(255,255,255,0.14)` | The only non-flat value in the theme. Used once per page at most, as a 40px blur behind a white hairline in the array plot |
 
-Contrast against `#000000`: `--fg-primary` 21:1, `--fg-body` 14.1:1,
-`--fg-muted` 6.0:1. All pass WCAG AA for normal text. `--line` and
-`--line-strong` are decoration only and carry no information that is not also
-carried by position or text.
+Measured against `--ground` `#000000`:
 
-There is no chromatic accent. Emphasis is brightness, never hue. A coloured
-button, a tinted panel, or a highlight colour is a defect in this system.
+| Token | Ratio | Smallest size used | AA threshold | Verdict |
+|---|---|---|---|---|
+| `--fg-primary` | 21.0:1 | 16px (`wordmark`, mobile) | 4.5:1 | pass, AAA |
+| `--fg-body` | 14.1:1 | 16px (`body`, mobile) | 4.5:1 | pass, AAA |
+| `--fg-muted` | 6.0:1 | 11px (`label`, `index`, mobile) | 4.5:1 | pass AA |
+| `--band` | 1.07:1 | non-text | — | decoration |
+| `--line` | 1.55:1 | non-text | — | decoration |
+| `--line-strong` | 2.37:1 | non-text | — | decoration |
 
-Opacity is not a colour. Do not express a lighter grey as
-`color: #FFF; opacity: .5`. Use the token.
+### `ground-light`
+
+`color-scheme: light` on `:root`.
+
+| Token | Hex | Role |
+|---|---|---|
+| `--ground` | `#EDEBE6` | Page background. Every page, every section |
+| `--band` | `#E5E2DC` | Alternating section band, and the mat inside an installation image plate |
+| `--fg-primary` | `#141210` | Headings, wordmark, links, the email address, numerals in index positions |
+| `--fg-body` | `#2B2825` | Running serif body copy and lead paragraphs |
+| `--fg-muted` | `#5E5A53` | Labels, section numbers, captions, plate text, technical term lists, footer status bar |
+| `--line` | `#B0AAA0` | All hairlines at rest: section rules, record separators, grid ticks |
+| `--line-strong` | `#8C857A` | Hairline hover state, and the frame of an installation image plate |
+| `--glow` | `transparent` | The theme carries no glow. The token exists so the two `:root` blocks are interchangeable. Nothing renders it |
+
+Measured against `--ground` `#EDEBE6`:
+
+| Token | Ratio | Smallest size used | AA threshold | Verdict |
+|---|---|---|---|---|
+| `--fg-primary` | 15.7:1 | 16px (`wordmark`, mobile) | 4.5:1 | pass, AAA |
+| `--fg-body` | 12.3:1 | 16px (`body`, mobile) | 4.5:1 | pass, AAA |
+| `--fg-muted` | 5.75:1 | 11px (`label`, `index`, mobile) | 4.5:1 | pass AA |
+| `--band` | 1.09:1 | non-text | — | decoration |
+| `--line` | 1.94:1 | non-text | — | decoration |
+| `--line-strong` | 3.07:1 | non-text | — | decoration |
+
+`--fg-muted` is darker than its dark-theme counterpart is light, on purpose.
+A grey that reads as quiet on black is not the same grey that reads as quiet
+on paper: `#8A8A8A` inverted to `#757575` would land at 3.9:1 here and fail
+at 11px. `#5E5A53` holds the same subordinate rank at 5.75:1.
+
+Hairlines are heavier here for the same reason. A 1px rule on a light field
+needs more tonal distance from its ground than on a dark one, so `--line`
+sits at 1.94:1 rather than 1.55:1 and still reads as a hairline, not a
+border. `--line-strong` at 3.07:1 is the only token that changes role
+between themes: on light it also frames installation image plates, because a
+`--line` frame abutting a dark photograph disappears into it.
+
+Every neutral is drawn from the ground's own hue family, warm and nearly
+desaturated. That is not an accent. A neutral ramp mixed cold against a warm
+ground reads as dirt.
+
+#### Why not `#FFFFFF`
+
+`#EDEBE6` is a warm grey at roughly 92% lightness. Pure white is wrong for
+three reasons, in order of weight.
+
+1. It is the screen maximum, so there is nothing above it. The ground becomes
+   the brightest thing on the page and the type recedes from it. An off-white
+   ground leaves headroom, which is where the brightest zone of a photograph
+   goes.
+2. It reads as a default. White ground, black text, no frame is what an
+   unstyled document looks like. A paper value reads as a chosen stock, which
+   is the register the brief asks for.
+3. On a pure white ground a hairline has to run toward `#B8B8B8` or darker to
+   be seen, and the whole ramp goes chalky and cold. Starting at 92% gives
+   `--line` and `--line-strong` room to separate from each other and from the
+   ground without either going grey-blue.
+
+### Which theme the references support
+
+| Reference | Supports |
+|---|---|
+| **other-people.net** | `ground-light`. The overall favourite. Warm light grey, not white, which is where `#EDEBE6` comes from |
+| **blankforms.org** | `ground-light`. Light ground, serif, gallery register |
+| **publicrecords.nyc** | `ground-dark`. Dark, full bleed, images passing under type |
+| **ashley.systems** | `ground-dark`. Darkness, grain, and the only source of `--glow` in the system |
+
+Two references each. The tie-breakers are that the favourite is light, and
+that `--glow` is the single element the dark theme has and the light theme
+cannot reproduce.
 
 ## Type
 
@@ -218,14 +315,75 @@ is drawn complete. No content depends on an animation to become visible.
 
 ## Lines and surfaces
 
-- Hairlines are exactly 1px, `--line`, square ends, never 2px, never dashed
-  except in the array plot's measurement ticks.
+- Hairlines are exactly 1px, square ends, never 2px, never dashed except in
+  the array plot's measurement ticks.
 - `border-radius` is `0` everywhere. There are no pills, no rounded cards, no
   circular portraits.
-- `box-shadow` is not used. The only blur in the system is `--glow`.
-- Images sit flush to the grid with no border except the image plate's 1px
-  `--line` frame, and no overlay except the caption bar described in the spec.
-- Portraits are 4:5 rectangles, baked greyscale, flush left to their column.
+- `box-shadow` is not used, in either theme. `ground-dark` has one blur,
+  `--glow`. `ground-light` has none.
+- No overlay on any image except the caption bar described in the spec.
+
+### The array plot
+
+`ground-dark` draws the emphasised ray in `--fg-primary` with a 40px `--glow`
+blur behind it, once per page.
+
+`ground-light` draws no glow. A dark blur behind a hairline on paper is a
+smudge, and a light blur is invisible. The emphasis is carried two other ways
+instead, both measurable in a screenshot:
+
+1. The emphasised ray is `--fg-primary` at 15.7:1 while every neighbouring
+   ray is `--line` at 1.94:1. That is a wider separation than the dark
+   theme's glow produces between its own ray and its neighbours.
+2. The measurement ticks along the emphasised ray double in density: 16px
+   spacing against 32px on the rest of the plot. Tick length, 8px, is
+   unchanged.
+
+The draw animation, `--dur-draw` with `--ease-io`, once on load, is identical
+in both themes.
+
+## Photography
+
+Portraits, both themes: 4:5 rectangles, baked greyscale, flush left to their
+column, no frame, no mat.
+
+### `ground-dark`
+
+Portraits are baked greyscale across the full range, black point to white
+point. Installation photography is full-bleed or plate-framed per the spec,
+with a 1px `--line` frame on plates. Dim-room photography sits naturally: the
+dark end of the image meets a dark ground and the frame reads against the
+image.
+
+### `ground-light`
+
+Two changes, because a dim-room photograph on paper is a dark rectangle and
+untreated it reads as a hole.
+
+**Treatment.** Greyscale, but the tonal range is mapped into the palette
+rather than to the device: the image's blackest pixel is `#141210`
+(`--fg-primary`) and its whitest is `#EDEBE6` (`--ground`). Nothing in a
+photograph is darker than the type or lighter than the page. This is baked
+into the asset, not a CSS filter, and it is checkable with an eyedropper on
+any screenshot: sample the four corners and the darkest visible area, and
+nothing should fall outside that pair.
+
+**Matting.** Installation photographs sit inside an image plate: a mat of
+`--band` at `--s-3` (24px) on all four sides at ≥768px, `--s-2` (16px) at
+≤767px, with the photograph flush inside it. The mat separates the dark image
+from the page the way a window mount separates a print from a wall. Portraits
+get no mat; their mapped white point already dissolves the top edge of the
+rectangle into the ground.
+
+**The plate hairline.** It moves outward and darkens. On dark the 1px frame is
+`--line` directly against the photograph. On light it is 1px `--line-strong`
+on the outer edge of the mat, against `--ground`, never against the
+photograph. A `--line` frame at 1.94:1 laid against a dark image edge is
+swallowed by the image; `--line-strong` at 3.07:1 against the ground reads as
+a frame. Everywhere else on the page, hairlines stay `--line`.
+
+**Full-bleed image bands** carry no frame and no mat in either theme. The
+viewport edge does the framing. The light theme's tonal mapping still applies.
 
 ## Voice
 
