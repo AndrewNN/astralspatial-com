@@ -1,5 +1,6 @@
 ---
 name: copy-editor
+model: sonnet
 description: Tightens site copy to the brief's voice. Use after the builder has copy in place, before the critic scores copy clarity.
 tools: Read, Write, Edit
 skills: [design-language]

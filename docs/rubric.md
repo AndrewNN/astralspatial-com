@@ -1,6 +1,6 @@
 # Rubric
 
-Status: draft for approval.
+Status: approved by Andrew, 2026-11-23.
 
 Every page is scored on all eight criteria, 0-10 each. A page passes when
 every criterion scores 8 or higher and the Lighthouse floor is met. One score

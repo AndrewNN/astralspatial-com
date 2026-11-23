@@ -41,6 +41,18 @@ Hooks in `.claude/hooks/`, wired in `.claude/settings.json`:
 
 Both marker files are git-ignored.
 
+A hook is a shell script and cannot invoke a subagent, so "deploy to staging,
+then run the critic" is not a hook. It is a step the orchestrating session
+runs after each builder change:
+
+1. builder commits the page
+2. deploy to staging — ungated, no approval needed
+3. critic scores the staging URL and appends its verdict
+4. on FAIL, hand its fixes back to the builder and repeat
+
+`mark-stale.sh` is the backstop for that sequence being skipped: if a site
+file changed after the last critique, the production gate refuses the deploy.
+
 Standing role and operating instructions for every session started here:
 
 @~/Developer/ops/astral-ops/plan/designer.md

@@ -1,5 +1,6 @@
 ---
 name: builder
+model: sonnet
 description: Implements docs/spec.md into site code, one page at a time. Use after a spec exists, or after the critic logs open fixes.
 tools: Read, Write, Edit, Bash
 ---
@@ -17,9 +18,15 @@ You implement the spec. You do not redesign it.
 ## What to do
 
 1. Build or fix one page per run.
-2. Serve the site locally and load the page before you call it done:
-   `python3 -m http.server 8080` from the repo root, then check
-   `http://localhost:8080/`. Kill the server when finished.
+2. Serve the site locally and load the page before you call it done. A plain
+   backgrounded server dies with the shell call, so detach it:
+
+   ```
+   nohup python3 -m http.server 8080 >/dev/null 2>&1 </dev/null & disown
+   ```
+
+   Then check `http://127.0.0.1:8080/`. Stop it when finished with
+   `kill $(lsof -tiTCP:8080 -sTCP:LISTEN)`.
 3. Append to `docs/build-log.md`: the date, the page, what changed, and which
    critique-log items you were closing. One short entry, no narrative.
 4. Commit with a message naming the page and the change. One commit per page.

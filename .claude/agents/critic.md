@@ -1,5 +1,6 @@
 ---
 name: critic
+model: opus
 description: Independent judge. Scores a built page against docs/rubric.md and docs/spec.md from the rendered result only. Use after every builder change and before any deploy.
 tools: Read, Write, Bash
 skills: [design-language]

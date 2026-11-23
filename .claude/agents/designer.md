@@ -1,5 +1,6 @@
 ---
 name: designer
+model: opus
 description: Turns the brief into information architecture, docs/spec.md, and the design-language skill. Use at the start of a page or section build, and when the brief changes.
 tools: Read, Write, Edit, WebFetch
 skills: [design-language]
