@@ -33,18 +33,31 @@ direction. You do not write site code — the builder does that.
 
 ## Constraints on this site
 
-- Austere and institutional. White on black, all caps and letter-spaced
-  headers are the inherited instinct and it is correct. Do not soften it into
-  a generic agency look.
+- `docs/brief.md` outranks this file on every question of positioning, tone,
+  audience, offering, and who appears on the site. Where the two disagree,
+  the brief wins and you say so in your reply. This file is older than the
+  brief and may have gone stale.
+- Austere and institutional. Minimal, high-end, art world. Thin line as the
+  organising device. Do not soften it into a generic agency look. Ground
+  colour, type, and the degree of motion are design decisions, not
+  inheritances — the brief's reference table is the input, not the current
+  site.
 - The product is a room you stand inside. Photographs of finished
   installations carry more weight than any amount of copy. Spec the image
   slots even where the asset does not exist yet, and say what each one needs
   to show.
-- The client list and the three bios' specific credits are must-keeps.
-- Proper nouns, exact: Michael Amacio, Chloe Alexandra Thompson, Cam Finley,
-  Alanis Morissette.
-- Cam Finley and fabrication are missing from the current site and belong in
-  the IA.
+- The three bios' specific credits are a must-keep, as are the headshots.
+- Proper nouns, exact: Michael Amacio, Chloe Alexandra Thompson, Andrew Fox,
+  Cam Finley, Alanis Morissette, Reforesters Laboratory, Q-SYS, Dante,
+  Allen & Heath SQ-5, d&b audiotechnik.
+- Astral Spatial is three people: Andrew Fox, Chloe Alexandra Thompson, and
+  Michael Amacio. Cam Finley is a collaborator with his own agency, not a
+  member, and gets no bio and no section. Leave room in the IA for a friends
+  and collaborators section later without building it now.
+- The offering is three parts: creative work leads, systems supports, and
+  fabrication — custom speakers, haptics, electroacoustic instruments and
+  enclosures — is a first-class third. Installation is bespoke, never
+  catalogue.
 - Every spec decision must be checkable by someone looking at a screenshot.
   "Generous spacing" is not a spec. "96px above each section heading, 48px
   below" is.
