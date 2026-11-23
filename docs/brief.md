@@ -41,8 +41,10 @@ not exist this year, and the site should not strain to imply otherwise.
 
 What is real:
 
-- **Reforesters Laboratory, Brooklyn.** Systems design. Complete. The only
-  finished project, and therefore the one that carries the weight.
+- **Reforesters Laboratory, Williamsburg.** Systems design. Complete. The only
+  finished project, and therefore the one that carries the weight. Spelling
+  confirmed against `reforesters.io`. The space is a listening room and
+  adaptogen cafe, and its own site describes a 24.2-channel system.
 - Further projects in development, unnamed until they can be shown.
 - **The individual CVs.** This is the strongest proof the business has. All
   three have done significant work elsewhere, and the current site's bios
@@ -112,10 +114,15 @@ Everything else in the current design is replaceable.
 | Contact unclickable | Replace per the call to action above |
 | `nginx-astralspatial.conf` port 80 only | Correct as written. TLS terminates at Cloudflare |
 
-## Open questions
+## Who is not on the site
 
-1. **Cam Finley.** Fabrication is part of the offering and he appears nowhere
-   on the site. Does he go on it, and as a fourth name or as a capability
-   without a bio?
-2. **Reforesters Laboratory.** The client list spells it "Reforesters
-   Laboratory". Confirm before it becomes the flagship credit.
+Astral Spatial is three people: Andrew Fox, Chloe Alexandra Thompson, and
+Michael Amacio.
+
+Cam Finley is a collaborator, not a member. He runs his own agency and
+Astral Spatial works with him on fabrication. He gets no bio, no section, and
+no billing as part of the team.
+
+A friends and collaborators section is a later addition, once there is more
+than one name to put in it and finished work to attach them to. The
+information architecture should leave room for it without building it now.
