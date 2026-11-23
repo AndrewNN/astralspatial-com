@@ -20,3 +20,8 @@ npm-debug.log*
 *.swp
 *.swo
 *~
+
+# Design-loop state, local only
+docs/.needs-critique
+docs/.production-approved
+docs/screenshots/
