@@ -1,6 +1,6 @@
 # Astral Spatial — positioning brief
 
-Status: revised with Andrew's answers, 2026-11-23. For approval.
+Status: approved by Andrew, 2026-11-23.
 
 ## What the business is
 
@@ -11,19 +11,29 @@ systems that carry it. Two halves, deliberately unequal on the site:
   existing works into spatial formats. This leads.
 - **Systems.** Control logic, room tuning, system architecture, and the
   workflows that make a room usable by someone who did not build it. Q-SYS
-  programming, ambisonic templating, Dante routing, speaker installation.
-  Ambisonics, wave field synthesis, Dolby Atmos, ambisonic decoding. This
-  supports.
+  programming, ambisonic templating, Dante routing. Ambisonics, wave field
+  synthesis, Dolby Atmos, ambisonic decoding. This supports.
+
+- **Fabrication.** Custom speaker installations, built as art rather than
+  specified from a catalogue. Custom speakers, custom haptics, custom
+  acoustic and electroacoustic instruments, and the enclosures for them.
 
 The systems work is technical but not magical. The creative work is the
 magic, and it is the harder thing to find anywhere else. The site leads with
 the magic and lets the technical credibility sit underneath it.
 
-One qualification on the split, from the Reforesters scope: the systems half
-is less about hanging speakers than about the logic and the artist-facing
-workflow running on top of hardware that may already exist. A room someone
-else built, made usable, is a real and sellable service. The current site's
-services list leads with "Speaker Installation", which undersells it.
+Two things follow from this that the current site gets wrong.
+
+The systems half is not primarily about hanging speakers. It is the logic and
+the artist-facing workflow, often running on hardware someone else already
+installed. A room built by others, made usable, is a real and sellable
+service.
+
+And where there is a physical install, it is bespoke. The current site lists
+"Speaker Installation" first, in the same words a dozen AV integrators use,
+which reads as the commodity version of a thing that is not commodity. An
+installation designed as an artwork — enclosures, haptics, instruments built
+for one room — is a different offering and needs different language.
 
 ## Who it is for
 
@@ -58,12 +68,18 @@ What is real:
   physical system. It built the control logic and tuned the room: Q-SYS
   programming, ambisonic templating, and the signal path that takes a visiting
   artist from a laptop into an Allen & Heath SQ-5, over Dante, through the
-  amplifiers.
+  d&b audiotechnik amplifiers.
 
   The deliverable was a workflow. An artist arrives with their own work and
   can play it in ambisonics without an engineer rebuilding the room for them.
   That is the thing worth saying, and it is the half of the business that is
   hardest to buy anywhere else.
+
+- **A custom speaker installation, in progress.** The client cannot be named
+  yet. It is the first project where the physical build is Astral Spatial's
+  own, and it is the proof that the fabrication offering is real rather than
+  aspirational. It gets a placeholder on the site now and a name when it can
+  be published.
 
 - Further projects in development, unnamed until they can be shown.
 - **The individual CVs.** This is the strongest proof the business has. All
