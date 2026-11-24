@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -19,7 +19,7 @@
 <meta name="twitter:title" content="Astral Spatial">
 <meta name="twitter:description" content="Lorem ipsum dolor sit amet consectetur adipiscing elit.">
 <meta name="twitter:image" content="https://astralspatial.com/img/og-01.jpg">
-<meta name="theme-color" content="#EDEBE6">
+<meta name="theme-color" content="#141210">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -656,7 +656,7 @@
 (function(){
 document.documentElement.className+=' js';
 var R=document.documentElement,TK='as-theme';
-try{if(localStorage.getItem(TK)==='dark')R.setAttribute('data-theme','dark');}catch(e){}
+try{if(localStorage.getItem(TK)==='light')R.removeAttribute('data-theme');}catch(e){}
 var tb=document.querySelector('[data-theme-toggle]');
 if(tb){
   var sync=function(){var d=R.getAttribute('data-theme')==='dark';
