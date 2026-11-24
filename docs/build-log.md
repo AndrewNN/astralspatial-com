@@ -160,3 +160,92 @@ not pixel-verified against the spec's stated measurements. `style.css` is
 23.4KB against the spec's stated 16KB per-page budget — total page weight is
 still well inside the 500KB floor and the largest single asset is nowhere
 near 150KB, but the per-file number is over.
+
+## 2026-11-24 — home — critique fixes 1–14, 16–18
+
+Fixed the double page-margin at its root: `.shell-section > .shell` now zeros
+`padding-inline`, since every nested `.shell` sat inside a `.shell-section`
+that already applied it. Standalone `.shell` uses (header, footer, contact
+band) keep their own padding, since they have no `.shell-section` ancestor.
+Re-measured before touching anything else, per the critique's own order.
+
+Closes fix 1. Re-measured content width 1312px at 1440 (was 1216), 334px at
+390 (was 310). `.record-body` now runs 66–68 characters at 1440 (floor 60)
+and 46–48 at 390 (floor 38) on every record, without further changes — fix 1
+alone cleared criterion 2's measure failure.
+
+Fix 2 and 3: `.section-head` no longer adds `padding-top` at ≥1024px, and
+`.section-head .label` no longer zeroes its `margin-top` there, so rule
+bottom → label top is 24px (was 0) and previous content → rule is 128px (was
+152).
+
+Fix 4–7, W/04 credit: moved the credit block out of the image plate and made
+it the first child of `.record-img-col`, above a rule and the technical
+rows — matching how W/01 and W/02 already carry SP-09. Dropped the
+absolute-positioned, negative-offset knockout entirely rather than keeping it
+layered over the image per SP-12's alternative: the simpler flow placement is
+what fix 4 describes outright, and it removes the overflow fix 5 flagged
+(credit bleeding 23–31px below the record) without introducing new
+corner-anchoring math to verify. `text-align: left` added; padding now
+`--s-2`/`--s-3` by breakpoint.
+
+Fix 8: the five section names are `<h2 class="label">` instead of `<span>`.
+Validator's heading-order error is gone (confirmed 0 errors via the W3C
+validator API against the built file).
+
+Fix 9: removed `record-w01-body`'s `border-top: 0` override, restoring the
+default `.record` top rule other than the special `margin-top` needed to
+survive the `.record:first-child { margin-top: 0 }` rule.
+
+Fix 10, record alignment: `W/01`'s index and title no longer share one
+padded box. Split into `.w01-fill` (the opaque ground rectangle, unchanged
+geometry) and `.w01-caption` (a `.shell.grid-12` overlay using the same grid
+classes every other record's index/title sit on). Doing this exposed a
+second bug fix 11 would otherwise have hidden: `.img-band`'s `width` needs
+`calc(100% + var(--margin) * 2)`, not just a negative `margin-inline` — a
+shift without a width increase re-creates the shell's own double-inset
+problem one level down, which is what put `W/01`'s title 16px off from `W/02`
+and `W/04`'s before the width fix. Confirmed by measurement: all three
+titles now render at x=286.66 at 1440 and x=28 at 390.
+
+Fix 11: `.img-band` is full-bleed to the frame's inner edge (see above; the
+margin-inline alone from the critique's suggested line wasn't sufficient on
+its own, width needed the matching increase).
+
+Fix 12: `.contact-email .mail` drops `letter-spacing` to 0 at ≤767px,
+restored to 0.02em at ≥1024px. Measured contact email width 341px against a
+350px content width at 390 (was 354, one pixel past the frame rule).
+
+Fix 13: `.fr-l::after` height 128px → 129px, five ticks now centred on 50vh.
+
+Fix 14: `og:image:alt` no longer describes "on black" — it names the actual
+light ground. The referenced asset exists in the repo and is committed; the
+404 the critique measured was against production, which this run does not
+deploy to.
+
+Fix 16: deleted the restating closing sentence from records `001` and `003`,
+and replaced `003`'s verbatim repeat of the `<h1>` clause ("rather than
+specified from a catalogue") with "not off a shelf."
+
+Fix 17: deleted `W/02`'s prose repeat of its own credit block; the prose now
+states only the system, the year, and what it demonstrates.
+
+Fix 18: added one sentence naming the audience to section 01, sourced
+directly from `docs/brief.md`'s "galleries, museums, and public art first,"
+with no added persuasion.
+
+Skipped fix 15 (`work.html`/`studio.html`) — out of scope for this run per
+the handoff instruction.
+
+Verified via a local Playwright (1.54.0, chromium) script, not the critic
+subagent: no horizontal scroll at 390×844 or 1440×900; `W/01`, `W/02`, `W/04`
+titles share one x at both widths; body copy clears its character floor on
+every record at both widths; HTML validates with 0 errors (1 pre-existing
+info-level warning, a missing heading on the unnumbered contact section, not
+in the fix list); gitleaks clean.
+
+Not fixed, flagged rather than silently dropped: fix 5's "if the layered
+treatment is kept" branch was not taken (see fix 4–7 above) — `W/04`'s credit
+no longer overlaps its image slot per SP-12 L2, it sits above it in normal
+flow. This is a spec deviation the critic should weigh against the
+alternative the critique itself offered.
