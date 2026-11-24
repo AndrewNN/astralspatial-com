@@ -92,3 +92,15 @@ wraps, and IMG-01's empty-plate caption bar overlapped the plate's own
 centered label at ≤767px.
 
 No critique run yet; `docs/critique-log.md` untouched by this entry.
+
+## 2026-11-23 — homepage — caption bar token fix
+
+`.band-caption` carried a hardcoded `rgba(0,0,0,0.72)` scrim, copied unchanged
+into the light build, with `--fg-body` text on it at about 1.3:1. Replaced
+with `--band` background and `--fg-muted` text in both builds: 5.30:1 on
+light, legible on dark. No off-token colour values remain in either
+stylesheet.
+
+Known open, left for the critic: three footer nav links are 22px tall against
+a 44px floor, and the right-edge rail is static because the homepage build
+capped JavaScript at the email rewrite.
