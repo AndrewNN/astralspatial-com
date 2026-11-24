@@ -135,6 +135,13 @@ build.
 - **Layering.** Text passing over and under imagery, as on publicrecords.nyc,
   at mobile width as well as desktop. The layered effect is wanted; the
   mouse-tracked parallax that produced it there is not.
+- **The cursor is the mark.** On pointer devices, replace the default cursor
+  with the mark. Desktop only — there is no cursor on a phone, so the site
+  cannot depend on it for anything.
+- **Sound objects moving through the field.** The array plot is a
+  three-dimensional field and the mark is its axes. Motion means objects
+  travelling through that field: points moving along paths, not elements
+  sliding in. This is where the site's motion budget is spent.
 
 Installation photography warms the site later, once it exists. The design
 must work before it arrives and improve when it does.
