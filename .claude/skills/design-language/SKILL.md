@@ -138,9 +138,10 @@ three reasons, in order of weight.
 | **publicrecords.nyc** | `ground-dark`. Dark, full bleed, images passing under type |
 | **ashley.systems** | `ground-dark`. Darkness, grain, and the only source of `--glow` in the system |
 
-Two references each. The tie-breakers are that the favourite is light, and
-that `--glow` is the single element the dark theme has and the light theme
-cannot reproduce.
+Two references each, so the references did not settle it. Both grounds were
+built and reviewed on staging on 2026-11-23 and `ground-light` was chosen: it
+reads better, it holds more space, and the dark build felt cramped. `#EDEBE6`
+is the shipping ground.
 
 ## Type
 
@@ -340,8 +341,12 @@ Rules:
    children. An entrance plays once; nothing re-animates on scroll-back.
 4. The array-plot draw is `--dur-draw`, `--ease-io`, once, on load.
 5. Nothing moves more than 16px. No parallax. No mouse-tracked transforms. No
-   scroll-driven scaling or rotation.
-6. No element is invisible without JavaScript. Entrance animations start at
+   scroll-driven scaling or rotation. Layered compositions are static: the
+   overlap is in the layout, never in a transform that follows the pointer.
+6. The frame and the mark never animate. They are at their final state on
+   first paint. The only exception is the mark on a link row inheriting that
+   row's 120ms `color` transition.
+7. No element is invisible without JavaScript. Entrance animations start at
    `opacity: 0` only inside a `@media (scripting: enabled)` guard or as a CSS
    `animation` that ends at the resting state — never as a class a script must
    add.
@@ -563,8 +568,10 @@ them.
   "solutions", "we pride ourselves". No exclamation marks. No em dashes in
   body copy.
 - Short declaratives. Where a sentence runs past 28 words, split it.
-- Claim only what is finished. The agency is new; the CVs are long. Attribute
-  credits to the people who earned them rather than to the company.
+- The credit line is typographic furniture, not a disclaimer. It sits in the
+  same register as the technical metadata beside it, at the same size and
+  colour, never smaller, never after the prose as a footnote. Its wording is
+  the team's.
 - The technical register is allowed to be opaque. Q-SYS, ambisonic templating,
   wave field synthesis, Dante are kept, unexplained, as evidence rather than
   education. Mystery is permitted. Vagueness is not.
@@ -577,7 +584,7 @@ them.
 ### Proper nouns, exact
 
 Michael Amacio · Chloe Alexandra Thompson · Andrew Fox · Cam Finley ·
-Alanis Morissette · Reforesters Laboratory · Q-SYS · MaxMSP · Dante ·
+Alanis Morissette · Reforesters Laboratory · Jupiter Sound · Q-SYS · MaxMSP · Dante ·
 Allen & Heath SQ-5 · d&b audiotechnik · Dolby Atmos · Meow Wolf · MoFE ·
 Richard Mosse · Philip Glass Ensemble · *32 Sounds* · Mexican Summer ·
 Polyvinyl · Domino Records · Sony Music · Life is Beautiful · Ben Frost ·
