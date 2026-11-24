@@ -73,9 +73,6 @@ holds the slots.
 - **MoFE.** Andrew Fox designed the system, Jupiter Sound executed it, Chloe
   Alexandra Thompson tuned it and refined sound design within it.
 
-- **An anechoic chamber in Detroit.** Chloe Alexandra Thompson and Michael
-  Amacio, within the last year. Details to be confirmed by the team.
-
 - Further projects in development, unnamed until they can be shown.
 
 - **The individual CVs.** This is the strongest proof the business has. All
@@ -89,6 +86,15 @@ holds the slots.
   agency and should be framed accordingly.
 
 The bio text is kept. The headshots are kept.
+
+### Withheld
+
+One prior project by two of the principals is under NDA and cannot appear on
+the site, in the repo, in markup, in alt text, or commented out. It is not
+named here. Do not reintroduce it.
+
+The work section is built to hold a record that is absent without leaving a
+hole, so nothing needs to change in the design if it is ever cleared.
 
 ### Credit line
 
