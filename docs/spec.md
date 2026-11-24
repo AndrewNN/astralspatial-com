@@ -2411,9 +2411,11 @@ The brief leaves these open. Each is a choice, with what it rejects.
    no section, and no billing. The IA holds his slot as the first intended
    entry of `04 — FRIENDS AND COLLABORATORS`, which publishes when the
    fabrication commission can be named.
-8. **Bios ordered alphabetically by surname** — Amacio, Fox, Thompson.
-   Rejected: the current site's order and any seniority ordering. Alphabetical
-   implies no hierarchy between three equal principals.
+8. **Bios ordered Thompson, Amacio, Fox**, set by Andrew. Rejected:
+    alphabetical by surname, which was the earlier decision, and the original
+    site's order.
+
+
 9. **"Credits" rather than "Past Clients".** Rejected: keeping the current
    heading. The names belong to the three people's prior work, and the brief
    says to frame them accordingly.
