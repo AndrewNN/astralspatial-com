@@ -561,6 +561,16 @@ change on scroll or hover.
 and shifts as the toolbar collapses. Nothing is positioned relative to it and
 no content depends on it.
 
+**The strips are transparent below 768px.** `--frame-fill` is `transparent`
+at mobile and `--ground` from 768px up. On a phone the frame is the rule, the
+corner ticks and nothing else, so content scrolls visibly beneath the top and
+bottom rules rather than disappearing behind an opaque band. A heading bisected
+by the hairline mid-scroll is the intended effect, not a defect.
+
+This reverses the earlier judgement that a border-only frame was a bad idea.
+Andrew asked for it directly after reviewing on a phone, and it is the same
+principle as rules passing over text rather than masking it.
+
 ### The mark
 
 Three axes from one origin, each ending in a filled triangle: Y up, X right,

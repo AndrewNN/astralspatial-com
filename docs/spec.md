@@ -571,6 +571,13 @@ corner in a visibly darker grey, and five short ticks pointing inward from the
 left edge around the vertical centre. At 390×844: the same without the
 measurement ticks, 9px in, with 8px corner arms.
 
+**Mobile fill.** `--frame-fill` is `transparent` below 768px and `--ground`
+from 768px up. Each strip sets `background-color: var(--frame-fill)`. Below
+768px the frame is the rule, the corner ticks and the measurement ticks only;
+content passes visibly under the top and bottom rules as it scrolls. Verify by
+scrolling until a heading crosses the top rule: the heading must remain
+readable above the rule, not be clipped by an opaque band.
+
 ### SP-11 — The mark
 
 One inline SVG shape. Geometry and the placement rule are in the skill under

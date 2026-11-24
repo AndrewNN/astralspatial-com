@@ -22,6 +22,7 @@
   --margin: 20px;
   --frame: 8px;
   --frame-gap: 16px;
+  --frame-fill: transparent;
   --tick-arm: 8px;
   --obj-r: 17;
   --obj-fs: 16;
@@ -68,7 +69,10 @@ img, svg { max-width: 100%; display: block; }
 }
 .fr {
   position: absolute;
-  background: var(--ground);
+  background: transparent;
+}
+@media (min-width: 768px) {
+  :root { --frame-fill: var(--ground); }
 }
 .fr-t, .fr-b { left: var(--frame); right: var(--frame); height: calc(var(--frame) + 1px); }
 .fr-l, .fr-r { top: 0; bottom: 0; width: calc(var(--frame) + 1px); }
@@ -84,7 +88,7 @@ img, svg { max-width: 100%; display: block; }
   background-repeat: no-repeat;
   background-size: 100% 1px;
   background-position: bottom;
-  background-color: var(--ground);
+  background-color: var(--frame-fill);
 }
 .fr-b { background-image: linear-gradient(to right,
     transparent 0, transparent var(--frame-gap),
@@ -93,7 +97,7 @@ img, svg { max-width: 100%; display: block; }
   background-repeat: no-repeat;
   background-size: 100% 1px;
   background-position: top;
-  background-color: var(--ground);
+  background-color: var(--frame-fill);
 }
 .fr-l { background-image: linear-gradient(to bottom,
     transparent 0, transparent var(--frame-gap),
@@ -102,7 +106,7 @@ img, svg { max-width: 100%; display: block; }
   background-repeat: no-repeat;
   background-size: 1px 100%;
   background-position: right;
-  background-color: var(--ground);
+  background-color: var(--frame-fill);
 }
 .fr-r { background-image: linear-gradient(to bottom,
     transparent 0, transparent var(--frame-gap),
@@ -111,7 +115,7 @@ img, svg { max-width: 100%; display: block; }
   background-repeat: no-repeat;
   background-size: 1px 100%;
   background-position: left;
-  background-color: var(--ground);
+  background-color: var(--frame-fill);
 }
 
 .fr-t::before, .fr-t::after, .fr-b::before, .fr-b::after {
