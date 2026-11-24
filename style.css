@@ -858,9 +858,16 @@ img, svg { max-width: 100%; display: block; }
   background-image: repeating-linear-gradient(to bottom,
     var(--line) 0, var(--line) 2px, transparent 2px, transparent 4px);
 }
-.cred-axis-h-i { left: 46%; }
-.cred-axis-h-s { left: 70%; }
-.cred-axis-h-r { left: 94%; }
+.cred-axis-h { letter-spacing: 0.08em; font-size: 10px; }
+.cred-axis-h-i { left: 38%; }
+.cred-axis-h-s { left: 68%; }
+.cred-axis-h-r { left: 92%; }
+@media (min-width: 768px) {
+  .cred-axis-h { letter-spacing: 0.22em; font-size: 11px; }
+  .cred-axis-h-i { left: 46%; }
+  .cred-axis-h-s { left: 70%; }
+  .cred-axis-h-r { left: 94%; }
+}
 @media (min-width: 1024px) {
   .cred-axis-h-i { left: 50%; }
   .cred-axis-h-s { left: 72%; }
