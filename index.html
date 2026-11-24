@@ -60,7 +60,7 @@
       <a class="nav-link" href="/work.html">Work</a>
       <a class="nav-link" href="/studio.html">Studio</a>
       <span class="nav-divider" aria-hidden="true"></span>
-      <a class="mail nav-mail" href="#email-fallback" data-mail data-u="info" data-d="moc.laitapslartsa" aria-label="Email Astral Spatial at info at astralspatial dot com"><span>info</span><i class="at" aria-hidden="true"></i><span>astralspatial</span><i class="dot" aria-hidden="true"></i><span>com</span></a>
+      <a class="cta-jump nav-mail label" href="#contact">Contact</a>
     </nav>
   </div>
 </header>
@@ -73,7 +73,7 @@
       <p class="label hero-eyebrow">( New York )</p>
       <h1 class="statement hero-statement">Spatial audio designed for a room, not specified from a catalogue.</h1>
       <p class="lead hero-lead">We design sound for specific rooms, then build the control logic and workflow that let an artist use the room without an engineer standing by.</p>
-      <p class="hero-cta"><a class="mail link-cta" href="#email-fallback" data-mail data-u="info" data-d="moc.laitapslartsa" aria-label="Email Astral Spatial at info at astralspatial dot com"><span>info</span><i class="at" aria-hidden="true"></i><span>astralspatial</span><i class="dot" aria-hidden="true"></i><span>com</span></a></p>
+      <p class="hero-cta"><a class="cta-jump link-cta hero-mail" href="#contact">Start a project</a></p>
       <p class="body-s hero-next">The work is scoped and described in writing before anyone gets on a call.</p>
     </div>
     <div class="hero-plot">
@@ -429,11 +429,17 @@
 </section>
 
 <section id="contact" class="contact-band">
-  <div class="shell grid-12">
-    <p class="label contact-label" style="grid-column:1/13">05 — Contact</p>
-    <p class="contact-email"><a class="mail statement" href="#email-fallback" data-mail data-u="info" data-d="moc.laitapslartsa" aria-label="Email Astral Spatial at info at astralspatial dot com"><span>info</span><i class="at" aria-hidden="true"></i><span>astralspatial</span><i class="dot" aria-hidden="true"></i><span>com</span></a></p>
+  <div class="shell">
+    <p class="label contact-label">05 — Contact</p>
+  </div>
+  <div class="contact-aperture">
+    <span class="aperture-rule aperture-rule-l" aria-hidden="true"></span>
+    <p class="contact-email"><a class="cta-start statement" href="mailto:%69%6e%66%6f%40%61%73%74%72%61%6c%73%70%61%74%69%61%6c%2e%63%6f%6d">Start a project</a></p>
+    <span class="aperture-rule aperture-rule-r" aria-hidden="true"></span>
+  </div>
+  <div class="shell">
     <p class="body contact-sentence">Send the room, the work, and the dates. Astral Spatial scopes it in writing before any call.</p>
-    <p class="label contact-location" style="grid-column:1/13">New York</p>
+    <p class="label contact-location">New York</p>
   </div>
 </section>
 
@@ -453,17 +459,17 @@
       <li>Astral Spatial</li>
       <li>New York</li>
       <li>Spatial audio, systems, fabrication</li>
-      <li class="footer-email"><a id="email-fallback" class="mail" href="#email-fallback" data-mail data-u="info" data-d="moc.laitapslartsa" aria-label="Email Astral Spatial at info at astralspatial dot com"><span>info</span><i class="at" aria-hidden="true"></i><span>astralspatial</span><i class="dot" aria-hidden="true"></i><span>com</span></a></li>
+      <li class="footer-email"><a class="cta-jump label" href="#contact">Contact</a></li>
       <li>© 2026</li>
     </ul>
   </div>
 </footer>
 
 <script>
-for (const a of document.querySelectorAll('[data-mail]')) {
-  a.href = 'mailto:' + a.dataset.u + String.fromCharCode(64) +
-           a.dataset.d.split('').reverse().join('');
-}
+(function(){
+var m=document.querySelector('.cta-start');
+if(m){var h=m.href,j=document.querySelectorAll('.cta-jump');for(var i=0;i<j.length;i++)j[i].href=h;}
+})();
 </script>
 </body>
 </html>
