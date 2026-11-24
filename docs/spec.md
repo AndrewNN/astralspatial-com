@@ -25,8 +25,13 @@ One block, hand-written vanilla, present on `/index.html` only. `work.html` and
 What the script is allowed to write, and nothing else:
 
 - the `transform` attribute on the five sound-object groups (SP-13)
+- the `transform` style on the five watermark elements (SP-19) — one
+  assignment, `translateY(scrollY × 0.16)`
 - the `r` and `font-size` of nothing — those are CSS (SP-13)
 - the `href` attribute on three `<a>` elements (SP-05)
+
+SP-18's action target is CSS and inline SVG. **No part of the call to action is
+scripted**, and the script does not touch it.
 
 It adds no element, removes none, sets no class, sets no inline style property,
 never assigns `innerHTML`, and calls `getBoundingClientRect` zero times inside
@@ -60,10 +65,10 @@ other-people.net. Each one resolves to components in this document.
 
 | Finding | Resolution |
 |---|---|
-| Too thin — the page reads washed out beside Other People | SP-17. Weight floors in the skill, applied here component by component. The `--line` and `--line-strong` values are settled separately and are not changed by this revision |
-| Too text reliant | SP-15 G-05, tightened from eight prose blocks to five and from 420 words to 170. Six paragraphs are deleted outright, three become registers, one becomes a plot |
-| The call to action should feel graphic | SP-18. `Start a project` becomes a drawn object. The underlined text link is withdrawn, and so is G-04, which SP-18 absorbs |
-| A watermark the text scrolls over | SP-19. A fixed measured field at stacking level `-1`, in `--wash`, which is a flat colour and not a scrim |
+| Too thin — the page reads washed out beside Other People | SP-17. Three settled line values — `--line` `#3A3732`, `--line-strong` `#141210`, and a new `--line-detail` `#5E5A53` — plus the weight floors W1–W4 in the skill, applied here component by component. **Settled and built; not reopened by this revision** |
+| Too text reliant | SP-15 G-05, tightened from eight prose blocks to five, from 420 words to 170, and now capped per section at one block and 55 words. Eight paragraphs are deleted outright, three become registers, one becomes a plot |
+| The call to action should feel graphic | SP-18. `Start a project` becomes a crosshair on a point, inside a ring, on a 2px datum. The underlined text link is withdrawn, and so is G-04, which SP-18 absorbs |
+| A watermark the text scrolls over | SP-19. Six instances of the mark at page scale, in outline, in `--watermark` `#E4E1DB`, at stacking level `-1`, lagging the scroll at 0.16. **Built; documented here as built** |
 
 ---
 
@@ -149,7 +154,7 @@ width, then its label.
 
 | Element | Token | Colour |
 |---|---|---|
-| Section rule | 1px solid | `--line-strong` — R1 structural, per the skill's W3 |
+| Section rule | 1px solid | `--line` `#3A3732` — R2, per the skill's W3. At 9.9:1 a 1px section rule reads as structure without reading as a border; R1 is reserved for the rules that bound a region rather than separate two |
 | Section number + name, e.g. `02 — SELECTED WORK` | `label` | `--fg-primary` |
 
 A section label is an `<h2>`. It was set at `--fg-muted`, which made every
@@ -343,8 +348,15 @@ The accessible name of every instance **is its visible text**. Nothing more.
 The contact band's link carries the real `href`, fully percent-encoded:
 
 ```html
-<a class="cta-start statement" href="mailto:%69%6e%66%6f%40%61%73%74%72%61%6c%73%70%61%74%69%61%6c%2e%63%6f%6d">Start a project</a>
+<a class="cta-start statement" href="mailto:%69%6e%66%6f%40%61%73%74%72%61%6c%73%70%61%74%69%61%6c%2e%63%6f%6d">
+  <svg class="tg" aria-hidden="true" focusable="false"><use href="#tg-32"></use></svg>
+  <span class="tg-text">Start a project</span>
+</a>
 ```
+
+The two drawn rule spans that flank it are siblings of the `<a>`, not children
+of it, so they stay out of the accessible name and out of the focus ring's
+contents. Full markup in SP-18.
 
 Every browser resolves a percent-encoded `mailto:` natively. No script is
 needed for it to work.
@@ -384,18 +396,27 @@ JavaScript, so this is the right trade.
 
 #### Styling
 
-**The two primary instances are SP-18 action targets and carry no underline.**
-The drawn object is the affordance. The hero instance and the contact-band
-instance differ only in text token and anchoring; everything else about them is
-one component.
+**The two primary instances are SP-18 action targets and carry no underline,
+no border-bottom, and no `text-decoration`.** The drawn object is the
+affordance: a 2px datum stopped either side of the words, with a crosshair on a
+point sitting on the line. The hero instance and the contact-band instance
+differ only in text token, target symbol, four gap values, and anchoring;
+everything else about them is one component.
 
 The header and footer instances stay text links. Text `--fg-primary` at rest,
-with a 1px `--line-strong` underline at 6px offset; on hover and
-`:focus-visible` the underline goes `--fg-primary` over `--dur-fast`. The text
-never changes colour, so the cell is at 15.7:1 in every state and the hover is
-carried by the rule, which is a `border-color` transition and on the sanctioned
-list. At ≤767px every instance is `display: inline-block` with
-`padding: 8px 0` so its tap target is ≥44px tall.
+with a 1px **`--line`** `#3A3732` underline at 6px offset; on hover and
+`:focus-visible` the underline goes `--fg-primary` `#141210` over `--dur-fast`.
+The text never changes colour, so the cell is at 15.7:1 in every state and the
+hover is carried by the rule, which is a `border-color` transition and on the
+sanctioned list.
+
+The underline is `--line`, not `--line-strong`: `--line-strong` is
+`--fg-primary` exactly, so a `--line-strong` underline brightening to
+`--fg-primary` on hover is a transition between two identical colours and the
+affordance has no state. 9.9:1 → 15.7:1 is a visible change at 1px.
+
+At ≤767px every instance is `display: inline-block` with `padding: 8px 0` so
+its tap target is ≥44px tall.
 
 The previous scheme — `--fg-muted` text with a `--fg-muted` underline,
 brightening to `--fg-primary` on hover — is withdrawn. It put the primary
@@ -442,7 +463,7 @@ The state of every image slot before its photograph exists. Costs 0KB.
 - The exact box dimensions the photograph will occupy.
 - 1px `--line-strong` border (R1 — a plate frame is structural), `--ground`
   fill.
-- Four corner ticks, 12px long, 1px `--fg-muted`, inset 8px.
+- Four corner ticks, 12px long, 1px `--line-detail`, inset 8px.
 - Centred: `label` token, `--fg-muted` at ≥768px and `--fg-body` at ≤767px,
   naming what the plate will hold, e.g.
   `PLATE — INSTALLATION, REFORESTERS LABORATORY`.
@@ -478,16 +499,16 @@ Contents:
 
 | Element | Spec |
 |---|---|
-| Frame | 1px `--line` square, inset 0.5px. R3 context — the plot's boundary is not the subject and it is the one rule that crosses `lead` at ≥1440px, where L1 requires it to be the lighter of the two |
+| Frame | 1px `--line-detail` square, inset 0.5px. R3 context — the plot's boundary is not the subject, and the one rule that crosses `lead` at ≥1440px is this frame's left edge. L1 constraint 4 names R2 as the crossing rank for page rules; this is a drawing stroke rather than a page rule, and it crosses at 5.75:1 against `--fg-body` at 12.3:1, which is lighter still. A drawing stroke may cross only where the drawing itself is permitted to overlap text, per L1's 25% clause |
 | Outer ring | 16 points at r=228 from centre |
 | Upper ring | 6 points at r=150, rotated 11.25° from the outer ring |
 | Height layer | 2 points at r=60, above centre |
 | Point | `--pt` — 4.1 viewBox units at ≥768px, 6.4 at ≤767px, so the point renders **4.0 ±0.3 CSS px square at every viewport**. `--fg-primary`. Positioned by `transform="translate(cx cy)"` with `x` and `y` at `calc(var(--pt) * -0.5)`. The previous 3×3 unit point rendered 1.9px at 390px, which is the thinnest mark the build shipped |
 | Numerals | `01`, `04`, `08`, `12`, `16`, `20`, `22`, `24` only, `index` token at 10px, **`--fg-body`** — W1 puts nothing muted below 12px — set 10px radially outward |
-| Listening position | 16×16px 1px cross, `--fg-primary`, at centre, labelled `LP` 10px to its right in `--fg-body` |
-| Spokes | 8 hairlines, centre to each numbered point, 1px `--line` (R3) |
-| Measurement ticks | Left and bottom edges, 1px, `stroke-dasharray: 2 4`, `--fg-muted` at ≥768px and `--fg-body` at ≤767px, with captions at the same colour giving the channel count |
-| Signal line | The plot's one W4 emphasis stroke: **2px** `--fg-primary` with `vector-effect="non-scaling-stroke"`, from the centre cross to point 01. No glow: `--glow` is `transparent` on the light ground. Emphasis is carried by weight and contrast — 2px at 15.7:1 against neighbouring 1px rays at 1.94:1 — and by the ray's own tick column at 16px pitch against 32px on the rest of the plot |
+| Listening position | 16×16px 1px crosshair, `--fg-primary`, at centre, with a 4×4 `--fg-primary` point at its crossing, labelled `LP` 10px to its right in `--fg-body`. This is the figure SP-18's action target enlarges and encircles. The two are the same drawing at two scales, which is why the call to action looks like it belongs on this page |
+| Spokes | 8 hairlines, centre to each numbered point, 1px `--line-detail` (R3) |
+| Measurement ticks | Left and bottom edges, 1px, `stroke-dasharray: 2 4`, `--line-detail`. Their captions are type, not strokes, so they stay `--fg-body` per W1 |
+| Signal line | The plot's one W4 emphasis stroke: **2px** `--fg-primary` with `vector-effect="non-scaling-stroke"`, from the centre cross to point 01. No glow: `--glow` is `transparent` on the light ground. Emphasis is carried by weight and contrast — 2px at 15.7:1 against neighbouring 1px rays at 5.75:1 — and by the ray's own tick column at 16px pitch against 32px on the rest of the plot. It is the same stroke, at the same weight and colour, as SP-18's datum: the signal arriving at a point |
 | Sound objects | Five, per SP-13. Drawn in a `<g class="objs">` placed after the spokes and points and **before** the numerals, the `LP` cross, and the `LP` label in document order, so plot type always draws over an object and never under it |
 | Caption bar | Flush under the frame, 32px tall, 1px `--line` top rule (R2), `label` token, `--fg-muted` at ≥768px and `--fg-body` at ≤767px. Left cell `FIG. 01`, right cell `24.2 — REFORESTERS LABORATORY` |
 
@@ -558,7 +579,7 @@ stays first within it, so reading order is prose → credit → technical rows.
 ### SP-10 — Site frame
 
 Every page. Fixed to the viewport, drawn as four `--frame-fill` strips with
-a 1px `--line-strong` rule on each inner edge (R1). Geometry, colour, interruption,
+a 1px `--line` rule on each inner edge (R2). Geometry, colour, interruption,
 corner ticks, and measurement marks are specified in the design-language
 skill under "The frame". This component states the markup and the
 interactions.
@@ -605,10 +626,15 @@ above the frame when focused. No other element declares a `z-index` above 1.
 
 | Band | Inset | Rule | Interruption | Corner tick arms | Left measurement marks |
 |---|---|---|---|---|---|
-| ≤767 | 8px | 1px `--line-strong` | 16px each end | 8px, `--fg-muted` | none |
-| 768–1023 | 16px | 1px `--line-strong` | 24px each end | 16px, `--fg-muted` | none |
-| 1024–1439 | 16px | 1px `--line-strong` | 24px each end | 16px, `--fg-muted` | 5 × 8px at 32px pitch, `--fg-muted`, centred on `50vh` |
-| ≥1440 | 16px | 1px `--line-strong` | 24px each end | 16px, `--fg-muted` | 5 × 8px at 32px pitch, `--fg-muted`, centred on `50vh` |
+| ≤767 | 8px | 1px `--line` (R2) | 16px each end | 8px, `--line-detail` | none |
+| 768–1023 | 16px | 1px `--line` (R2) | 24px each end | 16px, `--line-detail` | none |
+| 1024–1439 | 16px | 1px `--line` (R2) | 24px each end | 16px, `--line-detail` | 5 × 8px at 32px pitch, `--line-detail`, centred on `50vh` |
+| ≥1440 | 16px | 1px `--line` (R2) | 24px each end | 16px, `--line-detail` | 5 × 8px at 32px pitch, `--line-detail`, centred on `50vh` |
+
+The edge rule is R2, not R1, for one reason: at ≤767px the strips are
+transparent and the rule passes over prose, and R2 is the only rank L1 permits
+to cross text. `--line-strong` is `--fg-primary` exactly, so an R1 frame rule
+crossing a paragraph would be the same ink as the paragraph.
 
 The three colour changes in that table are the frame's whole contribution to
 SP-17. The geometry, the inset, the interruptions, the arm lengths, and the 1px
@@ -625,12 +651,13 @@ preference. It is not drawn on load, it does not fade, and it does not react
 to scroll or hover.
 
 **Screenshot checks.** At 1440×900: a hairline rectangle 17px in from each
-viewport edge sampling `--line-strong`, interrupted 24px before each corner,
-with a 16px L-tick at each corner sampling `--fg-muted`, and five short ticks
-pointing inward from the left edge around the vertical centre, also
-`--fg-muted`. At 390×844: the same without the measurement ticks, 9px in, with
-8px corner arms. At both widths the corner tick is visibly darker than the edge
-rule it terminates.
+viewport edge sampling `#3A3732`, interrupted 24px before each corner, with a
+16px L-tick at each corner sampling `#5E5A53`, and five short ticks pointing
+inward from the left edge around the vertical centre, also `#5E5A53`. At
+390×844: the same without the measurement ticks, 9px in, with 8px corner arms.
+At both widths the corner tick is visibly **lighter** than the edge rule it
+terminates — reversed from the previous revision, because the edge rule is now
+the near-black one and the tick is the measuring mark.
 
 **Mobile fill.** `--frame-fill` is `transparent` below 768px and `--ground`
 from 768px up. Each strip sets `background-color: var(--frame-fill)`. Below
@@ -754,11 +781,14 @@ Legibility is preserved by five constraints, all measurable in a screenshot:
    underline; a rule at the x-height merges with the horizontal bars of `e`,
    `a`, and `t` and the word turns to mud. Checkable: measure the rule's y
    against the line's cap box in a crop.
-4. **The rule is lighter than the type.** `--line` `#B0AAA0` crossing
-   `--fg-primary` `#141210` leaves the crossed glyph at 94%+ of its ink and
-   the 1px crossing line at 1.94:1 against the ground on either side of the
-   word. The type never drops below `--fg-primary`, so its own contrast is
-   15.7:1 everywhere, unchanged.
+4. **The crossing rule is R2 `--line` `#3A3732`, and only R2.** At 9.9:1
+   against `--fg-primary` at 15.7:1 the rule is measurably lighter than the
+   type it crosses, the crossed glyph keeps 94%+ of its ink, and the type's own
+   contrast stays 15.7:1 everywhere, unchanged. An R1 crossing is forbidden:
+   `--line-strong` is `--fg-primary` exactly, so the rule and the glyph would
+   be one piece of ink and the word would be cut rather than crossed. An R3
+   crossing is forbidden too: at 5.75:1 the rule vanishes into the word and
+   reads as a printing fault rather than a decision.
 5. **At most two crossings per page**, and never two on the same text block.
    The device reads as deliberate at two instances and as an accident at six.
 
@@ -782,7 +812,7 @@ and at ≤767px the plot is below the text.
 
 #### When a rule crosses a photograph
 
-`--line` `#B0AAA0` against an unknown photographic tone has no guaranteed
+`--line` `#3A3732` against an unknown photographic tone has no guaranteed
 contrast, so the rule changes colour and nothing else:
 
 - **Over the ground or over `--band`:** 1px `--line`. The default.
@@ -865,7 +895,7 @@ plate, then the `W/01` record whose top rule crosses the band.
 | Mat, bottom | 96px `--band` | 48px `--band` |
 | Photograph box inside the mat | width − 48px × 440px | width − 32px × 156px |
 | Plate hairline | 1px `--line-strong`, outer edge of the mat | same |
-| `W/01` index in the bottom mat | `index`, `--fg-muted`, 24px from the mat's left inner edge, baseline 32px below the photograph | `index`, 16px from the left, baseline 16px below |
+| `W/01` index in the bottom mat | `index`, `--fg-primary` — an index is not a W2 subordinate rank — 24px from the mat's left inner edge, baseline 32px below the photograph | `index`, `--fg-primary`, 16px from the left, baseline 16px below |
 | Title in the bottom mat | `title` 32px, `--fg-primary`, left-aligned to the index | `title` 24px |
 | Caption bar | `FIG. 02` · `REFORESTERS LABORATORY, WILLIAMSBURG` · `24.2 CHANNEL`, `label`, `--fg-muted`, sitting in the **top** mat, 24px tall | same, in the top mat, 16px tall, two cells on one line and `24.2 CHANNEL` dropped |
 | Record top rule | 1px, runs full-bleed and **crosses the plate** at 40px above the plate's bottom edge | 1px, crosses at 20px above the bottom edge |
@@ -1118,25 +1148,25 @@ short-circuits on one check rather than branching in two places.
 
 More line art and graphic, less brochure. The page is currently paragraphs in
 columns; drawn elements take over part of the load. Everything below comes from
-the vocabulary already on the page — 1px rules, dashed `2 4` ticks, 3×3 square
-points, the filled triangle, hairline circles, `--band` fills, catalogue
-numerals — and introduces no second visual language.
+the vocabulary already on the page — 1px rules, dashed `2 4` ticks, 4×4 square
+points, the filled triangle, hairline circles, crosshairs, `--band` fills,
+catalogue numerals — and introduces no second visual language.
 
 **The sanctioned primitives, complete.** 1px hairline, straight or elliptical ·
 2px emphasis stroke, `--fg-primary`, one per drawing (W4) · dashed hairline at
 `2 4` · 4×4 CSS px square point, `--fg-primary` · filled triangle, 3.9 long ×
-2.1 across · hairline circle · `--band` flat fill · `label`, `index` numerals.
-Nothing else is drawn anywhere on the site. No arrowheads other than the
-triangle, no curves other than ellipses, no fill other than `--ground`,
-`--band`, and `--fg-primary` points, no hatching, no stipple, no outline boxes
-around things.
+2.1 across · hairline circle · crosshair · `--band` flat fill · `label`,
+`index` numerals. Nothing else is drawn anywhere on the site. No arrowheads
+other than the triangle, no curves other than ellipses, no fill other than
+`--ground`, `--band`, and `--fg-primary` points, no hatching, no stipple, no
+outline boxes around things.
 
-**The ink floor.** Per the skill: no drawing is rendered entirely in `--line`.
-Every drawing on this site contains at least one `--fg-primary` element and at
-least one element at `--fg-body` or darker, and the stroke that carries the
-drawing's subject is never the lightest thing in it. The ink assignment is
-stated per drawing below, because "drawn in hairlines" was what produced five
-grey smudges on a phone.
+**The ink floor.** Per the skill: no drawing is rendered entirely in
+`--line-detail`. Every drawing on this site contains at least one
+`--fg-primary` element and at least one element at `--line` or darker, and the
+stroke that carries the drawing's subject is never the lightest thing in it.
+The ink assignment is stated per drawing below, because "drawn in hairlines"
+was what produced five grey smudges on a phone.
 
 The triangle is a shared primitive, not the mark. The mark is the three-axis
 assembly of three hairlines and three triangles from one origin. A triangle
@@ -1155,9 +1185,9 @@ construction the plot's caption bar uses. ≤2.5KB of markup each.
 
 | Record | Drawing | Caption |
 |---|---|---|
-| `001` Creative | A source fan. One 4×4 point at `(24, 90)`, nine hairlines fanning to nine 4×4 points on a vertical line at x = 264, spaced 18 units apart from y = 18 to y = 162. The centre ray is the drawing's one 2px emphasis stroke in `--fg-primary`; the two rays either side of it are 1px `--fg-primary`; the remaining six are 1px `--line`. The three emphasised rays carry 8-unit dashed ticks at 16-unit pitch in `--fg-muted` | `FIG. 05 — SOURCE TO ARRAY` |
-| `002` Systems | A signal scale bar. One horizontal **2px** `--fg-primary` spine at y = 72 from x = 16 to x = 272 — the drawing's emphasis stroke, because the path is the subject — with five 10-unit vertical ticks dropping from it at x = 16, 80, 144, 208, 272 in 1px `--fg-primary`, and five labels below at `index` 9px in `--fg-body`: `LAPTOP`, `SQ-5`, `DANTE`, `Q-SYS`, `AMPS`. Above the spine, a dashed `2 4` rule at y = 48 spanning only x = 144 to x = 272 in `--fg-muted`, labelled `AMBISONIC` at 9px `--fg-body` — the span the templating covers | `FIG. 06 — SIGNAL PATH` |
-| `003` Fabrication | A measured elevation. A speaker enclosure outline, 96 wide × 132 tall at `(40, 24)`, drawn as the drawing's **2px** `--fg-primary` emphasis stroke, with one 1px `--fg-primary` hairline circle for the driver and one 4×4 point at the terminal position. Two dimension lines offset 16 units outside the body, each a 1px `--line` rule terminated at both ends by the shared triangle primitive in `--fg-primary`, with dimensions set at `index` 9px in `--fg-body`: one horizontal, one vertical | `FIG. 07 — ENCLOSURE, ELEVATION` |
+| `001` Creative | A source fan. One 4×4 point at `(24, 90)`, nine hairlines fanning to nine 4×4 points on a vertical line at x = 264, spaced 18 units apart from y = 18 to y = 162. The centre ray is the drawing's one 2px emphasis stroke in `--fg-primary`; the two rays either side of it are 1px `--fg-primary`; the remaining six are 1px `--line-detail`. The three emphasised rays carry 8-unit dashed ticks at 16-unit pitch in `--line-detail` | `FIG. 05 — SOURCE TO ARRAY` |
+| `002` Systems | A signal scale bar. One horizontal **2px** `--fg-primary` spine at y = 72 from x = 16 to x = 272 — the drawing's emphasis stroke, because the path is the subject — with five 10-unit vertical ticks dropping from it at x = 16, 80, 144, 208, 272 in 1px `--fg-primary`, and five labels below at `index` 9px in `--fg-body`: `LAPTOP`, `SQ-5`, `DANTE`, `Q-SYS`, `AMPS`. Above the spine, a dashed `2 4` rule at y = 48 spanning only x = 144 to x = 272 in `--line-detail`, labelled `AMBISONIC` at 9px `--fg-body` — the span the templating covers | `FIG. 06 — SIGNAL PATH` |
+| `003` Fabrication | A measured elevation. A speaker enclosure outline, 96 wide × 132 tall at `(40, 24)`, drawn as the drawing's **2px** `--fg-primary` emphasis stroke, with one 1px `--fg-primary` hairline circle for the driver and one 4×4 point at the terminal position. Two dimension lines offset 16 units outside the body, each a 1px `--line-detail` rule terminated at both ends by the shared triangle primitive in `--fg-primary`, with dimensions set at `index` 9px in `--fg-body`: one horizontal, one vertical | `FIG. 07 — ENCLOSURE, ELEVATION` |
 
 No boxes around the labels, no shading inside the enclosure, no arrowheads
 other than the triangle. One 2px stroke per drawing and no more, so the three
@@ -1177,14 +1207,18 @@ The information gains one true field and the section gains its drawn element.
 - A 1px `--line-strong` rule across the content width at the top of the
   register (R1 — it is the register's axis and the thing every row measures
   against), carrying three 8px dashed `2 4` ticks at 50%, 72%, and 94% of its
-  length in `--fg-muted`, with three `label` headers above them in
+  length in `--line-detail`, with three `label` headers above them in
   `--fg-primary`: `INSTALLATION`, `SYSTEM`, `RECORD`.
 - Twelve rows below it. Each row: the name at `body-s` in `--fg-body` flush
-  left, then a 1px **`--fg-muted`** connector running right from 8px after the
+  left, then a 1px **`--fg-body`** connector running right from 8px after the
   name to the row's tick position, terminating in a 4×4 `--fg-primary` point on
-  the axis. The connector is the row's one piece of information, so it is not
-  `--line`; a register whose twelve data rules are at 1.94:1 is a register of
-  nothing.
+  the axis. The connector is the row's one piece of information, so it carries
+  the same ink as the name it starts from and is darker than the row separators
+  it sits between.
+
+Four weights, in order, all checkable with an eyedropper: axis
+`--line-strong` 15.7:1 · connector `--fg-body` 12.3:1 · row separator `--line`
+9.9:1 · tick `--line-detail` 5.75:1.
 - Row height 48px at ≥1024px, 44px at ≤767px, 1px `--line` between rows (R2).
 - No 2px stroke. This drawing's emphasis is its twelve terminal points.
 - One point per row. A name belonging to two categories gets the category the
@@ -1201,9 +1235,9 @@ connecting rule shortens accordingly. The names stay flush left at `body-s`
 
 The three portraits sit on one shared 1px `--line` rule that runs the full
 content width and passes behind all three, 24px below their bottom edges (R2).
-An 8px tick in `--fg-muted` drops from the rule at each portrait's left edge,
-and a fourth tick at the rightmost portrait's right edge. The names sit 24px
-below the rule.
+An 8px tick in `--line-detail` drops from the rule at each portrait's left
+edge, and a fourth tick at the rightmost portrait's right edge. The names sit
+24px below the rule.
 
 One rule instead of three separate blocks is what makes three people read as
 one practice. 0 bytes.
@@ -1218,10 +1252,14 @@ stacked and there is no single row to share.
 #### G-04 — The contact aperture: absorbed into SP-18
 
 Withdrawn as a separate element. Its two entering rules and its gap-in-a-rule
-construction are now two parts of the action target, which is specified once in
-SP-18 and used at two scales. Nothing is lost; the component grew a target, two
-end-stops, and a second instance in the hero, and the 1px `--line` rules became
-the 2px `--fg-primary` emphasis stroke.
+construction are now parts of the action target, which is specified once in
+SP-18 and used at two scales. Nothing is lost; the component grew a ring, a
+crosshair, a centre point, two end-stops, and a second instance in the hero,
+and the two 1px `--line` rules became one 2px `--fg-primary` datum.
+
+The aperture failed on its own terms: two rules with an empty gap between them
+read as a spacing accident rather than as an object, because nothing occupied
+the gap. SP-18 puts something in it that is aimed at.
 
 #### G-05 — Prose budget
 
@@ -1233,46 +1271,72 @@ columns. **Revised 2026-11-24**, for `/index.html`:
 |---|---|---|
 | Prose blocks (`lead`, `body`, `body-s` paragraphs) | ≤ 8 | **≤ 5** |
 | Total words of prose | ≤ 420 | **≤ 170** |
+| **Prose blocks per section** | — | **≤ 1** |
+| **Words of prose per section** | — | **≤ 55** |
 | Consecutive paragraphs anywhere | ≤ 2 | **≤ 1** |
 | Sentences per prose block | ≤ 2 | ≤ 2 |
 | Sections with no drawn element | 0 | 0 |
 | Sections with no prose at all | — | **≥ 2** |
 
-**The five surviving prose blocks on the home page**, and nothing else:
-
-| # | Block | Token | Cap | Why it survives |
-|---|---|---|---|---|
-| 1 | Hero lead | `lead` | 1 sentence, ≤ 28 words | The claim has to be legible as a sentence once |
-| 2 | Section 01 positioning line | `body` | 1 sentence, ≤ 30 words | It is the only place the audience and the unequal relation between the three offerings are stated |
-| 3 | `W/01` prose | `body` | 2 sentences, ≤ 55 words | The only finished project. The workflow clause is the point of the section |
-| 4 | Credits framing line | `body` | 1 sentence, ≤ 20 words | Attribution honesty needs plain language |
-| 5 | Contact band next-step sentence | `body` | 2 sentences, ≤ 30 words | The primary action has to say what happens next |
+The per-section cap is the hard one and it is the one that makes the page stop
+reading as a brochure. **One prose block per section. No second paragraph, no
+standfirst above it, no `body-s` note below it, no `label` line doing a
+sentence's job.** It is checkable in a full-page screenshot without counting
+words: a section with two blocks of serif text in it is a defect.
 
 `≤ 1` consecutive paragraph means the page contains no instance anywhere of one
-paragraph followed by another. Checkable in a full-page screenshot.
+paragraph followed by another.
 
-**The six deleted paragraphs**, and what carries their content instead:
+#### The per-section budget, home
 
-| Deleted | What now carries it |
-|---|---|
-| `001` Creative prose | The title, the `FIG. 05` fan, and the four register rows. A sentence saying "sound designed for a specific room" between a drawing of a source feeding an array and a list reading `SPATIALIZED SOUND DESIGN` was the third statement of the same fact |
-| `002` Systems prose | `FIG. 06`, which draws the signal path the paragraph described device by device, plus eight register rows |
-| `003` Fabrication prose | `FIG. 07`, a measured elevation of the thing, plus four register rows |
-| `W/02` prose | Its SP-09 credit line, its register, and G-06, which plots its channel count against the Reforesters room. Its full-length prose lives on `work.html`, which is where a reader who wants it goes |
-| `W/04` prose | The plate, the index, and two register rows. Everything true that can be published about an unnamed in-progress commission is `STATUS — IN PROGRESS` and `CLIENT — UNNAMED` |
-| Hero next-step line | Deleted as a duplicate. It said what the contact band's sentence says. One `label` line under the hero target replaces it: `SCOPED IN WRITING BEFORE ANY CALL` |
+| Section | Prose blocks | Words | Drawn element | Registers and tables |
+|---|---|---|---|---|
+| Hero | 1 — the lead | ≤ 28 | SP-08 array plot, SP-18 target | — |
+| 01 What we do | 1 — the positioning line | ≤ 30 | 3 × G-01 | 3 metadata registers, 4 + 8 + 4 rows |
+| 02 Selected work | 1 — `W/01` prose | ≤ 55 | G-06 scale plot, IMG-01 plate, IMG-05 plate | 3 SP-09 credit lines, 3 technical registers |
+| 03 Credits | 1 — the framing line | ≤ 20 | G-02 axis | 12-row register |
+| 04 Who we are | **0** | 0 | G-03 datum, 3 portraits | 3 × 3-row person registers |
+| 05 Contact | 1 — the next-step sentence | ≤ 30 | SP-18 target | — |
+| **Total** | **5** | **≤ 163** | — | — |
 
-**The three converted blocks:**
-
-| Was | Becomes |
-|---|---|
-| Three `body-s` person credits in section 04 | Three registers. Each person's comma list becomes three `label` rows in the SP-03 register construction. Every named credit is kept exactly; only the punctuation goes |
-| Twelve-name credit list | G-02, already specified |
-| `W/02`'s scale claim | G-06, below |
-
-Every numbered section on the home page contains at least one of: the array
+Two sections carry no prose at all: 01's positioning line belongs to the
+section, not to a record, so all three records in it are wordless, and 04 is
+wordless outright. Every numbered section contains at least one of: the array
 plot, a G-01 diagram, G-02's axis, G-03's datum, G-06, the SP-18 target, or an
-image plate. Sections 01 and 04 contain no prose at all.
+image plate.
+
+#### Every remaining text block on the page, and its verdict
+
+This is the complete pass. A block not in this table does not exist on the
+home page.
+
+| Block | Verdict |
+|---|---|
+| Hero eyebrow `( NEW YORK )` | **Kept.** `label`, two words, and the only place the city is stated above the fold |
+| Hero `<h1>` | Kept. Display type, not prose |
+| Hero lead | **Kept, 1 of 5.** One sentence, ≤ 28 words |
+| Hero next-step line, `body-s` | **Deleted outright, with no replacement.** Revised from the previous entry in this table, which replaced it with a `label` line reading `SCOPED IN WRITING BEFORE ANY CALL`. A caption under the target is still a text block, it spends budget rather than saving it, and it sits in the one place on the page that has to be purely graphic — directly under the thing a visitor is meant to act on. The fact survives, once, in the contact band's sentence |
+| `001` Creative prose | **Deleted → drawing.** `FIG. 05`, the source fan, plus four register rows. A sentence saying "sound designed for a specific room" between a drawing of a source feeding an array and a row reading `SPATIALIZED SOUND DESIGN` was the third statement of one fact |
+| `002` Systems prose | **Deleted → drawing.** `FIG. 06` draws the signal path the paragraph listed device by device, plus eight register rows |
+| `003` Fabrication prose | **Deleted → drawing.** `FIG. 07`, a measured elevation of the object, plus four register rows |
+| `001`–`003` metadata rows | **Kept as registers.** They are lists of facts, which is what a register is for |
+| Section 01 positioning line | **Kept, 2 of 5.** The only place the audience and the unequal relation between the three offerings are stated |
+| `W/01` prose | **Kept, 3 of 5.** The only finished project; the workflow clause is the point of the section |
+| `W/02` prose | **Deleted → plot.** G-06 plots its channel count against the Reforesters room, and SP-09 carries the names. Full-length prose lives on `work.html` |
+| `W/04` prose | **Deleted → register.** `STATUS — IN PROGRESS` and `CLIENT — UNNAMED` is everything publishable about an unnamed in-progress commission |
+| `W/01`, `W/02`, `W/04` technical rows | **Kept as registers** |
+| `ALL PROJECTS` link row | Kept. Navigation, not prose |
+| Credits framing line | **Kept, 4 of 5.** Attribution honesty needs plain language |
+| Twelve-name credit list | **Converted → register.** G-02: an axis, twelve connectors, twelve terminal points. Two fields of information where the three-column list carried one |
+| Three person credits in 04, `body-s` | **Converted → three registers.** Each comma list becomes three `label` rows in the SP-03 register construction, three rows per person and no more. Every named credit is kept exactly; only the punctuation and the running-sentence form go |
+| `FULL BIOGRAPHIES` link row | Kept. Navigation |
+| Contact band next-step sentence | **Kept, 5 of 5.** The primary action has to say what happens next |
+| Contact band location line `NEW YORK`, `label` | **Deleted outright.** The city is already on the page twice, in the hero eyebrow and in the footer status bar. A third instance is furniture, and the contact band's job is the target and one sentence |
+| Footer status bar | **Kept as a table.** Five cells, ruled, which is a register |
+
+Count: **five prose blocks kept, eight deleted outright, four converted to
+drawings or registers, and nothing shortened.** Deleting beat illustrating in
+eight places, which is the ratio the voice section asks for.
 
 Full-length prose lives on `work.html` and `studio.html`, where the job is
 detail and the bios are the proof. The home page's job is to be a drawing with
@@ -1285,12 +1349,13 @@ Section 02's drawn element, and the replacement for `W/02`'s two paragraphs. It
 sits directly under the section label, above the IMG-01 band.
 
 - A horizontal axis: 1px `--line-strong` across the content width, with dashed
-  `2 4` ticks in `--fg-muted` at 0, 8, 16, and 24 channels, labelled at
+  `2 4` ticks in `--line-detail` at 0, 8, 16, and 24 channels, labelled at
   `index` 9px in `--fg-body`.
 - Two rows under it. Each row: the project name at `body-s` in `--fg-body`
-  flush left, then a 1px `--fg-muted` connector running right to the row's
+  flush left, then a 1px `--fg-body` connector running right to the row's
   channel position, terminating in a 4×4 `--fg-primary` point, with the count
-  set at `index` in `--fg-primary` 8px past the point.
+  set at `index` in `--fg-primary` 8px past the point. The same four weights as
+  G-02.
 - Row 1: `Reforesters Laboratory`, 24.2. Row 2: `MoFE`, 13.1.
 - Row height 48px at ≥1024px, 44px at ≤767px, 1px `--line` between.
 - Caption, two cells at `label`: `FIG. 03` · `CHANNEL COUNT, DELIVERED SYSTEMS`.
@@ -1366,6 +1431,171 @@ except the last; no single word alone on the last line of a `title` or
 glyph within 4px of the frame's inner rule. `text-wrap: pretty` on prose and
 `text-wrap: balance` on `statement` and `title` are required, not optional.
 
+### SP-17 — Weight
+
+**Settled and built. This component is a pointer, not a proposal.** The values
+and the four floors live in the design-language skill under "The three line
+weights, settled" and "Weight floors". Nothing in this spec reopens them.
+
+| Token | Hex | Ratio on `#EDEBE6` | Carries |
+|---|---|---|---|
+| `--line` | `#3A3732` | 9.9:1 | R2 — every page rule, and every rule that crosses text |
+| `--line-strong` | `#141210` | 15.7:1 | R1 — the named heaviest rules: header, footer, index band, contact band, plate frames, the credits axis |
+| `--line-detail` | `#5E5A53` | 5.75:1 | R3 — ticks, dashes, dimension lines, register connectors, corner ticks, context spokes. Strokes only, never type |
+
+Structural rules are near-black; detail is mid-grey. The three values do not
+change. `--line-detail` is the one new token of the weight pass and it exists
+because with `--line` at 9.9:1 there is no longer a light rule in the system,
+so a drawing whose ticks and connectors all sit at 9.9:1 has no hierarchy in
+it.
+
+The component-by-component application is already written into SP-00 through
+SP-16 above. Four checks stand in for the whole pass, all with an eyedropper on
+a screenshot crop:
+
+1. No type anywhere on the page samples `#5E5A53` at ≤767px, at any size.
+2. No section rule, record rule, or frame edge rule samples lighter than
+   `#3A3732`.
+3. Every tick, dash, and register connector samples `#5E5A53`.
+4. Every drawing contains at least one `#141210` element.
+
+### SP-18 — The action target
+
+The answer to "the call to action should feel more graphic". `Start a project`
+stops being underlined text and becomes a drawn object: **a crosshair on a
+point, inside a ring, sitting on a 2px datum that stops either side of the
+words.** Geometry, the two symbols, the gap tables, and the four states are
+specified once in the design-language skill under "The action target". This
+component states the markup, the per-page census, and what is removed.
+
+The object is the array plot's listening-position cross — the one place in the
+plot where something is aimed at — inscribed in a ring and brought to page
+scale, with the plot's signal line as its datum. It introduces no new drawn
+vocabulary: ring, crosshair, 4×4 point, 2px emphasis stroke, 1px end-stop.
+
+**Markup**, both instances:
+
+```html
+<p class="target target-band">
+  <span class="tg-rule tg-rule-l" aria-hidden="true"></span>
+  <a class="cta-start statement" href="mailto:%69%6e%66%6f%40%61%73%74%72%61%6c%73%70%61%74%69%61%6c%2e%63%6f%6d">
+    <svg class="tg" aria-hidden="true" focusable="false"><use href="#tg-32"></use></svg>
+    <span class="tg-text">Start a project</span>
+  </a>
+  <span class="tg-rule tg-rule-r" aria-hidden="true"></span>
+</p>
+```
+
+The hero instance is the same three elements with `target-hero`, `link-cta`,
+`#tg-24`, and `href="#contact"`.
+
+The two `<symbol>` blocks are declared once per page inside the existing
+`.mk-defs` zero-size `<svg>`, beside `#mk`. Two symbols, not one scaled symbol:
+each is authored 1:1 with its rendered size, so every stroke is 1px and every
+point is 4×4 CSS px without `vector-effect` and without a new layout variable.
+≤480 bytes for both.
+
+**Accessible name.** The `<a>`'s accessible name is `Start a project`, from the
+`<span>`. The `<svg>` is `aria-hidden="true" focusable="false"` and contributes
+nothing. No `aria-label`, no `title`, no hidden span, no SVG `<title>`. The
+address is not in the accessible tree, not in the visible text, and not in any
+SVG `<text>` — it exists once per page, in one percent-encoded `href`, per
+SP-05.
+
+**Keyboard and no-script.** It is a real `<a>` with a real `href`. It is in the
+tab order at its position in reading order, `:focus-visible` renders the
+standard 1px `--fg-primary` ring at 2px offset on the `<a>`, and nothing about
+the object — not the datum, not the end-stops, not the target, not the gaps —
+is produced or positioned by script. With JavaScript off both instances render
+and both resolve.
+
+**Home page census**, two instances, which is the per-page maximum:
+
+| Instance | Where | Text | Token | Target |
+|---|---|---|---|---|
+| 1 | Hero, after the lead | `Start a project` | `link-cta` 24/20px, lower | `#tg-24` |
+| 2 | Contact band, section 05 | `START A PROJECT` | `statement` 56/30px, upper | `#tg-32` |
+
+The header and footer contact links stay `label`-size text links with a 1px
+`--line-strong` underline at 6px offset (SP-05). They are not targets. A third
+drawn instance on any page is a defect.
+
+**One object, two sizes — not two treatments.** The reason is a reading
+sequence: a visitor who meets the object in the hero and then scrolls to the
+bottom has to recognise the same object, or the page reads as offering two
+different primary actions. The hero instance is the quiet statement of the
+grammar and the band instance is the loud one. What differs between them is the
+text token, the symbol, four gap values, and what the entering rules anchor to.
+What does not differ is the construction, the stroke weights, the four states,
+or the words.
+
+**Removed by this component:**
+
+- `border-bottom: 1px solid var(--fg-muted)` on `.hero-mail` and on the
+  contact-band link, and the `border-color` hover transition on both. The
+  underline is gone from both primary instances; it survives only on the
+  header and footer text links.
+- `.cta-start { display: inline-block }` as the whole of the band link's
+  styling.
+- G-04's two 1px `--line` aperture rules, which are replaced by the datum's
+  2px `--fg-primary` segments.
+- The `link → next-step line` 8px gap in the hero, because the next-step line
+  is deleted (SP-15 G-05).
+
+**Defect conditions**, all checkable in a screenshot:
+
+- Either primary instance rendering with an underline or a `text-decoration`.
+- A fill, a border, or a radius on the `<a>`.
+- A ring that is not 18px (band) or 14px (hero) in diameter.
+- A centre point that is not 4×4px.
+- A datum that is not 2px, or that passes unbroken behind the words.
+- The band instance rendering inline at ≤767px rather than stacked.
+- A third drawn instance anywhere on a page.
+- A colour change on hover. Every part of the object is `--fg-primary` in
+  every state.
+
+### SP-19 — The watermark
+
+**Built. This component documents what is on the page.** Geometry, the five
+positions, the stroke, the lag factor, and the defect conditions are in the
+design-language skill under "The watermark".
+
+In one sentence: the mark at page scale, five times down the document, in
+outline, in `--watermark` `#E4E1DB` at 1.08:1, at stacking level `-1`, lagging
+the scroll at 0.16.
+
+| Property | Value |
+|---|---|
+| Instances | 5, `.wm-1` to `.wm-5`, direct children of `<body>` |
+| Figure | The `#mk` geometry, outlined, triangles unfilled, axis lines extended to the tips |
+| Stroke | 1px `--watermark`, `vector-effect="non-scaling-stroke"` |
+| Width | 88vw capped at 880px at ≤767px, 50vw at ≥768px |
+| Vertical | `top` 6 / 26 / 46 / 66 / 86 % of the document |
+| Horizontal | Alternating, odd from the right and even from the left, each bleeding off its own edge |
+| Stacking | `z-index: -1`. Text paints over it at full strength |
+| Motion | `transform: translateY(scrollY × 0.16)`, one assignment in the existing rAF loop |
+| Cost | ≤1.3KB of markup, 0 requests, 1 line of script |
+
+**It is at level `-1` and nothing else is.** That is what makes it subordinate
+by construction rather than by opacity, and it is why it does not reduce any
+contrast ratio anywhere: a glyph crossed by a watermark stroke still samples
+`#141210` or `#2B2825`.
+
+**It is the one sanctioned parallax on the site**, and the skill's motion rules
+6 and 7 are rewritten to say so rather than being quietly contradicted. It is
+not autonomous motion: it moves only while the reader scrolls, by a fixed
+fraction of the distance they scrolled, and it stops when they stop. Under
+`prefers-reduced-motion: reduce` and with JavaScript off the `transform` is
+never set and the figures scroll with the document.
+
+**Count and anchors.** Six instances, `.wm-1` through `.wm-6`, each positioned.
+Anchors are 5.0, 18.5, 31.9, 45.4, 58.8 and 72.2 percent of document height —
+not evenly spread, because the parallax lag of `scrollY × 0.16` carries each
+figure down the page as the reader scrolls. An anchor is therefore `0.84 ×` the
+scroll position at which its figure should be centred. Measured coverage at
+every tenth of the page is exactly one figure in view, with no gaps; evenly
+spaced anchors leave holes at roughly 40 and 85 percent.
+
 ---
 
 ## 3. `/index.html` — home
@@ -1394,27 +1624,39 @@ both inside the first screen at 390×844.
 | Eyebrow `( NEW YORK )` | 1–7 | `label` | `--fg-muted` |
 | `<h1>` statement, 3 lines | 1–7 (774px) | `statement` 56px | `--fg-primary` |
 | Lead, 2 lines | 1–6 (660px) | `lead` 28px | `--fg-body` |
-| Contact link, SP-05, reading `Start a project` | 1–6 | `link-cta` 24px | `--fg-primary` |
-| Next-step line | 1–6 | `body-s` 15px | `--fg-muted` |
+| SP-18 action target, hero scale, reading `Start a project` | 1–6 (660px) | `link-cta` 24px | `--fg-primary` |
 | SP-08 array plot | 8–12 (546px), top-aligned to the statement. At ≥1440px the box shifts 48px left into the text column per SP-12 L1 | — | — |
 
 Vertical gaps, top of hero downward: eyebrow → statement 32px; statement →
-lead 40px; lead → contact link 48px; contact link → next-step line 8px.
+lead 40px; lead → target 48px. Nothing follows the target: the `body-s`
+next-step line is deleted (SP-15 G-05), so the target is the last thing in the
+hero text column and has 96px of hero bottom padding under it.
 
-At 1440×900 this puts the baseline of `Start a project` at roughly y=604 and
-the index band fully visible, with the top of section 01's space at the fold.
-The plot's box top-aligns to the statement at y ≈ 200, which is the value
-SP-14's scroll mapping assumes.
+The target's datum: left entering rule 90px (one column) from the text
+column's left edge, 24px to the target, 16px to the first glyph, 24px from the
+last glyph to the right end-stop, and the right entering rule takes the
+remainder out to the text column's right edge at column 6. `Start a project` at
+`link-cta` 24px lower case measures about 150px, so the right entering rule
+computes at about 356px — well clear of its 24px floor.
+
+At 1440×900 this puts the target's datum at roughly y=600 and the index band
+fully visible, with the top of section 01's space at the fold. The plot's box
+top-aligns to the statement at y ≈ 200, which is the value SP-14's scroll
+mapping assumes.
 
 **Layout ≤767px.** Single column, 20px margins, hero top padding 48px.
 
-Order: eyebrow → `<h1>` at 30px over 4 lines → lead at 20px →
-`Start a project` at 20px → next-step line at 14px → array plot at 350×350.
+Order: eyebrow → `<h1>` at 30px over 4 lines → lead at 20px → SP-18 target at
+`link-cta` 20px → array plot at 350×350.
 
-Gaps: 24, 24, 32, 8, 40. The link's baseline lands near y=488, inside the first
-screen. The plot sits at y ≈ 620, so its top edge is just below the fold: the
-first thing scrolling reveals is a field of moving objects, and that is the
-first and most important place SP-14's scroll scalar is felt.
+Gaps: 24, 24, 32, 48. The target's datum lands near y=480, inside the first
+screen. Its construction at 350px: left entering rule 32px fixed, 16px to the
+target, 12px to the first glyph, 16px from the last glyph to the right
+end-stop, and the right entering rule takes the remaining ≈100px. The object
+band is 44px tall, which is also the tap-target floor. The plot sits at y ≈ 600,
+so its top edge is just below the fold: the first thing scrolling reveals is a
+field of moving objects, and that is the first and most important place SP-14's
+scroll scalar is felt.
 
 **Copy intent.**
 
@@ -1423,8 +1665,11 @@ first and most important place SP-14's scroll scalar is felt.
 | Eyebrow | City | Locates the practice in one word |
 | `<h1>` statement | That this is spatial audio made as a work, not specified from a catalogue. Three lines, upper case, ≤30 characters per line | The single claim the whole site rests on. A curator reads only this and knows whether to continue |
 | Lead | The two halves, unequal: sound designed for a room, and the control logic and workflow that let an artist use that room without an engineer. One sentence, maybe two | Converts the claim into something a commissioner can scope |
-| Contact link | `Start a project`. The address is not rendered | The primary action, instance 2 of 4 |
-| Next-step line | What happens after the email: the work is described and scoped before anyone gets on a call. One sentence | Removes the "is this a sales funnel" question. Explicitly not "Get in touch" |
+| Action target | `Start a project`. Three words, lower case, no punctuation. The address is not rendered | The primary action, instance 2 of 4, drawn per SP-18 |
+
+The hero's next-step line is deleted. The fact it carried — that the work is
+described and scoped in writing before anyone gets on a call — is stated once
+on the page, in the contact band's sentence, and not twice.
 
 ### Index band
 
@@ -1536,8 +1781,8 @@ lower half:
 Records are 64px apart at ≥1024px, 48px at ≤767px, per SP-03.
 
 **Link row.** 1px `--line` rule carrying the mark at its right end per SP-11,
-then a 56px row: `ALL PROJECTS` at `label`, `--fg-muted`, hover
-`--fg-primary`. No `→`. Links to `/work.html`.
+then a 56px row: `ALL PROJECTS` at `label`, `--fg-body` at rest per W2, hover
+and `:focus-visible` `--fg-primary`. No `→`. Links to `/work.html`.
 
 ### 03 — Credits
 
@@ -1549,10 +1794,10 @@ brief is explicit that they belong to the people rather than the agency.
 the attribution unambiguous without apologising.
 
 **Credits register.** 48px below the framing line. Built as G-02: an axis rule
-with three dashed ticks headed `INSTALLATION`, `SYSTEM`, `RECORD`, then twelve
-single-column rows, each running a 1px `--line` from its name out to a 3×3
-`--fg-primary` point on the axis. 48px rows at ≥1024px, 44px at ≤767px, 1px
-`--line` between.
+with three dashed `--line-detail` ticks headed `INSTALLATION`, `SYSTEM`,
+`RECORD`, then twelve single-column rows, each running a 1px `--fg-body`
+connector from its name out to a 4×4 `--fg-primary` point on the axis. 48px
+rows at ≥1024px, 44px at ≤767px, 1px `--line` between.
 
 The three-column list of the previous revision is withdrawn. Twelve names in
 three columns is the most brochure-like block on the page and it carried one
@@ -1602,40 +1847,71 @@ tall, 1px rule above carrying the mark at its right end per SP-11. No `→`.
 Purpose: the primary action, given a full band of its own.
 
 Full-bleed `--band` background. Padding 128px top and bottom at ≥1024px, 64px
-at ≤767px. 1px `--line` rule top and bottom.
+at ≤767px. 1px `--line-strong` rule top and bottom (R1).
 
 | Element | Token | Size | Colour |
 |---|---|---|---|
-| Label `05 — CONTACT` | `label` | 12/11px | `--fg-muted` |
-| Contact link, SP-05, reading `START A PROJECT` | `statement` | 56/30px | `--fg-primary` |
-| G-04 aperture rules | 1px `--line` | — | `--line` |
+| Label `05 — CONTACT` | `label` | 12/11px | `--fg-muted` ≥768px, `--fg-body` ≤767px |
+| SP-18 action target, band scale, reading `START A PROJECT` | `statement` | 56/30px | `--fg-primary` |
 | Next-step sentence | `body` | 18/16px | `--fg-body` |
-| Location line `NEW YORK` | `label` | 12/11px | `--fg-muted` |
 
-Gaps: label → link 48px (≥1024) / 32px (≤767); link → sentence 24px / 16px;
-sentence → location 48px / 32px. The link and the sentence span columns 1–8 at
-≥1024px; the aperture rules span from frame edge to frame edge.
+Three elements. The location line `NEW YORK` is deleted (SP-15 G-05): the city
+is already in the hero eyebrow and in the footer status bar, and the band's job
+is the target and one sentence.
 
-`START A PROJECT` at 56px measures about 400px and at 30px about 215px. It fits
-on one line at both widths with room to spare, and at 390px it clears the
-frame's inner rule by more than 100px. It must not wrap. The previous build's
-`INFO@ASTRALSPATIAL.COM` at 30px measured 354px against a 350px content width
-and ran under the frame strip; that defect is removed by the change of string,
-not by a size override.
+Gaps: label → target 48px (≥1024) / 32px (≤767); target → sentence 24px / 16px.
+The sentence spans columns 1–8 at ≥1024px.
+
+**The target at ≥1024px.** Inline. The datum runs full bleed from the frame's
+inner left edge to its inner right edge, 2px `--fg-primary`, interrupted by two
+24px-tall end-stops. Left end-stop → target 24px, target → first glyph 16px,
+last glyph → right end-stop 24px. `START A PROJECT` at `statement` 56px
+measures about 400px, so the whole object — 400px of text, a 32px target, three
+gaps of 64px total — occupies about 496px of the 1344px content width, leaving
+roughly 424px of entering rule on each side. Object band 56px tall. A 2px rule
+crossing the entire page and stopped twice is the graphic event the section is
+built around.
+
+**The target at ≤767px.** Stacked, per SP-18. 350px cannot hold the text, the
+target, and four gaps on one line. So the target sits flush to the content's
+left edge on a datum that runs 24px to its right and then full bleed to the
+frame's inner right edge, ending in one end-stop; and `START A PROJECT` at 30px
+sits 24px below the datum, flush left to the target's left edge. Object height
+88px. At 30px the text measures about 215px of a 350px content width, so it
+does not wrap and clears the frame's inner rule by more than 100px.
+
+The previous build's `INFO@ASTRALSPATIAL.COM` at 30px measured 354px against a
+350px content width and ran under the frame strip. That defect is removed by the
+change of string, not by a size override.
 
 Copy intent: the sentence names what to send — the room, the work, the dates —
-and what happens next. It does not say "Get in touch", "Let's talk", "Reach
-out", or "We'd love to hear from you".
+and what happens next, which is that the work is described and scoped in
+writing before anyone gets on a call. It does not say "Get in touch", "Let's
+talk", "Reach out", or "We'd love to hear from you". Two sentences maximum,
+≤30 words, and it is the only prose in the section.
 
 ### Call-to-action census
 
 Four instances, all reaching the same address: desktop header `CONTACT`, hero
-`Start a project`, contact band `START A PROJECT`, footer `CONTACT`. The
-contact band is the visually dominant one by a factor of 2.3 in type size, and
-it is the only one that carries the `mailto:` href directly (SP-05). That
-satisfies rubric item 8's "one primary action, visually dominant, repeated at
-least twice, specific about what happens next" — the next step is named in the
-sentence under the link, and the link itself is the verb.
+`Start a project`, contact band `START A PROJECT`, footer `CONTACT`.
+
+| Instance | Form | Type size | Drawn |
+|---|---|---|---|
+| Header | Text link, 1px underline at 6px offset | `label` 12px | no |
+| Hero | SP-18 action target, `#tg-24` | `link-cta` 24/20px | yes |
+| Contact band | SP-18 action target, `#tg-32` | `statement` 56/30px | yes |
+| Footer | Text link, 1px underline at 6px offset | `label` 12px | no |
+
+The contact band is the visually dominant one by a factor of 2.3 in type size
+over the hero and 4.7 over the two text links, it is the only one on a `--band`
+field, it is the only one whose datum crosses the whole page, and it is the only
+one that carries the `mailto:` href directly (SP-05). That satisfies rubric item
+8's "one primary action, visually dominant, repeated at least twice, specific
+about what happens next" — the next step is named in the sentence under the
+target, the words are a verb, and the two primary instances are the only drawn
+objects on the page a visitor can click.
+
+Two drawn instances, maximum, per SP-18. The header and footer stay text.
 
 ---
 
@@ -1787,7 +2063,7 @@ credit.
 |---|---|
 | 1–3 (342px) | Portrait, 320×400, flush left, top-aligned with the name |
 | 4–8 (546px) | Name at `title`, then two bio paragraphs at `body` |
-| 10–12 (342px) | Specialties, `label` token, one per line, line-height 2.0, `--fg-muted` |
+| 10–12 (342px) | Specialties, as an SP-03 register: `label` token, `--fg-body` per W2, 32px rows, 1px `--line` between. Not a bare list at line-height 2.0 |
 
 64px between records, each with its 1px top rule.
 
@@ -1895,13 +2171,17 @@ smallest text asset on any page:
 | Five sound objects, SP-13 | ≤ 0.8KB of markup |
 | Three G-01 diagrams | ≤ 2.5KB each, ≤ 7.5KB |
 | G-02 axis and twelve connector rules | ≤ 1.2KB |
-| Inline script, SP-13 + SP-14 + SP-05 | ≤ 2.5KB |
+| Five watermark figures, SP-19 | ≤ 1.3KB of markup |
+| Two action-target symbols plus two instances, SP-18 | ≤ 0.7KB of markup |
+| Inline script, SP-13 + SP-14 + SP-19 + SP-05 | ≤ 2.5KB |
 | Removed: four `<span>`/`<i>` email assemblies and their attributes | −1.6KB |
+| Removed: the hero next-step line and the contact band location line | −0.2KB |
 
-`style.css` grows 2KB for the objects, the aperture, the mat, and the drawn
-elements, and loses the two knockout blocks, the rail, and the `.mail .at` /
-`.mail .dot` rules. Nothing added in this revision makes a network request:
-every drawing is inline SVG and the script is inline.
+`style.css` grows 2.5KB for the objects, the action target, the watermark, the
+mat, and the drawn elements, and loses the two knockout blocks, the rail, the
+`.mail .at` / `.mail .dot` rules, and the two primary links' underline rules.
+Nothing added in this revision makes a network request: every drawing is inline
+SVG and the script is inline.
 
 ---
 
@@ -1965,30 +2245,40 @@ Everything that moves, with the evidence a critic can check.
 | # | What | Trigger | Duration / easing | Evidence |
 |---|---|---|---|---|
 | M1 | SP-08 array plot draws: frame, then spokes, then points, then captions | Page load, once | 1200ms / `--ease-io`, then 640/240/640ms at `--ease-out` | Screen recording of the first 2s at 1440×900. Final frame identical to the reduced-motion render |
-| M3 | Link underline brightens `--fg-muted` → `--fg-primary` | Hover, `:focus-visible` | 120ms / `--ease-out` | Hover screenshot of the hero email link |
+| M3 | Header and footer contact-link underline brightens `--line` `#3A3732` → `--fg-primary` `#141210` | Hover, `:focus-visible` | 120ms / `--ease-out` | Hover screenshot of the footer `CONTACT` cell. The two primary instances carry no underline and are not in this row — see M9 |
 | M4 | SP-03 record top rule `--line` → `--line-strong`, index numeral `translateX(8px)` | Hover, ≥1024px, `pointer: fine` | 120ms / `--ease-out` | Hover screenshot of record `001` |
-| M5 | Index band cell text `--fg-muted` → `--fg-primary` | Hover | 120ms / `--ease-out` | Hover screenshot of the index band |
+| M5 | Index band cell text `--fg-body` → `--fg-primary` | Hover | 120ms / `--ease-out` | Hover screenshot of the index band |
 | M6 | Link row text and its mark brighten together, the mark via `stroke: currentColor` | Hover, `:focus-visible` | 120ms / `--ease-out` | Hover screenshot of the `ALL PROJECTS` row showing text and mark at `--fg-primary` |
 | M7 | Five sound objects travel elliptical paths through the array field, SP-13 | Page load, from 2040ms, continuous while the tab is visible | 22–41s per object, linear in θ, no easing | Screen recording at 1440×900 and 390×844. Two frames 1s apart: every object has moved, none exceeds 35 CSS px/s, none leaves the plot frame, every numeral is readable at 10px |
 | M8 | The field's elevation changes with scroll: every object's semi-minor axis is multiplied by `k`, SP-14 | Scroll, continuous | None — a linear function of `scrollY`, no transition, no easing | Screenshots at scroll 0 and at the plot's exit. `k` ranges 1.30 → 0.70; the largest object moves 48 CSS px vertically across 1446px of scroll at 1440px, 31px across 1194px at 390px |
+| M9 | SP-18 action target: the target and the words `translateX(8px)` together, the left gap closing 24 → 16px and the right opening 24 → 32px. Active gives back half | Hover (`pointer: fine`), active | 120ms / `--ease-out` | Hover and active screenshots of both instances. Nothing changes colour in either state; `:focus-visible` shows the 1px ring and no offset |
+| M10 | SP-19 watermark: five figures lag the scroll, `translateY(scrollY × 0.16)` | Scroll, continuous | None — a linear function of `scrollY`, no transition, no easing | Screenshots at scroll 0 and scroll 844 at 390px. A watermark stroke has moved 135px less than the paragraph in front of it. No glyph samples anything but `#141210` or `#2B2825` in either frame |
 
 M2, the right-edge rail label swap, is withdrawn with SP-04.
 
-M7 and M8 are the whole autonomous motion budget, and they are both inside one
-`<svg>` on one page. Nothing else moves. The frame does not move, draw, or
-fade. The mark does not move; only M6's colour change touches it. No parallax,
-no mouse tracking, no scroll-triggered entrance animations on body content, no
-carousel, no autoplaying media, no `position: sticky`, no scroll hijack, and no
-transform anywhere that reads pointer position. No element outside the hero
-plot responds to scroll.
+**M7 and M8 are the whole autonomous motion budget**, and they are both inside
+one `<svg>` on one page. M3–M6 and M9 are 120ms hover affordances. M10 is the
+one sanctioned parallax on the site: it moves only while the reader scrolls,
+it carries no information, and it is at stacking level `-1` below every other
+element.
 
-Under `prefers-reduced-motion: reduce`: M1 renders complete, M3–M6 change state
-with no transition, **M7 never starts and M8 is pinned to `k = 1`**. The frame,
-the mark, and every layered composition are identical to their normal render.
-No content is hidden or unreachable.
+Nothing else moves. The frame does not move, draw, or fade. The mark does not
+move; only M6's colour change touches it. No mouse tracking, no scroll-linked
+translation of anything a reader can read, no scroll-triggered entrance
+animations on body content, no carousel, no autoplaying media, no
+`position: sticky`, no scroll hijack, and no transform anywhere that reads
+pointer position.
 
-Without JavaScript: M1 and M3–M6 all work; M7 and M8 do not exist, and the five
-objects render at their authored rest positions, which is a complete drawing.
+Under `prefers-reduced-motion: reduce`: M1 renders complete, M3–M6 and M9
+change state with no transition, **M7 never starts, M8 is pinned to `k = 1`,
+and M10's `transform` is never set**, so the watermarks scroll with the
+document. The frame, the mark, and every layered composition are identical to
+their normal render. No content is hidden or unreachable.
+
+Without JavaScript: M1, M3–M6, and M9 all work, because the action target is
+CSS and inline SVG with no scripted part; M7, M8, and M10 do not exist, and the
+five objects render at their authored rest positions, which is a complete
+drawing.
 The frame, the mark, every drawn element, and every layered composition render.
 The three jump links scroll to the contact band, where the mail link works
 natively. Every page is fully readable and every link resolves.
@@ -2040,6 +2330,24 @@ natively. Every page is fully readable and every link resolves.
   openings, and `003`'s verbatim reuse of the `<h1>`'s strongest clause.
 - **`W/02`'s prose credit**, which duplicated its own SP-09 block word for word.
 - Every piece of plausible placeholder prose. SP-16 governs what replaces it.
+- **The hero's `body-s` next-step line**, deleted outright with no replacement,
+  not even a `label` line. Its fact is stated once, in the contact band.
+- **The contact band's `NEW YORK` location line.** The city is on the page
+  twice already.
+- **The underline on both primary call-to-action instances**, and the
+  `border-color` hover transition that went with it. SP-18's drawn object is
+  the affordance. The underline survives only on the header and footer text
+  links, where it is `--line` at rest rather than `--line-strong`, so the
+  hover has somewhere to go.
+- **The two 1px `--line` G-04 aperture rules**, replaced by one 2px
+  `--fg-primary` datum.
+- **The light line values `#B0AAA0` and `#8C857A`.** Replaced by `--line`
+  `#3A3732`, `--line-strong` `#141210`, and the new `--line-detail` `#5E5A53`.
+- **The `--wash` token.** Replaced by `--watermark` `#E4E1DB`.
+- **Evenly spaced watermark anchors.** The parallax lag carries each figure
+  down the page, so even spacing leaves gaps at roughly 40 and 85 percent.
+  Anchors are compensated instead: `0.84 ×` the scroll position where each
+  figure should be centred.
 
 Kept: the bio text in substance, the three headshots, the twelve credit names,
 `info@astralspatial.com` as the contact route, and the light ground `#EDEBE6`.
@@ -2230,7 +2538,64 @@ The brief leaves these open. Each is a choice, with what it rejects.
     break any link or reference to a record; and a visible placeholder row for
     an unpublished record, which advertises a thing there is no permission to
     discuss. A gap in a catalogue number is normal and is not explained.
-27. **Work that cannot be published is absent, not described.** No title, no
+27. **Three line weights, structural near-black and detail mid-grey.**
+    Andrew's decision after the phone review, built before this revision was
+    written. `--line` `#3A3732` at 9.9:1 carries every page rule, including
+    every rule that crosses text; `--line-strong` `#141210` at 15.7:1 carries
+    the named heaviest rules and is deliberately identical to `--fg-primary`;
+    `--line-detail` `#5E5A53` at 5.75:1 carries ticks, dashes, dimension
+    lines, register connectors, and corner ticks. Rejected: keeping the old
+    pair and adding weight with pixels, which would put 2px rules across a
+    page whose whole system is one pixel; and raising `--line` without adding
+    a detail token, which leaves every tick and connector at 9.9:1 and turns
+    each measured drawing into a solid black diagram with no hierarchy. The
+    new token is the cost of the decision and it is the only one added.
+28. **The call to action is a crosshair on a point, inside a ring, on a 2px
+    datum that stops either side of the words.** Andrew's note was that it
+    should feel more graphic; underlined text is a text decoration, not an
+    object. The figure is the array plot's listening-position mark enlarged
+    and encircled, and the datum is the plot's signal line at page scale, so
+    the thing a visitor acts on is drawn in the same two strokes as the thing
+    the practice sells. Rejected: a **bracket**, which reads as UI chrome and
+    has no point in it, so nothing is aimed at; a **framed field**, which is
+    an outline box and the primitives forbid those; the **bare aperture** of
+    the previous revision, two rules with an empty gap, which read as a
+    spacing accident because nothing occupied the gap; and **the mark itself
+    at CTA scale**, which would make the signature mean two things and break
+    its placement rule. Also rejected: a button, a fill, a radius, and any
+    colour change on hover. It is two instances per page, one object at two
+    sizes rather than two treatments, because a visitor who meets it in the
+    hero and scrolls to the bottom has to recognise the same object or the
+    page reads as offering two different primary actions.
+29. **The watermark is the mark at page scale, five times down the document,
+    in outline, lagging the scroll at 0.16.** Andrew asked for exactly this:
+    very thin, underneath the text, parallax. Built before this revision was
+    written and documented here as built. The earlier specification — a fixed
+    concentric-ring field in `--wash`, with an argument that the mark at size
+    would break the mark's placement rule — is withdrawn. The placement rule
+    governs the mark as a mark, a 14–24px figure terminating a 1px rule; at
+    50vw, in outline, at 1.08:1, at stacking level `-1`, nothing resolves it
+    as a mark and the two do not compete. Rejected: `position: fixed`, which
+    is not parallax and was what the previous revision specified; opacity
+    rather than a flat colour, which composites against whatever is behind it
+    and is forbidden; filled triangles at 60px, which would be the only solid
+    shapes on the site; a lag factor above 0.25, which reads as a moving
+    background; and clamping the lag, which would make the figures stop
+    mid-document for no visible reason. The cost is that the site's single
+    "no parallax" rule becomes "parallax exactly once, below everything,
+    carrying no information", and the skill's motion rules now say so rather
+    than being quietly contradicted.
+30. **A hard per-section prose cap, not just a per-page one.** One prose block
+    per section, 55 words per section, at least two numbered sections with
+    none. The per-page budget alone let five blocks pile into three sections
+    and the page still read as paragraphs in columns. Rejected: shortening the
+    paragraphs, which leaves the same number of text blocks and the brochure
+    problem is a count; illustrating each one, which doubles the page's
+    content; and converting deleted paragraphs into `label` captions, which
+    spends the budget rather than saving it — a caption is a text block. Eight
+    paragraphs are deleted outright against four converted to drawings or
+    registers, which is the ratio the voice section asks for.
+31. **Work that cannot be published is absent, not described.** No title, no
     city, no room type, no date, no client, no indication of who worked on it,
     and no generic description — a description specific enough to be useful is
     specific enough to identify. Rejected: a plate labelled with the category

@@ -14,7 +14,8 @@ Five devices carry the whole system and nothing else is added to them: the
 **hairline**, the **frame** around the page, the **mark** — one small piece of
 array geometry, repeated, never explained — the **action target**, which is the
 one thing a visitor is meant to act on drawn in the same vocabulary, and the
-**watermark**, one very large quiet figure the page scrolls over.
+**watermark**, the mark at page scale five times down the document, in outline,
+below everything, lagging the scroll.
 
 Two rules govern how they meet type. **A hairline passes over text; text is
 never masked.** And **type sits on a flat palette colour, never on a
@@ -33,7 +34,7 @@ on one of these scales, it is wrong.
 ## Palette
 
 Two themes, `ground-dark` and `ground-light`. Both are complete sets of the
-same nine tokens, with the same roles and the same assignments in the type
+same ten tokens, with the same roles and the same assignments in the type
 scale. A build ships exactly one of them: swap the `:root` block and no other
 rule in the stylesheet changes. `ground-light` is the shipping theme.
 
@@ -46,8 +47,9 @@ Common to both themes:
   button, a tinted panel, or a highlight colour is a defect.
 - Opacity is not a colour. Do not express a lighter or darker grey as
   `color: var(--fg-primary); opacity: .5`. Use the token.
-- `--line` and `--line-strong` carry no information that is not also carried
-  by position or text, so neither is held to a text contrast threshold.
+- `--line`, `--line-strong`, and `--line-detail` carry no information that is
+  not also carried by position or text, so none of the three is held to a text
+  contrast threshold. None of the three is ever set on type.
 - A visible focus ring is 1px `--fg-primary` at 2px offset, in both themes.
   `--line-strong` is the hover state, not the focus ring.
 
@@ -62,9 +64,10 @@ Common to both themes:
 | `--fg-primary` | `#FFFFFF` | Headings, wordmark, links, the email address, numerals in index positions |
 | `--fg-body` | `#D6D6D6` | Running serif body copy and lead paragraphs |
 | `--fg-muted` | `#8A8A8A` | Labels, section numbers, captions, plate text, technical term lists, footer status bar |
-| `--line` | `#2E2E2E` | All hairlines at rest: section rules, record separators, image plate borders, grid ticks |
-| `--line-strong` | `#4A4A4A` | Structural hairlines, and the hairline hover state |
-| `--wash` | `#131313` | The watermark, and nothing else |
+| `--line` | `#B8B5B0` | Page rules at rest. The mirror of the light theme's `#3A3732` |
+| `--line-strong` | `#FFFFFF` | The named heaviest rules, and the hairline hover state |
+| `--line-detail` | `#8A8A8A` | Fine detail on and inside drawings. Strokes only, never type |
+| `--watermark` | `#131313` | The watermark, and nothing else |
 | `--glow` | `rgba(255,255,255,0.14)` | The only non-flat value in the theme. Used once per page at most, as a 40px blur behind a white hairline in the array plot |
 
 Measured against `--ground` `#000000`:
@@ -75,9 +78,13 @@ Measured against `--ground` `#000000`:
 | `--fg-body` | 14.1:1 | 16px (`body`, mobile) | 4.5:1 | pass, AAA |
 | `--fg-muted` | 6.0:1 | 11px (`label`, `index`, mobile) | 4.5:1 | pass AA |
 | `--band` | 1.07:1 | non-text | — | decoration |
-| `--line` | 1.55:1 | non-text | — | decoration |
-| `--line-strong` | 2.37:1 | non-text | — | decoration |
-| `--wash` | 1.08:1 | non-text | — | watermark only |
+| `--line` | 10.3:1 | non-text | — | structure |
+| `--line-strong` | 21.0:1 | non-text | — | structure |
+| `--line-detail` | 6.0:1 | non-text | — | detail |
+| `--watermark` | 1.08:1 | non-text | — | watermark only |
+
+The dark theme's three line values are the light theme's, mirrored. They have
+never been built or reviewed; the light values are the settled ones.
 
 ### `ground-light`
 
@@ -90,9 +97,10 @@ Measured against `--ground` `#000000`:
 | `--fg-primary` | `#141210` | Headings, wordmark, links, the email address, numerals in index positions |
 | `--fg-body` | `#2B2825` | Running serif body copy and lead paragraphs |
 | `--fg-muted` | `#5E5A53` | Labels, section numbers, captions, plate text, technical term lists, footer status bar |
-| `--line` | `#B0AAA0` | Context hairlines: record separators, row separators, grid ticks, dimension lines, the array plot's outer frame and context spokes |
-| `--line-strong` | `#8C857A` | Structural hairlines: section rules, band edges, the frame's four edge rules, image-plate frames. Also the record hover state |
-| `--wash` | `#E3E0DA` | The watermark, and nothing else. One rank quieter than `--line`, because the watermark is a field and `--line` is a rule |
+| `--line` | `#3A3732` | Page rules at rest: section rules, record separators, row separators, band edges, the frame's four edge rules. The default colour of a rule that belongs to the layout |
+| `--line-strong` | `#141210` | The heaviest rules: the header's bottom rule, the footer's top rule, the index band's and contact band's top and bottom rules, an image plate's frame, the credits register's axis. Also the record hover state |
+| `--line-detail` | `#5E5A53` | Fine detail inside and on drawings: measurement ticks, dashed ticks, dimension lines, register connectors, the frame's corner ticks and measurement marks, the array plot's context spokes. **Strokes only, never type** |
+| `--watermark` | `#E4E1DB` | The watermark, and nothing else |
 | `--glow` | `transparent` | The theme carries no glow. The token exists so the two `:root` blocks are interchangeable. Nothing renders it |
 
 Measured against `--ground` `#EDEBE6`:
@@ -103,21 +111,44 @@ Measured against `--ground` `#EDEBE6`:
 | `--fg-body` | 12.3:1 | 11px (`label`, `index`, mobile) | 4.5:1 | pass, AAA |
 | `--fg-muted` | 5.75:1 | 12px (`label`, desktop, subordinate ranks only) | 4.5:1 | pass AA |
 | `--band` | 1.09:1 | non-text | — | decoration |
-| `--line` | 1.94:1 | non-text | — | decoration |
-| `--line-strong` | 3.07:1 | non-text | — | decoration |
-| `--wash` | 1.08:1 | non-text | — | watermark only |
+| `--line` | 9.9:1 | non-text | — | structure |
+| `--line-strong` | 15.7:1 | non-text | — | structure |
+| `--line-detail` | 5.75:1 | non-text | — | detail |
+| `--watermark` | 1.08:1 | non-text | — | watermark only |
+
+### The three line weights, settled
+
+Decided 2026-11-24 after the phone review and built. **Structural rules are
+near-black; detail is mid-grey.** The earlier pair, `--line` `#B0AAA0` at
+1.94:1 and `--line-strong` `#8C857A` at 3.07:1, is withdrawn: on paper in
+daylight a 1px rule at 1.94:1 is not a hairline, it is an absence, and the page
+read as type floating with no structure under it.
+
+| Token | Hex | Ratio | What it is |
+|---|---|---|---|
+| `--line` | `#3A3732` | 9.9:1 | Every page rule, unless the rule is one of the named heaviest ones |
+| `--line-strong` | `#141210` | 15.7:1 | The named heaviest rules. Identical to `--fg-primary` by intent: the rule that bounds a region carries the same ink as a heading |
+| `--line-detail` | `#5E5A53` | 5.75:1 | Everything that measures rather than bounds. Identical to `--fg-muted` by intent, and governed by the same floor logic — but as a stroke token it is exempt from W1, which is a rule about type |
+
+These three values do not change. `--line-detail` is the new token, and it
+exists for one reason: with `--line` at 9.9:1 there is no longer a light rule
+in the system, and a drawing whose ticks and connectors are all at 9.9:1 is a
+solid black diagram with no hierarchy in it. The detail rank was previously
+carried by the old light `--line`; it now needs a token of its own.
+
+`--line-detail` is never set on type. Type at that value is `--fg-muted`, and
+W1 governs it. The two tokens share a hex and do not share a rule.
 
 `--fg-muted` is darker than its dark-theme counterpart is light, on purpose.
 A grey that reads as quiet on black is not the same grey that reads as quiet
 on paper: `#8A8A8A` inverted to `#757575` would land at 3.9:1 here and fail
 at 11px. `#5E5A53` holds the same subordinate rank at 5.75:1.
 
-Hairlines are heavier here for the same reason. A 1px rule on a light field
-needs more tonal distance from its ground than on a dark one, so `--line`
-sits at 1.94:1 rather than 1.55:1 and still reads as a hairline, not a
-border. `--line-strong` at 3.07:1 is the only token that changes role
-between themes: on light it also frames installation image plates, because a
-`--line` frame abutting a dark photograph disappears into it.
+Hairlines are heavier here for the same reason, and heavier than the first
+build shipped. A 1px rule on a light field needs far more tonal distance from
+its ground than on a dark one. At 1px, 9.9:1 still reads as a hairline rather
+than a border, because the weight is in the colour and the width never
+changes.
 
 Every neutral is drawn from the ground's own hue family, warm and nearly
 desaturated. That is not an accent. A neutral ramp mixed cold against a warm
@@ -178,20 +209,27 @@ stylesheet.
 
 | Rank | Token | Where |
 |---|---|---|
-| R1 structural | `--line-strong` | Section rules · the header's bottom rule · the index band's top and bottom rules · the contact band's top and bottom rules · the footer's top rule · the frame's four edge rules · an image plate's frame · the credits register's axis rule |
-| R2 record | `--line` | Record top rules · link-row rules · row separators inside the index band, the footer, a register, or a metadata table · figure-caption top rules · the shared datum under the portraits |
-| R3 drawn context | `--line` | Measurement ticks, dashed ticks, dimension lines, the array plot's outer frame and its unemphasised spokes, the G-01 context rays |
+| R1 structural | `--line-strong` `#141210` | The header's bottom rule · the footer's top rule · the index band's top and bottom rules · the contact band's top and bottom rules · an image plate's frame · the credits register's axis rule |
+| R2 page | `--line` `#3A3732` | Section rules · the frame's four edge rules · record top rules · link-row rules · row separators inside the index band, the footer, a register, or a metadata table · figure-caption top rules · the shared datum under the portraits · **every rule that crosses text** |
+| R3 detail | `--line-detail` `#5E5A53` | Measurement ticks, dashed ticks, dimension lines, register connectors, the frame's corner ticks and left-edge measurement marks, the array plot's outer frame and its unemphasised spokes, the G-01 context rays |
 
-A section rule set in `--line` is a defect. A record separator set in
-`--line-strong` is a defect.
+A record separator set in `--line-strong` is a defect. A tick set in `--line`
+is a defect. R3 is the only rank that may be set in `--line-detail`, and
+`--line-detail` appears nowhere else.
+
+R2 owns every rule that crosses text, which is why the frame's edge rules sit
+at R2 rather than R1: at ≤767px the frame rule passes over prose, and L1
+constraint 4 requires the crossing rule to be measurably lighter than the type
+it crosses. `--line` at 9.9:1 against `--fg-body` at 12.3:1 holds that;
+`--line-strong`, which is `--fg-primary` exactly, would not.
 
 W3 governs **page rules** — rules that belong to the layout. Strokes **inside a
-drawing** are governed by the ink floor instead, and may be `--line`,
-`--fg-muted`, `--fg-body`, or `--fg-primary` according to whether they carry
+drawing** are governed by the ink floor instead, and may be `--line-detail`,
+`--line`, `--fg-body`, or `--fg-primary` according to whether they carry
 context or subject. A connector in a register, a tick on an axis, and a
-dimension line are drawing strokes, not page rules. The frame's corner ticks
+dimension line are drawing strokes; they sit at R3. The frame's corner ticks
 and measurement marks are drawing strokes on the page, which is why they are
-`--fg-muted` and not an R-rank.
+R3 and not R1.
 
 **W4 — the emphasis stroke, 2px.** A drawing may carry **one** 2px stroke, and
 only on the stroke that carries the drawing's subject. No more than one per
@@ -206,7 +244,7 @@ grey and is worse than the 1px it replaced.
 | `FIG. 05` source fan | The centre ray of the three emphasised rays |
 | `FIG. 06` signal path | The horizontal spine |
 | `FIG. 07` enclosure | The enclosure outline |
-| The action target | The two rules entering from the edges, which are one object |
+| The action target | The datum, which is one object interrupted twice |
 | Credits register | None. Its emphasis is the terminal points |
 
 2px is forbidden on: the frame, any section rule, any record rule, any rule
@@ -365,7 +403,7 @@ inner edge. Nothing in the document touches the viewport edge.
 
 ### Layout variables
 
-Three variables carry layout values that change per breakpoint. They are
+Six variables carry layout values that change per breakpoint. They are
 indirections onto the scales above, not new scale values. Every value they
 take already appears in the spacing scale.
 
@@ -377,7 +415,10 @@ take already appears in the spacing scale.
 | `--obj-r` | 17 | 11 | 11 | 11 |
 | `--obj-fs` | 16 | 10 | 10 | 10 |
 | `--pt` | 6.4 | 4.1 | 4.1 | 4.1 |
-| `--wm-r` | 115vw | 95vw | 62vw | 62vw |
+
+The watermark has no layout variable. Its width and offsets are viewport
+percentages stated literally in its own section below, because it is sized to
+the viewport rather than to the grid and nothing else shares its values.
 
 `--frame-gap` is the length of the interruption at each end of a frame edge's
 hairline. A fourth value anywhere in the first three variables is a defect.
@@ -409,10 +450,6 @@ CSS px square at every viewport.** Inside the plot the rects are positioned by
 so changing the variable cannot shift a point off its coordinate. Outside the
 plot — the G-01 diagrams, the credits register's terminal points, the action
 target's centre point — a point is 4×4 CSS px stated directly.
-
-`--wm-r` is the watermark's outer radius (see "The watermark"). It is a
-viewport-relative length rather than a spacing-scale value because the
-watermark is sized to the viewport, not to the grid.
 
 ### Icon sizes
 
@@ -480,10 +517,12 @@ that moves is a 120ms hover affordance or the plot's one-time draw-on.
 That is the whole inventory. A second autonomously moving element anywhere is
 a defect, whatever its duration.
 
-The watermark does not move and is not part of this budget. It is
-`position: fixed` with no transform and no scroll input, so the page moves past
-it. A watermark that translates, scales, rotates, or fades on scroll is a
-defect, and so is one that moves with the pointer.
+**The watermark lags the scroll, and that is the one sanctioned parallax on the
+site.** It is not autonomous motion: it moves only while the reader is
+scrolling, by a fixed fraction of the distance they scrolled, and it stops the
+instant they stop. Nothing about it is timed. Geometry and the lag factor are
+in "The watermark" below. A watermark that scales, rotates, fades, or moves
+with the pointer is still a defect.
 
 The action target's hover and active offsets are 120ms affordances, in the same
 class as a record index's 8px shift, and are not autonomous motion.
@@ -497,26 +536,33 @@ class as a record index's 8px shift, and are not autonomous motion.
 3. Entrances: `--dur-slow`, `--ease-out`, stagger 60ms, maximum 8 staggered
    children. An entrance plays once; nothing re-animates on scroll-back.
 4. The array-plot draw is `--dur-draw`, `--ease-io`, once, on load.
-5. Nothing on the page moves more than 16px, with one exception: a sound
-   object travels its whole path. Its speed ceiling is **35 CSS px/s
-   instantaneous, at every viewport**.
-6. **No parallax. No mouse-tracked transforms. No pointer-position input of
-   any kind.** Layered compositions are static: the overlap is in the layout,
-   never in a transform.
-7. **Scroll drives exactly one scalar on the whole site**, and that scalar
-   changes exactly one property: the vertical foreshortening of the sound
-   objects' paths. It is a linear function of `scrollY`, clamped at both ends,
-   centred so that its mid-value is the authored geometry. No `position:
-   sticky`, no `scroll-behavior` override, no wheel or touch listener, no
-   scroll-triggered entrance animation, no scroll-driven opacity, and nothing
-   outside the plot's `<svg>` responds to scroll. Scroll interaction is on at
-   every width, including 390px — it is not a desktop flourish.
+5. Nothing on the page moves more than 16px, with two exceptions: a sound
+   object travels its whole path, at a ceiling of **35 CSS px/s
+   instantaneous, at every viewport**; and the watermark lags the scroll,
+   which has no distance ceiling because the distance is the reader's own.
+6. **No mouse-tracked transforms. No pointer-position input of any kind.**
+   Layered compositions are static: the overlap is in the layout, never in a
+   transform. Parallax exists exactly once, on the watermark, which is below
+   every other element on the page and carries no information.
+7. **Scroll drives exactly two scalars on the whole site**, and each changes
+   exactly one property:
+   - the vertical foreshortening of the sound objects' paths — a linear
+     function of `scrollY`, clamped at both ends, centred so that its
+     mid-value is the authored geometry
+   - the watermark's `translateY` — `scrollY × 0.16`, unclamped, one
+     assignment
+   Nothing else responds to scroll. No `position: sticky`, no
+   `scroll-behavior` override, no wheel or touch listener, no scroll-triggered
+   entrance animation, no scroll-driven opacity, and no scroll-linked
+   translation of anything a reader can read. Scroll interaction is on at every
+   width, including 390px — it is not a desktop flourish.
 8. A `scroll` listener is `{ passive: true }` and its entire body is one
    assignment. All work happens in the single `requestAnimationFrame` loop.
    `getBoundingClientRect` is never called inside that loop.
-9. The frame, the mark, and the watermark never animate. They are at their
-   final state on first paint. The only exception is the mark on a link row inheriting that
-   row's 120ms `color` transition.
+9. The frame and the mark never animate. They are at their final state on
+   first paint. The only exception is the mark on a link row inheriting that
+   row's 120ms `color` transition. The watermark never animates either: it has
+   no `transition` and no `animation`, only the scroll assignment in rule 7.
 10. No element is invisible without JavaScript. Entrance animations start at
     `opacity: 0` only inside a `@media (scripting: enabled)` guard or as a CSS
     `animation` that ends at the resting state — never as a class a script must
@@ -571,10 +617,12 @@ a solid blob is not a drawing.
 
 Under reduced motion every element renders in its final state. The array plot
 is drawn complete. The five sound objects render at full opacity at their
-authored rest positions and never move; the script short-circuits on one
-`matchMedia` check before its loop starts, and the scroll scalar is pinned to
-its mid-value. The result is identical to the JavaScript-off render. No content
-depends on an animation to become visible.
+authored rest positions and never move. **The watermark's lag is off and its
+`transform` is never set**, so it scrolls with the document like any other
+absolutely positioned element. Both scroll scalars are dead: the script
+short-circuits on one `matchMedia` check before its loop starts. The result is
+identical to the JavaScript-off render. No content depends on an animation to
+become visible.
 
 ## Lines and surfaces
 
@@ -582,12 +630,12 @@ depends on an animation to become visible.
   array plot's measurement ticks are dashed `2 4`; the frame's four edge rules
   are interrupted at their ends by `--frame-gap`; and one stroke per drawing
   may be the 2px emphasis stroke of W4. Nothing is ever 3px.
-- Corner ticks are `--fg-muted`, never `--line` and no longer `--line-strong`.
-  A corner tick is a registration mark and it is the one thing on the page
-  whose whole job is to be noticed at the edge of vision; at 1.94:1 it was
-  invisible on a phone and at 3.07:1 it was indistinguishable from the frame
-  rule now beside it. This holds for the frame's corners and for an image
-  plate's corners, which are the only two places a corner tick appears.
+- Corner ticks are `--line-detail`. A corner tick is a registration mark, so it
+  measures rather than bounds, and it must read as a different kind of mark from
+  the edge rule it terminates. At `--line` it would be the same ink as that
+  rule and the interruption would read as a drafting error. This holds for the
+  frame's corners and for an image plate's corners, which are the only two
+  places a corner tick appears.
 - `border-radius` is `0` everywhere. There are no pills, no rounded cards, no
   circular portraits. A hairline `<circle>` inside a drawing is not a rounded
   box: it is drawn geometry, and it is permitted.
@@ -612,17 +660,19 @@ this list and nothing else:
 | Dashed hairline | 1px, `stroke-dasharray: 2 4` |
 | Point | 4×4 CSS px square, `--fg-primary`. Inside the array plot via `--pt` |
 | Triangle | filled, 3.9 long × 2.1 across its base, `currentColor` |
-| Circle | 1px hairline, `--ground` fill |
+| Circle | 1px hairline. `--ground` fill where it must occlude what is behind it, `fill: none` where nothing is |
+| Crosshair | Two 1px lines, one horizontal and one vertical, crossing at a point and extending past whatever encloses them. The array plot's `LP` mark, and the action target's |
 | Flat fill | `--ground` or `--band` only |
 | Numeral and label | `index` and `label` tokens, down to 9px inside a drawing, never `--fg-muted` below 12px |
 
-**The ink floor inside a drawing.** A drawing may not be entirely `--line`.
-Every drawing on the site contains at least one element at `--fg-primary` and
-at least one at `--fg-body` or darker, and the element that carries the
-drawing's subject is never the lightest thing in it. `--line` is for context:
-the rays that are not the ray, the box the dimension measures, the ticks along
-an axis. A measured drawing rendered end to end at 1.94:1 reads as a smudge on
-a phone, which is what the first build shipped.
+**The ink floor inside a drawing.** A drawing may not be entirely
+`--line-detail`. Every drawing on the site contains at least one element at
+`--fg-primary` and at least one at `--fg-body` or `--line` or darker, and the
+element that carries the drawing's subject is never the lightest thing in it.
+`--line-detail` is for context: the rays that are not the ray, the box the
+dimension measures, the ticks along an axis. A measured drawing rendered end to
+end at 5.75:1 reads as a smudge on a phone, which is what the first build
+shipped at 1.94:1 and would still do here.
 
 No arrowheads other than the triangle. No curves other than straight lines and
 ellipses. No hatching, no stipple, no shading, no gradient, no outline box
@@ -637,20 +687,21 @@ signature.
 
 ### Where a rule changes colour
 
-A rule's rest colour is its W3 rank — `--line-strong` for R1, `--line` for R2
-and R3 — with exactly two colour exceptions, both about being seen:
+A rule's rest colour is its W3 rank — `--line-strong` for R1, `--line` for R2,
+`--line-detail` for R3 — with exactly two colour exceptions, both about being
+seen:
 
 | Over | Colour | Why |
 |---|---|---|
-| `--ground` or `--band` | Its W3 rank | The default. `--line` at 1.94:1 reads as a hairline; `--line-strong` at 3.07:1 reads as a structural rule without reading as a border |
+| `--ground` or `--band` | Its W3 rank | The default. At 1px, 9.9:1 reads as a hairline and 15.7:1 reads as a structural rule without reading as a border |
 | A photograph or an image plate's interior | `--ground` `#EDEBE6` | `--line` has no guaranteed contrast against an unknown photographic tone. The photography treatment caps every image's white point at `#EDEBE6`, so a `--ground` hairline is at worst equal to the lightest pixel in the image and at best at 15.7:1 against its darkest |
 
 A single rule may therefore render in two colours along its length — `--line`
 across the page, `--ground` across the image. That is a drafting convention,
 not an inconsistency. The change happens at the plate's outer hairline.
 
-`--wash` is not in this system. It is the watermark's colour and no rule, tick,
-border, or stroke anywhere on the site uses it.
+`--watermark` is not in this system. It is the watermark's colour and no rule,
+tick, border, or stroke anywhere on the site uses it.
 
 The asset constraint that makes the second row true is in "Photography" below.
 A rule is never interrupted, faded, dashed, or thickened to make it visible
@@ -664,29 +715,28 @@ viewport.
 
 **Construction.** Four fixed strips, each filled solid `--ground`, inset `0`
 from the viewport edges and `--frame` + 1px thick. Each strip carries a 1px
-**`--line-strong`** rule on its inner edge — the frame is R1, the outermost
-structural rule on the page, and it was the single worst offender when the
-page read washed out: a 1.94:1 hairline 9px from the edge of a phone screen in
-daylight is not there. It stays 1px; the weight comes from the rank, not from
-the width. The strips are solid at ≥768px, so content scrolls behind them and
+**`--line`** rule on its inner edge — R2, because at ≤767px that rule passes
+over prose and R2 is the rank that is allowed to cross text. It was the single
+worst offender when the page read washed out: a 1.94:1 hairline 9px from the
+edge of a phone screen in daylight is not there. At 9.9:1 it is. It stays 1px;
+the weight comes from the colour, not from the width. The strips are solid at
+≥768px, so content scrolls behind them and
 is cut cleanly at the rule rather than crossed by it. The frame is
 `pointer-events: none` and `aria-hidden="true"`.
 
 **The rule is interrupted.** Each edge's hairline stops `--frame-gap` short of
 each corner — 24px at ≥768px, 16px at ≤767px. The corner itself carries a
 tick: an L of two arms, 16px at ≥768px and 8px at ≤767px, 1px
-`--fg-muted`, drawn at the exact inner corner and running inward along both
+`--line-detail`, drawn at the exact inner corner and running inward along both
 edges. Arm plus gap equals the interruption, so the measurements close:
 16 + 8 = 24 at ≥768px, 8 + 8 = 16 at ≤767px. The effect is a registration
-mark, not a border, and at 5.75:1 the corner now reads before the edge does,
-which is the right order.
+mark, not a border, and the tick reads as a different kind of mark from the
+rule it terminates, which is the point of the interruption.
 
 **Measurement marks.** At ≥1024px only, the left edge carries five 8px ticks
-pointing inward from its hairline, 1px `--fg-muted`, at 32px pitch, the middle
-tick centred on `50vh`. They were `--line`: five 8px marks at 1.94:1 is five
-marks nobody sees, and a measurement mark that cannot be read is decoration,
-which this system does not permit. They are the array plot's tick column, moved to the
-page. No numerals, no caption. The right, top, and bottom edges carry none.
+pointing inward from its hairline, 1px `--line-detail`, at 32px pitch, the
+middle tick centred on `50vh`. They are the array plot's tick column, moved to
+the page. No numerals, no caption. The right, top, and bottom edges carry none.
 Below 1024px there are no measurement marks.
 
 **At 390px.** The frame is 1px of rule on 8px of inset, 9px per side, 18px of
@@ -709,11 +759,11 @@ bottom rules rather than disappearing behind an opaque band. A heading bisected
 by the hairline mid-scroll is the intended effect, not a defect.
 
 The mobile frame rule therefore crosses prose, which L1 forbids for every other
-rule on the site. It is the one sanctioned exception, and it is safe for the
-same reason L1's constraint 4 is: at 3.07:1 the rule is five times lighter than
-`--fg-body` at 12.3:1, it is 1px, and it is at a fixed viewport position rather
-than a fixed position in the text, so no word is permanently crossed. Nothing
-else is allowed to borrow this exception.
+rule on the site. It is the one sanctioned exception, and it is safe for three
+reasons: the rule is 1px; it is R2 `--line` at 9.9:1 against `--fg-body` at
+12.3:1, so it is lighter than the type it crosses; and it is at a fixed
+viewport position rather than a fixed position in the text, so no word is
+permanently crossed. Nothing else is allowed to borrow this exception.
 
 This reverses the earlier judgement that a border-only frame was a bad idea.
 Andrew asked for it directly after reviewing on a phone, and it is the same
@@ -789,129 +839,269 @@ document.
 inside a photograph, as a list bullet, as a heading ornament, in a row of more
 than one, or anywhere a rule does not already exist. One per rule, maximum.
 
+The watermark is not an instance of the mark and this rule does not reach it.
+It is the same geometry at 50vw, in outline, at 1.08:1, at stacking level
+`-1`. Nothing a reader can resolve as a mark is outside the placement rule;
+nothing at that scale and that value is resolved as a mark.
+
 **Off-page.** The favicon is the mark, and that is the only instance not
 sitting on a rule.
 
 ### The action target
 
 The primary call to action is a drawn object, not a line of underlined text.
-It is assembled from the primitives above and from nothing else: two rules, two
-end-stops, one hairline circle, one point, and the link's own words. No fill,
-no radius, no shadow, no box. It is not a button, and anything that reads as a
-button is a defect.
+An underline is a text decoration; this is a plotted target on a datum, and it
+is assembled from the primitives above and from nothing else. No fill, no
+radius, no shadow, no box, no background. It is not a button, and anything that
+reads as a button is a defect.
+
+**The object chosen, and what it is.** A **crosshair on a point, inside a
+ring, sitting on a heavy datum that stops either side of the words.** It is the
+array plot's listening-position mark — a 16px cross at the centre of the field,
+which is the one place in the plot where something is *aimed at* — inscribed in
+a ring and brought out to page scale. The datum is the plot's signal line at
+page scale. So the thing a visitor acts on is drawn in the same two strokes as
+the thing the practice sells: a point in a field, and a signal arriving at it.
+
+Rejected, each for a reason: a **bracket** (reads as a UI chrome affordance and
+has no point in it, so nothing is aimed at); a **framed field** alone (an
+outline box, which the primitives forbid); an **aperture** of two rules with
+nothing in the gap (what the previous revision had — the gap read as an
+accident of spacing, not as an object); and the mark itself at CTA scale (the
+mark may only sit in a gap in a 1px rule, and using the signature as a button
+makes it mean two things).
 
 **Construction**, left to right along one horizontal datum:
 
 ```
-──────────────────────┤  ⊕  START A PROJECT  ├──────────────────────
+──────────────┤          ⊕   START A PROJECT          ├──────────────
 ```
 
 | Part | Spec |
 |---|---|
-| Entering rules | Two, one from each side, on the datum. The object's single W4 emphasis stroke: 2px `--fg-primary` |
-| End-stops | A 1px `--fg-primary` vertical at the inner end of each entering rule, centred on the datum. 16px tall at ≥768px, 12px at ≤767px |
-| Gap | The distance from each end-stop to the text. 24px at ≥768px, 16px at ≤767px. This is the mark's construction — a gap in a rule — at the scale of the page |
-| Target | A 1px `--fg-primary` hairline circle with `--ground` fill, 24px across at ≥768px and 20px at ≤767px, carrying a 4×4 `--fg-primary` point at its centre, with the datum passing through it so the circle sits on the line. Inline SVG, `aria-hidden="true"`, 8px of clear space between it and the first glyph |
-| Text | The link's visible words, `--fg-primary`, **no underline**. The datum is the affordance |
+| Datum | One horizontal line through the whole object, interrupted twice. The object's single W4 emphasis stroke: **2px** `--fg-primary`, square ends |
+| Entering rules | The datum's two surviving segments, one from each side |
+| End-stops | A 1px `--fg-primary` vertical at the inner end of each entering rule, centred on the datum |
+| Target | Inline SVG, `aria-hidden="true"`, `focusable="false"`. A 1px `--fg-primary` ring, `fill: none`; a 1px `--fg-primary` crosshair through its centre, both arms extending past the ring; a 4×4 `--fg-primary` point at the crossing. The datum passes behind it and is interrupted on both sides, so the target sits **on** the line, not beside it |
+| Text | The link's visible words, `--fg-primary`, **no underline, no border-bottom**. The datum is the affordance |
 
-**Two instances, two scales.** The object is one component; only the text token
-and what the rules are anchored to change.
+The ring is `fill: none` because nothing passes behind it that needs occluding:
+the datum stops short on both sides, and the watermark at 1.08:1 is not visible
+through a 14px aperture. A `--ground`-filled ring in the contact band, which is
+`--band`, would print as a pale disc.
 
-| | Contact band | Hero |
+**Two symbols, authored 1:1, no scaling.** The target renders at exactly two
+sizes and each has its own `<symbol>`, declared once per page beside `#mk`.
+Neither is ever scaled, so every stroke is 1px and every point is 4×4 CSS px
+without `vector-effect` and without a new layout variable.
+
+```
+<symbol id="tg-32" viewBox="0 0 32 32">
+  <g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="butt">
+    <circle cx="16" cy="16" r="9"/>
+    <line x1="16" y1="2" x2="16" y2="30"/>
+    <line x1="2" y1="16" x2="30" y2="16"/>
+  </g>
+  <rect x="14" y="14" width="4" height="4" fill="currentColor"/>
+</symbol>
+
+<symbol id="tg-24" viewBox="0 0 24 24">
+  <g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="butt">
+    <circle cx="12" cy="12" r="7"/>
+    <line x1="12" y1="2" x2="12" y2="22"/>
+    <line x1="2" y1="12" x2="22" y2="12"/>
+  </g>
+  <rect x="10" y="10" width="4" height="4" fill="currentColor"/>
+</symbol>
+```
+
+| | `#tg-32` | `#tg-24` |
 |---|---|---|
-| Text token | `statement`, 56px / 30px, upper | `link-cta`, 24px / 20px, lower |
-| Rules anchored to | The frame's inner edges, left and right | The left edge of the text column, and its right edge at column 6 of 12. At ≤767px, the content width on both sides |
-| Datum height above the text's baseline | Centred on the cap box | Centred on the cap box |
-| Object height, ≥768px | 56px band | 40px band |
-| Object height, ≤767px | 48px band | 44px band, which is also the tap-target floor |
+| Rendered box | 32×32 CSS px | 24×24 CSS px |
+| Ring diameter | 18px | 14px |
+| Crosshair arm past the ring | 5px each side | 3px each side |
+| Centre point | 4×4px | 4×4px |
 
-At ≤767px, if the text plus two gaps leaves either entering rule shorter than
-24px, both rules and both end-stops are dropped and the target and the text
-remain. The object degrades to a target on a line, never to a crowded one.
+**Checkable:** the band target measures 32px square overall with an 18px ring;
+the hero target measures 24px square overall with a 14px ring; both carry a
+4px point. A ring of any other diameter, or a point that is not 4px, is a
+defect.
+
+**Two instances, one object, two sizes.** The hero instance and the contact
+band instance are the same component. Only the text token, the target symbol,
+four gap values, and what the entering rules anchor to change. They are not two
+treatments, for one reason: a reader who meets the object in the hero and skips
+to the bottom of the page has to recognise the same object, or the page reads
+as having two different primary actions. One grammar, stated twice, at two
+volumes.
+
+| | Hero | Contact band |
+|---|---|---|
+| Text token | `link-cta`, 24px / 20px, lower case | `statement`, 56px / 30px, upper case |
+| Target | `#tg-24` | `#tg-32` |
+| Entering rules anchored to | Left: a fixed 1-column stub. Right: the text column's right edge at column 6 of 12 | The frame's inner edges, left and right — full bleed |
+| End-stop height, ≥768 / ≤767 | 16px / 12px | 24px / 16px |
+| Left end-stop → target | 24px / 16px | 24px / — |
+| Target → first glyph | 16px / 12px | 16px / — |
+| Last glyph → right end-stop | 24px / 16px | 24px / — |
+| Object height, ≥768 / ≤767 | 40px / 44px, which is also the tap-target floor | 56px / 88px stacked |
+
+The datum is centred on the text's cap box in both instances, at both widths.
+
+**The contact band instance at ≤767px stacks, and does not degrade.** 350px of
+content cannot hold `START A PROJECT` at 30px plus a target plus four gaps plus
+two rules. So at ≤767px the band instance is drawn in two parts:
+
+1. The datum runs full bleed from the target's right edge to the frame's inner
+   right edge, 2px, with a 24px gap between the target and the start of the
+   rule. The target sits flush to the content's left edge. There is no left-hand
+   entering rule and no left end-stop: the target *is* the left terminal.
+2. `START A PROJECT` at `statement` 30px sits 24px below the datum, flush left
+   to the target's left edge.
+
+Object height 88px: 32px target, 24px gap, 32px cap height. One end-stop, at
+the right. This is more graphic on a phone than the inline version, not less:
+a heavy rule crosses the whole screen and is stopped by a target.
+
+**Geometry at the two scored viewports.**
+
+| | Hero, 1440px | Hero, 390px | Band, 1440px | Band, 390px |
+|---|---|---|---|---|
+| Content width | 660px (cols 1–6) | 350px | 1344px (full bleed) | 350px |
+| Text measure | ≈150px | ≈124px | ≈400px | ≈215px |
+| Target | 24px | 24px | 32px | 32px |
+| Gaps | 24 + 16 + 24 | 16 + 12 + 16 | 24 + 16 + 24 | 24 |
+| Left entering rule | 90px, fixed | 32px, fixed | remainder | none |
+| Right entering rule | remainder, ≥ 24px | remainder, ≥ 24px | remainder | remainder |
+
+If the right entering rule computes shorter than 24px at any width, the text
+column is too narrow for the instance and the stacked construction is used
+instead. That is the only degradation path, and it is a different layout rather
+than a stripped one.
 
 **States.** The accessible name is the visible text. Nothing is added to the
-accessible tree — no `aria-label`, no `title`, no hidden span — and the drawn
-parts are all `aria-hidden="true"`.
+accessible tree — no `aria-label`, no `title`, no hidden span — and every drawn
+part is `aria-hidden="true"`. The `<a>` is a real anchor with a real `href`, it
+is in the tab order, and nothing about it needs script.
 
 | State | What changes | Timing |
 |---|---|---|
 | Rest | As above | — |
-| Hover, `pointer: fine` | The target and the text together, `transform: translateX(8px)`. The gap on the left closes to 16px / 8px and the gap on the right opens by the same amount. Nothing changes colour, because everything is already `--fg-primary` | `--dur-fast`, `--ease-out` |
-| `:focus-visible` | The standard focus ring: 1px `--fg-primary` outline at 2px offset, on the `<a>` itself, enclosing the target and the text. The hover offset is not applied | no transition |
+| Hover, `pointer: fine` | The target and the text translate together, `transform: translateX(8px)`. The left gap closes from 24px to 16px and the right gap opens from 24px to 32px, so the object slides along its own datum. Nothing changes colour, because everything is already `--fg-primary` | `--dur-fast`, `--ease-out` |
+| `:focus-visible` | 1px `--fg-primary` outline at 2px offset on the `<a>` itself, enclosing the target and the text. The hover offset is **not** applied, so focus and hover are never confused with each other | no transition |
 | Active | `transform: translateX(4px)` — the object gives back half the hover offset, which reads as a press | `--dur-fast`, `--ease-out` |
 
-The hover is the same affordance a record index already uses, which is why it
-is a `transform` of ≤16px and not a new mechanic. Under
-`prefers-reduced-motion: reduce` the offsets apply with no transition; every
-state stays distinguishable without motion.
+Hover and active are `transform` only, on an element that is not in flow terms
+moved: the gaps are padding on the `<a>`'s two drawn siblings and do not
+reflow. Under `prefers-reduced-motion: reduce` every offset still applies, with
+no transition, so all four states stay distinguishable without motion.
 
 **It is two instances per page, maximum.** The header and footer contact links
-stay `label`-size text links. The target is the thing a visitor acts on, and a
-fourth drawn instance would make it wallpaper.
+stay `label`-size text links. A third drawn instance makes the object
+wallpaper, and an object that appears three times is a pattern rather than the
+thing to do.
+
+**Forbidden on this object.** A background fill of any kind. A border on the
+`<a>`. `border-radius`. An underline or `text-decoration`. A colour change on
+hover. An arrow, a chevron, or a `→`. The word `button` in a class name. The
+mark `#mk` anywhere inside it. The email address as rendered text, in the
+visible words, in the accessible name, in a `title`, or in an SVG `<text>`.
 
 ### The watermark
 
-One very large quiet figure, fixed to the viewport, that the page's text passes
-over as it scrolls. It is at stacking level `-1`, below every photograph,
-plate, diagram, rule, and word on the site, which is what makes it subordinate.
+**Built 2026-11-24, to Andrew's direct request: very thin, underneath the text,
+parallax.** What follows describes what is on the page, not an alternative.
 
-**It is a measured field, not the mark at size.** The mark may only sit in a
-gap in a 1px rule; a 900px mark behind the page breaks the one rule that keeps
-the mark meaning one thing. The array plot's full geometry at page scale
-competes with the array plot 500px away. What is left is the drafting register
-itself: concentric rings and radial spokes, large enough that the reader sees
-arcs rather than a circle, and never sees the whole figure at once.
+The mark, at page scale, five times down the length of the document, in outline
+only, in the palette's quietest value, below everything. It is at stacking level
+`-1`, below every photograph, plate, diagram, rule, and word on the site, which
+is what makes it subordinate by construction rather than by opacity.
+
+An earlier revision of this file specified a concentric-ring field fixed to the
+viewport and argued that the mark at size would break the mark's placement
+rule. That is withdrawn. The placement rule governs the mark **as a mark** — a
+14–24px figure terminating a 1px rule. At 50vw, in outline, at 1.08:1, behind
+the text, it is not read as a mark terminating anything; it is read as the
+stock the page is printed on. The two do not compete, because no reader sees
+both as the same object.
 
 | Part | Spec |
 |---|---|
-| Rings | Three concentric circles at 0.42, 0.72, and 1.00 × `--wm-r` |
-| Spokes | Twelve, at 30° intervals, each from the innermost ring outward past the viewport edge |
-| Datum | One horizontal line through the centre, full viewport width |
-| Stroke | 1px `--wash` `#E3E0DA`, `vector-effect="non-scaling-stroke"`, square ends |
-| Fill | None. Not `--ground`, not `--band`, not transparent-over-something — the shapes have no fill at all |
+| Figure | The mark's own geometry, `viewBox="0 0 24 24"`, `preserveAspectRatio="xMidYMid meet"` |
+| Stroke | 1px `--watermark` `#E4E1DB`, `vector-effect="non-scaling-stroke"`, `stroke-linecap: butt`, `stroke-linejoin: miter` |
+| Fill | None, on every element including the three triangles. The triangles are **outlined, not filled** — a filled triangle at 60px across would be the only solid shape on the site |
+| Axis lines | Extended to the triangle tips rather than stopping 3.43 short of them, because an outlined triangle has no ink to print through: `(9,15)→(9,4.4)`, `(9,15)→(20.6,15)`, `(9,15)→(4.6,18.95)` |
+| Instances | **Five.** `.wm-1` to `.wm-5` |
 | Numerals, labels, ticks, dashes | None |
 
-**Position and size.**
+**Position and size.** Each instance is `position: absolute` in the document,
+`aspect-ratio: 1 / 1`, `pointer-events: none`, `aria-hidden="true"`, and a
+direct child of `<body>` so no ancestor creates a stacking context above it.
 
-| | Centre | `--wm-r` | Outer ring diameter |
+| | Width | Vertical position | Horizontal |
 |---|---|---|---|
-| ≤767 | 50vw, 38vh | 115vw | 2.30 × viewport width |
-| 768–1023 | 50vw, 42vh | 95vw | 1.90 × viewport width |
-| ≥1024 | 62vw, 42vh | 62vw | 1.24 × viewport width |
+| ≤767 | 88vw, capped at 880px | `top` 6 / 26 / 46 / 66 / 86 % of the document | `right: -26vw`, `left: -30vw`, `right: -20vw`, `left: -28vw`, `right: -24vw` |
+| ≥768 | 50vw | the same six percentages | `right: -12vw` on 1, 3, 5 · `left: -14vw` on 2, 4, 6 |
 
-At ≥1024px the centre sits at 62vw, under the plot column and the metadata
-columns, so the prose measure in columns 1–7 is the part of the page the
-watermark touches least. At 390px it is centred, because there is one column
-and nowhere to put it that prose does not reach.
+Three rules hold at both widths and are the whole layout logic:
 
-**It is fixed, and it does not move.** `position: fixed`, full viewport,
-`pointer-events: none`, `aria-hidden="true"`, a direct child of `<body>` so no
-ancestor creates a stacking context above it. Content scrolls over a stationary
-figure. There is no transform, no scroll listener, no scroll-linked property,
-and no animation of any kind on it, at any motion preference. That is what
-keeps it outside the motion budget: the only thing in motion is the page, and
-the page was already moving. It is not parallax, which would require it to
-translate at a rate; it translates at no rate at all.
+1. **Six instances, anchored for the lag.** 5.0, 18.5, 31.9, 45.4, 58.8 and
+   72.2 percent of document height. They are not evenly spread: the parallax
+   lag carries each figure down as the reader scrolls, so an anchor is
+   `0.84 ×` the scroll position where its figure should be centred. Verify by
+   measuring coverage at every tenth of the page — one figure in view
+   throughout, no gaps.
+2. **Alternating sides.** Odd instances enter from the right, even from the
+   left. No two consecutive instances are on the same side.
+3. **Every instance bleeds off the edge it entered from.** The negative offset
+   is always larger than nothing and always smaller than the width, so between
+   a quarter and a third of each figure is off-screen. The reader never sees a
+   complete one, which is what keeps it a watermark rather than an illustration.
 
-**Why `--wash` and not opacity.** The design language forbids opacity scrims
-and forbids anything that reduces text contrast. A watermark at
-`opacity: 0.08` over `--line` would composite against whatever is behind it,
-including type, and the composited value would depend on stacking. A flat
-colour at level `-1` cannot touch type at all: the glyph paints over it at full
-strength.
+**The lag.** `transform: translateY(scrollY × 0.16)`, applied to all five by one
+assignment inside the array plot's existing `requestAnimationFrame` loop. The
+elements are in the document, so they already travel with the page at −1.0 ×
+`scrollY`; adding +0.16 leaves them travelling at −0.84, which is the lag.
+
+| Property | Value |
+|---|---|
+| Factor | 0.16 |
+| Clamped | No. The function is linear over the whole document |
+| Script cost | One assignment in a loop that already exists. No second listener, no second loop, no `getBoundingClientRect` |
+| Will-change | `transform`, on `.watermark` only |
+| Reduced motion | The `transform` is never set. The figures scroll with the document |
+| JavaScript off | The `transform` is never set. Identical to the reduced-motion render |
+
+0.16 is low on purpose. At 844px of viewport the reader scrolls a screen and the
+figure behind the text has drifted 135px against it — enough that the page has
+depth, little enough that nobody can point at what moved. Above about 0.25 the
+figures start to read as a moving background, and a moving background behind
+prose is what this site is the opposite of.
+
+**Why a flat colour and not opacity.** The design language forbids opacity
+scrims and forbids anything that reduces text contrast. A watermark at
+`opacity: 0.08` would composite against whatever is behind it, and the
+composited value would depend on stacking. A flat colour at level `-1` cannot
+touch type at all: the glyph paints over it at full strength.
 
 **The contrast guarantee, checkable.** Three measurements on any screenshot:
 
 1. A glyph crossed by a watermark stroke samples `#141210` or `#2B2825`
    unchanged. Type contrast is 15.7:1 and 12.3:1 as specified, everywhere.
-2. A watermark stroke over the bare ground samples `#E3E0DA` ±1 per channel,
-   1.08:1 — present as a figure at 1200px of arc, absent as an interruption in
-   a 16px letterform.
+2. A watermark stroke over the bare ground samples `#E4E1DB` ±1 per channel,
+   1.08:1 — present as a figure 600px across, absent as an interruption in a
+   16px letterform.
 3. The watermark is invisible inside the contact band, inside an image plate's
    mat, and over any photograph, because all three are opaque fills at level 0
    or above. It appears over the bare ground and nowhere else.
 
-**Cost.** One inline `<svg>`, ≤700 bytes of markup, zero requests, no script.
+**Cost.** Five inline `<svg>` blocks, ≤260 bytes each, ≤1.3KB total, zero
+requests, one line of script.
+
+**Defect conditions.** A sixth instance. Two consecutive instances on the same
+side. An instance wholly inside the viewport. A filled triangle. A stroke in
+any value but `--watermark`. A `z-index` other than `-1`. A `transition` or
+`animation` on `.watermark`. A lag factor that is not 0.16.
 
 ### Layering
 
@@ -953,9 +1143,13 @@ all measurable in a screenshot crop:
    of the crossed line's cap height, no closer than 2px to the baseline or to
    the x-height line. On the baseline it reads as an underline; at the x-height
    it merges with the bars of `e`, `a`, and `t` and the word turns to mud.
-4. **The rule is lighter than the type.** `--line` `#B0AAA0` over
-   `--fg-primary` `#141210` leaves the crossed glyph at 94%+ of its ink, and
-   the type's own contrast stays 15.7:1 everywhere.
+4. **The crossing rule is R2, and R2 only.** `--line` `#3A3732` at 9.9:1 over
+   `--fg-primary` `#141210` at 15.7:1. The rule is measurably lighter than the
+   type it crosses, the crossed glyph keeps 94%+ of its ink, and the type's own
+   contrast stays 15.7:1 everywhere. An R1 crossing is forbidden: at `#141210`
+   the rule and the glyph are the same ink and the word is cut rather than
+   crossed. An R3 crossing is forbidden too, for the opposite reason — at
+   5.75:1 the rule disappears into the word and reads as a printing fault.
 5. **At most two crossings per page**, never two on one text block. The device
    reads as deliberate at two and as an accident at six.
 
@@ -995,15 +1189,16 @@ above the bottom mat so it never collides with the mat's type. A layout that
 only reads once photography arrives is wrong.
 
 **Forbidden.** Opaque knockouts behind type. Type over a photograph. Mouse
-tracking. Parallax. Scroll-linked translation of content. Opacity scrims.
-Gradient fades over images. `backdrop-filter`. Text set in a colour chosen to
-suit one photograph. Interrupting a rule so type can pass through the gap —
-with one exception, the action target, where the gap holds the link and
-nothing is crossed.
+tracking. Scroll-linked translation of anything at stacking level 0 or above.
+Opacity scrims. Gradient fades over images. `backdrop-filter`. Text set in a
+colour chosen to suit one photograph. Interrupting a rule so type can pass
+through the gap — with one exception, the action target, where the gap holds
+the link and nothing is crossed.
 
-The watermark is not an exception to any of this. It sits **under** the artwork
-level in a flat colour, so it is not a scrim, not an overlay, and not over
-type. Nothing is composited and no text contrast is reduced.
+The watermark is the one scroll-linked translation on the site and it is not an
+exception to the rest of this. It sits **under** the artwork level in a flat
+colour, so it is not a scrim, not an overlay, and not over type. Nothing is
+composited and no text contrast is reduced.
 
 ### The array plot
 
@@ -1016,15 +1211,16 @@ instead, both measurable in a screenshot:
 
 1. The emphasised ray is the plot's one W4 emphasis stroke: **2px**
    `--fg-primary` with `vector-effect="non-scaling-stroke"`, at 15.7:1, while
-   every neighbouring ray is 1px `--line` at 1.94:1. That is a wider separation
-   than the dark theme's glow produces between its own ray and its neighbours.
+   every neighbouring ray is 1px `--line-detail` at 5.75:1. That is a wider
+   separation than the dark theme's glow produces between its own ray and its
+   neighbours.
 2. The measurement ticks along the emphasised ray double in density: 16px
    spacing against 32px on the rest of the plot. Tick length, 8px, is
    unchanged.
 
 The rest of the plot's ink, under the weight floors: the outer frame and the
-unemphasised spokes stay 1px `--line` (R3 context); the measurement ticks are
-`--fg-muted` at ≥768px and `--fg-body` at ≤767px; the 24 points render 4.0 CSS
+unemphasised spokes are 1px `--line-detail` (R3 context); the measurement ticks
+are `--line-detail`; the 24 points render 4.0 CSS
 px via `--pt` in `--fg-primary`; the channel numerals and the `LP` label are
 `--fg-body`, not `--fg-muted`, because they are 10px and W1 puts nothing
 muted below 12px; and the `LP` cross is `--fg-primary`.
@@ -1098,9 +1294,9 @@ does not cross that image.
 **The plate hairline.** It moves outward and darkens. On dark the 1px frame is
 `--line` directly against the photograph. On light it is 1px `--line-strong`
 on the outer edge of the mat, against `--ground`, never against the
-photograph. A `--line` frame at 1.94:1 laid against a dark image edge is
-swallowed by the image; `--line-strong` at 3.07:1 against the ground reads as
-a frame. Everywhere else on the page, hairlines stay `--line`.
+photograph. A plate frame is R1 `--line-strong` at 15.7:1, which against the
+ground reads as a frame and is the one rule on the page allowed to be as black
+as a heading, because it bounds a region rather than separating two.
 
 **Full-bleed image bands** carry no frame and no mat in either theme. The
 viewport edge does the framing. The light theme's tonal mapping still applies.
@@ -1140,8 +1336,21 @@ them.
   measured elevation), or a relation between names and categories (an axis). If
   it is any of those, draw it. A paragraph that restates a drawing beside it is
   deleted, not shortened. Deleting is preferred to illustrating.
-- Prose is budgeted per page and the budget is a count, not a feeling. The
-  counts live in the spec.
+- Prose is budgeted per page **and per section**, and the budget is a count,
+  not a feeling. The hard caps: **one prose block per section, maximum, and no
+  section carries more than 55 words of prose.** At least two numbered sections
+  on a page carry none at all. The per-page totals and the per-section
+  allowances live in the spec.
+- Three questions kill a paragraph, in this order. Is the fact already in the
+  drawing beside it? Delete the paragraph. Is the fact a list, a sequence, a
+  quantity, or a relation? Draw it and delete the paragraph. Is the fact true,
+  publishable, and carried nowhere else on the page? Then it is one of the
+  page's five, and it gets one sentence.
+- **Deleting beats illustrating, and illustrating beats shortening.** A
+  paragraph trimmed from four sentences to two is still a paragraph; the
+  brochure problem is the count of text blocks, not their length.
+- A `label`-size line is a text block. Converting a paragraph into a caption
+  spends the budget rather than saving it.
 - British or American spelling: American.
 
 ### Placeholder copy
