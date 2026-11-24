@@ -22,18 +22,9 @@ The systems work is technical but not magical. The creative work is the
 magic, and it is the harder thing to find anywhere else. The site leads with
 the magic and lets the technical credibility sit underneath it.
 
-Two things follow from this that the current site gets wrong.
-
-The systems half is not primarily about hanging speakers. It is the logic and
-the artist-facing workflow, often running on hardware someone else already
-installed. A room built by others, made usable, is a real and sellable
-service.
-
-And where there is a physical install, it is bespoke. The current site lists
-"Speaker Installation" first, in the same words a dozen AV integrators use,
-which reads as the commodity version of a thing that is not commodity. An
-installation designed as an artwork — enclosures, haptics, instruments built
-for one room — is a different offering and needs different language.
+The systems half is the logic and the artist-facing workflow, often running
+on hardware someone else already installed. Where there is a physical
+install, it is bespoke.
 
 ## Who it is for
 
@@ -54,10 +45,8 @@ sideways.
 
 ## Proof
 
-The agency is new. A long list of completed projects does not exist and will
-not exist this year, and the site should not strain to imply otherwise.
-
-What is real:
+Four work records. Selection and wording are the team's call; the design
+holds the slots.
 
 - **Reforesters Laboratory, Williamsburg.** Complete, and the only finished
   project, so it carries the weight. Spelling confirmed against
@@ -81,34 +70,14 @@ What is real:
   aspirational. It gets a placeholder on the site now and a name when it can
   be published.
 
-- **MoFE.** A spatial system at scale, and the clearest single example of one.
-  Andrew designed the system and commissioned Jupiter Sound to execute it;
-  Chloe Alexandra Thompson tuned it and refined sound design within it. Not an
-  Astral Spatial commission — it predates the agency — but it is two of the
-  three principals doing together exactly what the agency sells.
+- **MoFE.** Andrew Fox designed the system, Jupiter Sound executed it, Chloe
+  Alexandra Thompson tuned it and refined sound design within it.
 
 - **An anechoic chamber in Detroit.** Chloe Alexandra Thompson and Michael
-  Amacio, within the last year. Not an Astral Spatial commission. Details and
-  permission to publish are both outstanding.
+  Amacio, within the last year. Details to be confirmed by the team.
 
 - Further projects in development, unnamed until they can be shown.
 
-### How work that predates the agency is attributed
-
-Two of the three work examples were done by these people before Astral Spatial
-existed, one of them with a third party executing the build. Presenting them
-as agency commissions would be a lie, and the art world is the audience least
-likely to forgive one.
-
-Every work record therefore carries an explicit credit line naming who did
-what. Reforesters reads as Astral Spatial. The other two name the individuals
-and the year, and say plainly that the work predates the agency. A curator
-reading the page should be able to tell, without asking, which projects the
-company delivered and which its people did elsewhere.
-
-This is not a weakness to be minimised. Three people who have each done this
-work at scale, now working together, is the actual proposition. The site
-should say that rather than imply a backlog it does not have.
 - **The individual CVs.** This is the strongest proof the business has. All
   three have done significant work elsewhere, and the current site's bios
   carry the specifics: a 32–148 speaker array specialist and Max Certified
@@ -120,6 +89,12 @@ should say that rather than imply a backlog it does not have.
   agency and should be framed accordingly.
 
 The bio text is kept. The headshots are kept.
+
+### Credit line
+
+Every work record carries a credit line as a fixed field, so the design
+reserves room for it on all records. Who appears on which line, and the
+wording, is the team's call during the copy pass.
 
 ## Tone and design direction
 

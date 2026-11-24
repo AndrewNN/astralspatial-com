@@ -10,10 +10,15 @@ serif for everything a person actually reads. Catalogue numbering carries
 hierarchy instead of boxes, cards, or shadows. Nothing is rounded, nothing is
 shaded, nothing has a gradient.
 
-The ground comes in two themes, `ground-dark` and `ground-light`. They share
-every token name, every type size, every spacing value, every grid column,
-and every motion rule. Only the eight palette values and the photography
-treatment differ.
+Three devices carry the whole system and nothing else is added to them: the
+**hairline**, the **frame** around the page, and the **mark** — one small
+piece of array geometry, repeated, never explained.
+
+The site ships `ground-light`, decided on 2026-11-23 after both grounds were
+built and reviewed. `ground-dark` stays documented below because it is a
+complete, matched set and a user-switchable dark mode is a possible later
+addition. It is not what any page ships today. Where the two disagree on a
+behaviour, `ground-light` is the live answer.
 
 Every value below is a literal. If a rendered page shows a number that is not
 on one of these scales, it is wrong.
@@ -23,7 +28,7 @@ on one of these scales, it is wrong.
 Two themes, `ground-dark` and `ground-light`. Both are complete sets of the
 same eight tokens, with the same roles and the same assignments in the type
 scale. A build ships exactly one of them: swap the `:root` block and no other
-rule in the stylesheet changes.
+rule in the stylesheet changes. `ground-light` is the shipping theme.
 
 There is no `prefers-color-scheme` branch, no theme class, no toggle, and no
 JavaScript. A page is one theme from load to unload.
@@ -253,8 +258,50 @@ Content width is capped at 1680px; above that the margins grow and the grid
 stays fixed. At 1440px exactly: content 1344px, column 90px, gutter 24px.
 
 20px is the mobile page margin and the single sanctioned exception to the
-spacing scale. Nothing touches the viewport edge except deliberate full-bleed
-image bands and the header and footer rules.
+spacing scale.
+
+**Page margins are measured from the frame, not from the viewport.** The frame
+insets the whole document (see "The frame"), so at 390px the distance from the
+viewport edge to the first character of body copy is 8px of frame inset plus
+20px of page margin, 28px total. Full-bleed means bleeding to the frame's
+inner edge. Nothing in the document touches the viewport edge.
+
+### Layout variables
+
+Three variables carry layout values that change per breakpoint. They are
+indirections onto the scales above, not new scale values. Every value they
+take already appears in the spacing scale.
+
+| Variable | ≤767 | 768–1023 | 1024–1439 | ≥1440 |
+|---|---|---|---|---|
+| `--margin` | 20px | 32px | 40px | 48px |
+| `--frame` | 8px | 16px | 16px | 16px |
+| `--frame-gap` | 16px | 24px | 24px | 24px |
+
+`--frame-gap` is the length of the interruption at each end of a frame edge's
+hairline. A fourth value anywhere in these variables is a defect.
+
+### Icon sizes
+
+Inline SVG marks render at 12px, 16px, or 24px square. Nothing else. 12px is
+not a spacing value; it is the existing length of a plate corner tick and the
+`label` cap height, and marks are sized to sit on a rule without outweighing
+the type beside it.
+
+### Stacking order
+
+Four levels. Nothing else declares a `z-index`.
+
+| Level | What |
+|---|---|
+| `0` | Photographs, image plates, the array plot — every piece of artwork a text block may cross |
+| `1` | Layered text blocks and their `--ground` knockouts |
+| `40` | The site frame |
+| `50` | The skip link |
+
+A `z-index` of `2`, `99`, or `9999` in the stylesheet is a defect. No element
+creates a stacking context by means of `opacity`, `filter`, or `transform` in
+a way that lifts artwork above level 0.
 
 ## Breakpoints
 
@@ -315,13 +362,130 @@ is drawn complete. No content depends on an animation to become visible.
 
 ## Lines and surfaces
 
-- Hairlines are exactly 1px, square ends, never 2px, never dashed except in
-  the array plot's measurement ticks.
+- Hairlines are exactly 1px, square ends, never 2px. Two exceptions, both
+  named: the array plot's measurement ticks are dashed `2 4`, and the frame's
+  four edge rules are interrupted at their ends by `--frame-gap`.
+- Corner ticks are `--line-strong`, never `--line`. This holds for the frame's
+  corners and for an image plate's corners, which are the only two places a
+  corner tick appears.
 - `border-radius` is `0` everywhere. There are no pills, no rounded cards, no
   circular portraits.
 - `box-shadow` is not used, in either theme. `ground-dark` has one blur,
   `--glow`. `ground-light` has none.
-- No overlay on any image except the caption bar described in the spec.
+- No overlay on any image except the caption bar described in the spec and the
+  `--ground` knockouts described under "Layering". Neither uses opacity.
+
+### The frame
+
+Every page is framed. The frame is the first thing that says the page is a
+drawn object rather than a document, and it is the only element fixed to the
+viewport.
+
+**Construction.** Four fixed strips, each filled solid `--ground`, inset `0`
+from the viewport edges and `--frame` + 1px thick. Each strip carries a 1px
+`--line` rule on its inner edge. The strips are solid, so content scrolls
+behind them and is cut cleanly at the rule rather than crossed by it. The
+frame is `pointer-events: none` and `aria-hidden="true"`.
+
+**The rule is interrupted.** Each edge's hairline stops `--frame-gap` short of
+each corner — 24px at ≥768px, 16px at ≤767px. The corner itself carries a
+tick: an L of two arms, 16px at ≥768px and 8px at ≤767px, 1px
+`--line-strong`, drawn at the exact inner corner and running inward along both
+edges. Arm plus gap equals the interruption, so the measurements close:
+16 + 8 = 24 at ≥768px, 8 + 8 = 16 at ≤767px. The effect is a registration
+mark, not a border.
+
+**Measurement marks.** At ≥1024px only, the left edge carries five 8px ticks
+pointing inward from its hairline, 1px `--line`, at 32px pitch, the middle
+tick centred on `50vh`. They are the array plot's tick column, moved to the
+page. No numerals, no caption. The right, top, and bottom edges carry none.
+Below 1024px there are no measurement marks.
+
+**At 390px.** The frame is 1px of rule on 8px of inset, 9px per side, 18px of
+390 — 4.6% of the width. It is never 2px: a 2px rule at that inset reads as a
+border on a phone, and the system has no 2px hairline anywhere else. Body
+copy begins 28px from the viewport edge.
+
+**It does not animate.** The frame is at its final state on first paint, in
+every motion preference. It is not drawn, it does not fade in, and it does not
+change on scroll or hover.
+
+**Known behaviour.** On iOS Safari the bottom strip tracks the visual viewport
+and shifts as the toolbar collapses. Nothing is positioned relative to it and
+no content depends on it.
+
+### The mark
+
+One shape, reduced from the array plot: a listening-position crosshair, a
+hairline ray, and the array point the ray reaches. It is the site's signature
+and it is never captioned, labelled, named in alt text, or explained.
+
+**Geometry.** `viewBox="0 0 16 16"`, `stroke-width: 1`,
+`shape-rendering: crispEdges`, `stroke: currentColor`, `fill: currentColor`.
+
+| Element | Coordinates |
+|---|---|
+| Crosshair, horizontal arm | `(1.5, 11.5)` to `(7.5, 11.5)` |
+| Crosshair, vertical arm | `(4.5, 8.5)` to `(4.5, 14.5)` |
+| Ray | `(4.5, 11.5)` to `(12.5, 3.5)` |
+| Point | `rect x=11 y=2 width=3 height=3`, filled |
+
+Declared once per page as a `<symbol id="mk">` inside a zero-size inline
+`<svg>` at the top of `<body>`, then placed with `<use href="#mk">`. No image
+request, no second file, no icon font.
+
+**Where it is allowed.** The mark only ever sits in a gap in a 1px rule, at
+that rule's right end, vertically centred on the rule, with the gap 8px wider
+than the mark on each side. Three placements, and no others:
+
+| Placement | Size ≥768 | Size ≤767 | Colour |
+|---|---|---|---|
+| Section rule, right end | 16px | 12px | `--fg-muted` |
+| Link row rule, right end | 12px | 12px | `currentColor`, so it brightens with the row |
+| Footer top rule, **left** end | 24px | 16px | `--fg-muted` |
+
+The footer instance is the single mirrored one and marks the end of the
+document.
+
+**The rule that stops it spreading.** A mark that is not centred in a gap in a
+1px rule is a defect. It never appears inside prose, inside an image plate,
+inside a photograph, as a list bullet, as a heading ornament, in a row of more
+than one, or anywhere a rule does not already exist. One per rule, maximum.
+
+**Off-page.** The favicon is the mark, and that is the only instance not
+sitting on a rule.
+
+### Layering
+
+Text passes over artwork. The composition is static or scroll-only. There is
+no mouse tracking, no parallax, and no transform tied to pointer position
+anywhere on the site.
+
+Legibility is guaranteed by construction, not by judgement, and never by an
+opacity scrim. Two mechanics, and no third.
+
+**L1 — hairline underlap.** Text may overlap artwork whose content in the
+overlap region is 1px `--line` hairlines and nothing else. No knockout, no
+fill, no change to the type. The overlap may not exceed 25% of the text
+block's area, and no numeral, caption, filled point, or `--fg-primary` stroke
+may fall inside it. Checkable: sample the overlap region in a screenshot and
+the only non-ground pixels belong to 1px rules.
+
+**L2 — ground knockout.** Text crossing a photograph, an image plate's
+interior, or a `--band` fill sits on a solid `--ground` panel. The panel has
+no border, no radius, no shadow, and no opacity — it is the page colour,
+opaque, so the text keeps the same 15.7:1 it has everywhere else. Padding
+`--s-3` (24px) at ≥768px, `--s-2` (16px) at ≤767px. The panel bleeds off the
+left edge of its content column to the frame, so it shows three edges and
+reads as a strip of the page rather than a card.
+
+Both mechanics put artwork at stacking level 0 and the text at level 1.
+Nothing below the text is clipped, masked, or blurred.
+
+**Degradation.** A layered composition over an image slot that has no
+photograph yet keeps its exact geometry over the image plate instead. The
+plate's centred label moves out of the overlap region so the knockout never
+sits on it. A layout that only reads once photography arrives is wrong.
 
 ### The array plot
 
