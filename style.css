@@ -196,6 +196,7 @@ img, svg { max-width: 100%; display: block; }
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--fg-primary);
+  text-wrap: balance;
 }
 @media (min-width: 1024px) {
   .title { font-size: 2rem; }
