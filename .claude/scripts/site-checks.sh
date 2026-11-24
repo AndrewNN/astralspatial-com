@@ -12,6 +12,13 @@ fi
 WORK=$(mktemp -d)
 trap 'rm -rf "$WORK"' EXIT
 
+# A bare origin with no path makes the DIR calculation below strip the host,
+# which silently breaks every relative reference on the page.
+case "$URL" in
+  http://*/*|https://*/*) ;;
+  *) URL="$URL/" ;;
+esac
+
 echo "url: $URL"
 echo "date: $(date -u '+%Y-%m-%dT%H:%M:%SZ')"
 echo
@@ -35,12 +42,29 @@ import re, sys, urllib.parse
 html = open(sys.argv[1], encoding='utf-8', errors='replace').read()
 base, dirurl = sys.argv[2], sys.argv[3]
 refs = set()
+
+# Resource hints are not links. A bare origin like fonts.googleapis.com
+# answers 404 by design, so checking these reports failures that aren't.
+hints = set()
+for m in re.finditer(r'<link\b[^>]*>', html, re.I):
+    tag = m.group(0)
+    if re.search(r'rel\s*=\s*["\'][^"\']*(preconnect|dns-prefetch|preload)', tag, re.I):
+        h = re.search(r'href\s*=\s*["\']([^"\']+)["\']', tag, re.I)
+        if h:
+            hints.add(h.group(1).strip())
+
 for attr in ('href', 'src', 'content'):
     for m in re.finditer(attr + r'\s*=\s*["\']([^"\']+)["\']', html, re.I):
         u = m.group(1).strip()
         if attr == 'content' and not re.match(r'^(https?:|/)', u):
             continue
         if u.startswith(('#', 'mailto:', 'tel:', 'data:', 'javascript:')):
+            continue
+        if u in hints:
+            continue
+        # Cloudflare rewrites mailto: links to this; the fragment carries the
+        # encoded address and the path itself is never fetchable.
+        if '/cdn-cgi/l/email-protection' in u:
             continue
         refs.add(urllib.parse.urljoin(dirurl + '/', u))
 for r in sorted(refs):
@@ -68,9 +92,20 @@ print(f'img_count: {len(imgs)}')
 print(f'img_missing_alt: {len([i for i in imgs if not re.search(chr(92)+"balt"+chr(92)+"s*=", i, re.I)])}')
 h1s = re.findall(r'<h1[^>]*>(.*?)</h1>', html, re.I | re.S)
 print(f'h1_count: {len(h1s)}')
-for wrong in ('Morisette', 'Amasio', 'Mike Amacio'):
-    if wrong in html:
-        print(f'WRONG_SPELLING_PRESENT: {wrong}')
+# Any local stylesheet or script published without a ?v= cache buster. A
+# long immutable cache plus no new URL means edits never reach visitors.
+unbusted = []
+for m in re.finditer(r'<link\b[^>]*rel\s*=\s*["\']stylesheet["\'][^>]*>', html, re.I):
+    h = re.search(r'href\s*=\s*["\']([^"\']+)["\']', m.group(0), re.I)
+    if h and not re.match(r'^(https?:)?//', h.group(1)) and '?' not in h.group(1):
+        unbusted.append(h.group(1))
+for m in re.finditer(r'<script\b[^>]*src\s*=\s*["\']([^"\']+)["\'][^>]*>', html, re.I):
+    u = m.group(1)
+    if not re.match(r'^(https?:)?//', u) and '?' not in u:
+        unbusted.append(u)
+print(f'assets_without_cache_bust: {len(unbusted)}')
+for u in unbusted:
+    print(f'  NO_CACHE_BUST: {u}')
 PY
 echo
 
@@ -83,7 +118,11 @@ LARGEST=0
 while read -r ref; do
   [ -z "$ref" ] && continue
   COUNT=$((COUNT + 1))
-  read -r code size < <("${CURL[@]}" -o /dev/null -w '%{http_code} %{size_download}' -L "$ref" 2>/dev/null || echo "000 0")
+  METRICS=$("${CURL[@]}" -o /dev/null -w '%{http_code} %{size_download}' -L "$ref" 2>/dev/null) || METRICS=""
+  code=$(printf '%s' "$METRICS" | awk 'NR==1{print $1}' | tr -cd '0-9')
+  size=$(printf '%s' "$METRICS" | awk 'NR==1{print $2}' | tr -cd '0-9')
+  [ -n "$code" ] || code=000
+  [ -n "$size" ] || size=0
   KB=$((size / 1024))
   if [ "$code" != "200" ]; then
     BROKEN=$((BROKEN + 1))
