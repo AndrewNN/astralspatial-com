@@ -86,8 +86,9 @@ Measured against `--ground` `#000000`:
 | `--fg-primary` | `#141210` | Headings, wordmark, links, the email address, numerals in index positions |
 | `--fg-body` | `#2B2825` | Running serif body copy and lead paragraphs |
 | `--fg-muted` | `#5E5A53` | Labels, section numbers, captions, plate text, technical term lists, footer status bar |
-| `--line` | `#B0AAA0` | All hairlines at rest: section rules, record separators, grid ticks |
-| `--line-strong` | `#8C857A` | Hairline hover state, and the frame of an installation image plate |
+| `--line` | `#B0AAA0` | Context hairlines: record separators, row separators, grid ticks, dimension lines, the array plot's outer frame and context spokes |
+| `--line-strong` | `#8C857A` | Structural hairlines: section rules, band edges, the frame's four edge rules, image-plate frames. Also the record hover state |
+| `--wash` | `#E3E0DA` | The watermark, and nothing else. One rank quieter than `--line`, because the watermark is a field and `--line` is a rule |
 | `--glow` | `transparent` | The theme carries no glow. The token exists so the two `:root` blocks are interchangeable. Nothing renders it |
 
 Measured against `--ground` `#EDEBE6`:
@@ -95,11 +96,12 @@ Measured against `--ground` `#EDEBE6`:
 | Token | Ratio | Smallest size used | AA threshold | Verdict |
 |---|---|---|---|---|
 | `--fg-primary` | 15.7:1 | 16px (`wordmark`, mobile) | 4.5:1 | pass, AAA |
-| `--fg-body` | 12.3:1 | 16px (`body`, mobile) | 4.5:1 | pass, AAA |
-| `--fg-muted` | 5.75:1 | 11px (`label`, `index`, mobile) | 4.5:1 | pass AA |
+| `--fg-body` | 12.3:1 | 11px (`label`, `index`, mobile) | 4.5:1 | pass, AAA |
+| `--fg-muted` | 5.75:1 | 12px (`label`, desktop, subordinate ranks only) | 4.5:1 | pass AA |
 | `--band` | 1.09:1 | non-text | — | decoration |
 | `--line` | 1.94:1 | non-text | — | decoration |
 | `--line-strong` | 3.07:1 | non-text | — | decoration |
+| `--wash` | 1.08:1 | non-text | — | watermark only |
 
 `--fg-muted` is darker than its dark-theme counterpart is light, on purpose.
 A grey that reads as quiet on black is not the same grey that reads as quiet
@@ -133,6 +135,66 @@ three reasons, in order of weight.
    be seen, and the whole ramp goes chalky and cold. Starting at 92% gives
    `--line` and `--line-strong` room to separate from each other and from the
    ground without either going grey-blue.
+
+### Weight floors
+
+Added 2026-11-24, after a phone review against other-people.net in daylight.
+The page read washed out. The cause was not one value; it was that the
+subordinate rank had spread until most of the ink on the page was 11px
+grotesque at 5.75:1. These four floors fix it, and all four are checkable with
+an eyedropper on a screenshot crop.
+
+**W1 — colour floor by size.** `--fg-muted` is not permitted below 12px, and
+is not permitted at all below 768px.
+
+| Band | `--fg-muted` allowed on | Everything else |
+|---|---|---|
+| ≤767px | nothing | `--fg-body` or `--fg-primary` |
+| ≥768px | the subordinate ranks in W2 only, at 12px | `--fg-body` or `--fg-primary` |
+
+**W2 — the subordinate rank, complete.** The only type that renders
+`--fg-muted` anywhere on the site, and only at ≥768px:
+
+`FIG.` caption cells · image-plate labels · the image plate's mat caption bar ·
+the footer status cells · the hero eyebrow · in-drawing dimension numerals
+
+Nothing else. In particular: section labels, index-band cells, record metadata
+rows, credit lines, link-row text, `body-s` prose, the array plot's channel
+numerals, person credits, and the register rows are **not** subordinate rank
+and do not render `--fg-muted` at any width.
+
+**W3 — rule ranks.** Every 1px rule on the site is one of three ranks. The rank
+is positional, so it is decidable from a screenshot without reading the
+stylesheet.
+
+| Rank | Token | Where |
+|---|---|---|
+| R1 structural | `--line-strong` | Section rules · the header's bottom rule · the index band's top and bottom rules · the contact band's top and bottom rules · the footer's top rule · the frame's four edge rules · an image plate's frame · the credits register's axis rule |
+| R2 record | `--line` | Record top rules · link-row rules · row separators inside the index band, the footer, a register, or a metadata table · figure-caption top rules · the shared datum under the portraits |
+| R3 drawn context | `--line` | Measurement ticks, dashed ticks, dimension lines, the array plot's outer frame and its unemphasised spokes, the G-01 context rays |
+
+A section rule set in `--line` is a defect. A record separator set in
+`--line-strong` is a defect.
+
+**W4 — the emphasis stroke, 2px.** A drawing may carry **one** 2px stroke, and
+only on the stroke that carries the drawing's subject. No more than one per
+drawing. It is `--fg-primary`, and inside an SVG it carries
+`vector-effect="non-scaling-stroke"` so it renders exactly 2px at every plot
+scale — a 2px stroke scaled by 0.625 is 1.25px, which anti-aliases to a pale
+grey and is worse than the 1px it replaced.
+
+| Drawing | Its one 2px stroke |
+|---|---|
+| Array plot | The signal line, centre to point `01` |
+| `FIG. 05` source fan | The centre ray of the three emphasised rays |
+| `FIG. 06` signal path | The horizontal spine |
+| `FIG. 07` enclosure | The enclosure outline |
+| The action target | The two rules entering from the edges, which are one object |
+| Credits register | None. Its emphasis is the terminal points |
+
+2px is forbidden on: the frame, any section rule, any record rule, any rule
+that crosses text, the mark, the watermark, and any rule outside a drawing.
+A 3px stroke does not exist.
 
 ### Which theme the references support
 
@@ -187,9 +249,9 @@ band. `md` (768–1023) uses the `≥1024` column unless noted in the spec.
 | `title-s` | 22px | 18px | 1.18 | 0.08em | upper | grotesque | `--fg-primary` |
 | `lead` | 28px | 20px | 1.40 | 0 | sentence | serif | `--fg-body` |
 | `body` | 18px | 16px | 1.62 | 0 | sentence | serif | `--fg-body` |
-| `body-s` | 15px | 14px | 1.55 | 0 | sentence | serif | `--fg-muted` |
-| `label` | 12px | 11px | 1.0 | 0.22em | upper | grotesque | `--fg-muted` |
-| `index` | 12px | 11px | 1.0 | 0.10em | upper, tabular | grotesque | `--fg-muted` |
+| `body-s` | 15px | 14px | 1.55 | 0 | sentence | serif | `--fg-body` |
+| `label` | 12px | 11px | 1.0 | 0.22em / 0.16em | upper | grotesque | per W1/W2 |
+| `index` | 12px | 11px | 1.0 | 0.10em | upper, tabular | grotesque | per W1/W2 |
 | `link-cta` | 24px | 20px | 1.2 | 0.12em | lower | grotesque | `--fg-primary` |
 
 Nothing else. Eleven sizes is the whole system. A twelfth value in the
@@ -197,6 +259,18 @@ stylesheet is a defect.
 
 Tracking is positive only, and only on upper-case. Lower-case and sentence-case
 text is always `letter-spacing: 0`.
+
+`label` is the one token with two tracking values, for the same reason the
+sizes have two columns. At 11px, 0.22em puts 2.4px of space between glyphs
+about 6px wide, and the word disperses into a row of marks rather than reading
+as a word. 0.16em at ≤767px holds the catalogue register and keeps the ink
+together. `index` keeps 0.10em at both widths; it was never loose enough to
+disperse.
+
+Colour for `label` and `index` is set by the weight floors, not by the token:
+`--fg-muted` only at ≥768px and only on the W2 subordinate ranks, `--fg-body`
+or `--fg-primary` everywhere else. `body-s` is prose and is never the
+subordinate rank, which is why it moved off `--fg-muted` entirely.
 
 ### Running text rules
 
@@ -285,6 +359,8 @@ take already appears in the spacing scale.
 | `--frame-gap` | 16px | 24px | 24px | 24px |
 | `--obj-r` | 17 | 11 | 11 | 11 |
 | `--obj-fs` | 16 | 10 | 10 | 10 |
+| `--pt` | 6.4 | 4.1 | 4.1 | 4.1 |
+| `--wm-r` | 115vw | 95vw | 62vw | 62vw |
 
 `--frame-gap` is the length of the interruption at each end of a frame edge's
 hairline. A fourth value anywhere in the first three variables is a defect.
