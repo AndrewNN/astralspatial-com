@@ -46,11 +46,24 @@ toggle, no `prefers-color-scheme` branch, and no dark stylesheet in the repo.
 
 Two scored viewports: **390×844** and **1440×900**. Both are first-class.
 
-Three devices carry the design beyond the hairline grid: the frame (SP-10),
-the mark (SP-11), and layering (SP-12). Each is specified once as a component
-and then referenced. Three further components carry this revision: the sound
-objects (SP-13), the scroll scalar (SP-14), and the drawn elements (SP-15).
-SP-16 governs placeholder copy.
+Five devices carry the design beyond the hairline grid: the frame (SP-10), the
+mark (SP-11), layering (SP-12), the action target (SP-18), and the watermark
+(SP-19). Each is specified once as a component and then referenced. Three
+further components carry the hero: the sound objects (SP-13), the scroll scalar
+(SP-14), and the drawn elements (SP-15). SP-16 governs placeholder copy and
+SP-17 governs weight.
+
+### Revision of 2026-11-24, after the phone review
+
+Four findings from Andrew looking at the built page on a phone beside
+other-people.net. Each one resolves to components in this document.
+
+| Finding | Resolution |
+|---|---|
+| Too thin — the page reads washed out beside Other People | SP-17. Weight floors in the skill, applied here component by component. The `--line` and `--line-strong` values are settled separately and are not changed by this revision |
+| Too text reliant | SP-15 G-05, tightened from eight prose blocks to five and from 420 words to 170. Six paragraphs are deleted outright, three become registers, one becomes a plot |
+| The call to action should feel graphic | SP-18. `Start a project` becomes a drawn object. The underlined text link is withdrawn, and so is G-04, which SP-18 absorbs |
+| A watermark the text scrolls over | SP-19. A fixed measured field at stacking level `-1`, in `--wash`, which is a flat colour and not a scrim |
 
 ---
 
@@ -136,15 +149,19 @@ width, then its label.
 
 | Element | Token | Colour |
 |---|---|---|
-| Section rule | 1px solid | `--line` |
-| Section number + name, e.g. `02 — SELECTED WORK` | `label` | `--fg-muted` |
+| Section rule | 1px solid | `--line-strong` — R1 structural, per the skill's W3 |
+| Section number + name, e.g. `02 — SELECTED WORK` | `label` | `--fg-primary` |
+
+A section label is an `<h2>`. It was set at `--fg-muted`, which made every
+heading on the page the lightest type in its own section. It is the structural
+heading and it carries the structural colour.
 
 Vertical gaps per the skill's section rhythm table: 128/24/48 at ≥1024px,
 64/16/32 at ≤767px.
 
-The rule carries the mark (SP-11) at its right end: a 32px gap at ≥768px with
-the 16px mark centred in it, a 28px gap at ≤767px with the 14px mark centred
-in it. The gap is at the right end of the content width, so the rule reads as
+The rule carries the mark (SP-11) at its right end, in `--fg-primary`: a 32px
+gap at ≥768px with the 16px mark centred in it, a 28px gap at ≤767px with the
+14px mark centred in it. The gap is at the right end of the content width, so the rule reads as
 starting at the left margin and terminating in the mark. One mark per section
 rule, never two.
 
@@ -157,7 +174,7 @@ the contact band, and the footer are unnumbered.
 
 ### SP-01 — Header
 
-Full-bleed, static (not sticky), 1px `--line` bottom rule.
+Full-bleed, static (not sticky), 1px `--line-strong` bottom rule (R1).
 
 **≥1024px**, height 64px, page margin per grid:
 
@@ -166,8 +183,10 @@ Full-bleed, static (not sticky), 1px `--line` bottom rule.
 - Right, in one row, 32px gaps, vertically centred: `WORK`, `STUDIO`, a 1px
   `--line` vertical divider 16px tall, then the contact link (SP-05) reading
   `CONTACT` at `label` size in `--fg-primary`.
-- Current page's nav item: `--fg-primary` instead of `--fg-muted`, no
-  underline.
+- Nav items at rest are `--fg-body`, hover and `:focus-visible`
+  `--fg-primary`. They were `--fg-muted`; a 12px nav at 5.75:1 is the first
+  thing a reader looks for and the lightest thing on the page.
+- Current page's nav item: `--fg-primary`, no underline.
 
 **≤767px**, height 56px:
 
@@ -177,18 +196,20 @@ Full-bleed, static (not sticky), 1px `--line` bottom rule.
 
 ### SP-02 — Footer
 
-Appears on all three pages. 1px `--line` top rule. Preceded by 192px of space
-at ≥1024px, 96px at ≤767px.
+Appears on all three pages. 1px `--line-strong` top rule (R1). Preceded by
+192px of space at ≥1024px, 96px at ≤767px.
 
-The top rule carries the mark (SP-11) at its **left** end — the one mirrored
+The top rule carries the mark (SP-11) at its **left** end, in `--fg-primary` — the one mirrored
 instance on the site. 40px gap at ≥768px with the 24px mark centred in it,
 32px gap at ≤767px with the 16px mark centred in it. The gap starts at the
 left page margin, so the mark sits where the rule would otherwise begin.
 
-Row 1, navigation, `label` token, `--fg-muted`, current page `--fg-primary`:
+Row 1, navigation, `label` token, `--fg-body`, current page `--fg-primary`:
 `HOME` `WORK` `STUDIO`.
 
-Row 2, status bar, `label` token, `--fg-muted`, five cells:
+Row 2, status bar, `label` token, `--fg-muted` at ≥768px and `--fg-body` at
+≤767px per W1 — the status bar is the one W2 subordinate rank in the footer —
+five cells:
 `ASTRAL SPATIAL` · `NEW YORK` · `SPATIAL AUDIO, SYSTEMS, FABRICATION` ·
 the contact link (SP-05, reading `CONTACT`, `--fg-primary`) · `© 2026`.
 
@@ -210,31 +231,45 @@ background, no radius, no shadow.
 
 | Columns | Content |
 |---|---|
-| 1–2 | Index, `index` token, e.g. `001`, `W/01` |
-| 3–7 (546px) | Title (`title`), then prose (`body`) |
-| 9–12 (432px) | Metadata rows: `label` token, one per line, line-height 2.0, `--fg-muted` |
+| 1–2 | Index, `index` token, `--fg-primary`, e.g. `001`, `W/01` |
+| 3–7 (546px) | Title (`title`), then prose (`body`) where the record has any |
+| 9–12 (432px) | The metadata register |
 
-Top rule 1px `--line` across the full content width. 64px between sibling
+Top rule 1px `--line` across the full content width (R2). 64px between sibling
 records.
+
+**The metadata register.** The metadata column is a table, not a list. Each
+field is a 32px row at ≥1024px and 32px at ≤767px, `label` token,
+`--fg-body`, with a 1px `--line` rule between rows (R2) and no rule above the
+first or below the last. The register reads as a specification sheet, which is
+what it is, and the rules are what make it read as one rather than as a column
+of loose words.
+
+Line-height 2.0 and bare rows are withdrawn. They produced a column of 11px
+grotesque at 5.75:1 floating in space, which was the single largest block of
+washed-out ink on the page.
 
 **≤767px**, stacked:
 
 1. Top rule.
 2. Index, `index` token, 16px below the rule.
 3. Title, `title` at 24px, 16px below the index.
-4. Prose, `body` at 16px, 16px below the title.
-5. Metadata rows, `label` at 11px, 32px below the prose, 16px apart.
+4. Prose, `body` at 16px, 16px below the title, where the record has any.
+5. The metadata register, `label` at 11px in `--fg-body`, 32px below the
+   preceding element, rows 32px tall with 1px `--line` between.
 
 48px between sibling records.
 
 **Hover**, ≥1024px and `(pointer: fine)` only: top rule `--line` →
 `--line-strong` over `--dur-fast`; index numeral `translateX(8px)` over
-`--dur-fast`, `--ease-out`. Nothing else changes.
+`--dur-fast`, `--ease-out`. Nothing else changes. A record is not a link, so
+this is an affordance for the drawn row, not for navigation.
 
-**Metadata column composition.** For offerings (`001`–`003`) and people
-(`P/01`–`P/03`) the column holds technical rows only. For work records
+**Metadata column composition.** For offerings (`001`–`003`) the column opens
+with the record's G-01 diagram, 24px of clear, then the register. For people
+(`P/01`–`P/03`) the column is the register alone. For work records
 (`W/01`–`W/04`) the column opens with SP-09, then a 1px `--line` rule with
-16px clear above and below, then the technical rows. The record component
+16px clear above and below, then the register. The record component
 treats the credit line as the column's first child so it cannot be omitted by
 accident.
 
@@ -277,12 +312,12 @@ It exists in exactly one place per page: one `href`.
 
 #### What the reader sees
 
-| Placement | Visible text | Token | Colour |
-|---|---|---|---|
-| Desktop header | `CONTACT` | `label` | `--fg-primary` |
-| Home hero | `Start a project` | `link-cta` | `--fg-primary` |
-| Contact band | `START A PROJECT` | `statement` | `--fg-primary` |
-| Footer status cell | `CONTACT` | `label` | `--fg-primary` |
+| Placement | Visible text | Token | Colour | Form |
+|---|---|---|---|---|
+| Desktop header | `CONTACT` | `label` | `--fg-primary` | Text link |
+| Home hero | `Start a project` | `link-cta` | `--fg-primary` | SP-18 action target, hero scale |
+| Contact band | `START A PROJECT` | `statement` | `--fg-primary` | SP-18 action target, band scale |
+| Footer status cell | `CONTACT` | `label` | `--fg-primary` | Text link |
 
 `START A PROJECT` at `statement` 56px measures about 400px, so it sits inside
 columns 1–8 (774px) on one line. At 30px it measures about 215px inside a
@@ -349,12 +384,23 @@ JavaScript, so this is the right trade.
 
 #### Styling
 
-1px `--fg-muted` underline at 6px offset; on hover and `:focus-visible` the
-underline goes `--fg-primary` over `--dur-fast`. At ≤767px the link is
-`display: inline-block` with `padding: 8px 0` so its tap target is ≥44px tall.
-The `statement`-size instance in the contact band carries no underline — it is
-the terminus of the aperture rule described in SP-15 G-04, which is its
-affordance.
+**The two primary instances are SP-18 action targets and carry no underline.**
+The drawn object is the affordance. The hero instance and the contact-band
+instance differ only in text token and anchoring; everything else about them is
+one component.
+
+The header and footer instances stay text links. Text `--fg-primary` at rest,
+with a 1px `--line-strong` underline at 6px offset; on hover and
+`:focus-visible` the underline goes `--fg-primary` over `--dur-fast`. The text
+never changes colour, so the cell is at 15.7:1 in every state and the hover is
+carried by the rule, which is a `border-color` transition and on the sanctioned
+list. At ≤767px every instance is `display: inline-block` with
+`padding: 8px 0` so its tap target is ≥44px tall.
+
+The previous scheme — `--fg-muted` text with a `--fg-muted` underline,
+brightening to `--fg-primary` on hover — is withdrawn. It put the primary
+action's two smaller instances at 5.75:1 and gave them a 1.94:1 affordance,
+which on a phone in daylight is neither visible nor hoverable.
 
 #### Removed by this component
 
@@ -372,14 +418,18 @@ Sits directly under the hero on `/` and directly under the page title on
 `work.html` and `studio.html`. Lists that page's numbered sections as in-page
 anchors.
 
-**≥1024px**: one row, 56px tall, 1px `--line` above and below. Cells of equal
-width separated by 1px `--line` vertical rules. Each cell: number in `index`,
-16px gap, name in `label`. Hover: text `--fg-muted` → `--fg-primary` over
-`--dur-fast`.
+**≥1024px**: one row, 56px tall, 1px `--line-strong` above and below (R1).
+Cells of equal width separated by 1px `--line` vertical rules (R2). Each cell:
+number in `index`, 16px gap, name in `label`. Rest `--fg-body`, hover and
+`:focus-visible` `--fg-primary` over `--dur-fast`.
 
 **≤767px**: one row per section, 56px tall, 1px `--line` between. Number flush
-left, name 16px to its right, a 12px `↓` glyph flush right in `--fg-muted`.
+left, name 16px to its right, a 12px `↓` glyph flush right in `--fg-body`.
 56px rows satisfy the 44px tap-target floor.
+
+The band is navigation and it is the second thing a phone reader meets. At
+`--fg-muted` it was seven rows of near-invisible 11px caps; at `--fg-body` it
+is a register.
 
 At ≤767px the band carries two extra rows at the end — `WORK` and `STUDIO` —
 which are the cross-page navigation missing from the mobile header. Those two
@@ -390,9 +440,11 @@ rows are not shown at ≥1024px, where the header carries them.
 The state of every image slot before its photograph exists. Costs 0KB.
 
 - The exact box dimensions the photograph will occupy.
-- 1px `--line` border, `--ground` fill.
-- Four corner ticks, 12px long, 1px `--line-strong`, inset 8px.
-- Centred: `label` token, `--fg-muted`, naming what the plate will hold, e.g.
+- 1px `--line-strong` border (R1 — a plate frame is structural), `--ground`
+  fill.
+- Four corner ticks, 12px long, 1px `--fg-muted`, inset 8px.
+- Centred: `label` token, `--fg-muted` at ≥768px and `--fg-body` at ≤767px,
+  naming what the plate will hold, e.g.
   `PLATE — INSTALLATION, REFORESTERS LABORATORY`.
 - The same caption bar the photograph will carry.
 - No motion.
@@ -426,18 +478,18 @@ Contents:
 
 | Element | Spec |
 |---|---|
-| Frame | 1px `--line` square, inset 0.5px |
+| Frame | 1px `--line` square, inset 0.5px. R3 context — the plot's boundary is not the subject and it is the one rule that crosses `lead` at ≥1440px, where L1 requires it to be the lighter of the two |
 | Outer ring | 16 points at r=228 from centre |
 | Upper ring | 6 points at r=150, rotated 11.25° from the outer ring |
 | Height layer | 2 points at r=60, above centre |
-| Point | 3×3px square, `--fg-primary` |
-| Numerals | `01`, `04`, `08`, `12`, `16`, `20`, `22`, `24` only, `index` token at 10px, `--fg-muted`, set 10px radially outward |
-| Listening position | 16×16px 1px cross, `--fg-primary`, at centre, labelled `LP` 10px to its right |
-| Spokes | 8 hairlines, centre to each numbered point, 1px `--line` |
-| Measurement ticks | Left and bottom edges, 1px `--line`, `stroke-dasharray: 2 4`, with `--fg-muted` captions giving the channel count |
-| Signal line | One 1px `--fg-primary` line from the centre cross to point 01. No glow: `--glow` is `transparent` on the light ground. Emphasis is carried by contrast — `--fg-primary` at 15.7:1 against neighbouring rays at 1.94:1 — and by the ray's own tick column at 16px pitch against 32px on the rest of the plot |
+| Point | `--pt` — 4.1 viewBox units at ≥768px, 6.4 at ≤767px, so the point renders **4.0 ±0.3 CSS px square at every viewport**. `--fg-primary`. Positioned by `transform="translate(cx cy)"` with `x` and `y` at `calc(var(--pt) * -0.5)`. The previous 3×3 unit point rendered 1.9px at 390px, which is the thinnest mark the build shipped |
+| Numerals | `01`, `04`, `08`, `12`, `16`, `20`, `22`, `24` only, `index` token at 10px, **`--fg-body`** — W1 puts nothing muted below 12px — set 10px radially outward |
+| Listening position | 16×16px 1px cross, `--fg-primary`, at centre, labelled `LP` 10px to its right in `--fg-body` |
+| Spokes | 8 hairlines, centre to each numbered point, 1px `--line` (R3) |
+| Measurement ticks | Left and bottom edges, 1px, `stroke-dasharray: 2 4`, `--fg-muted` at ≥768px and `--fg-body` at ≤767px, with captions at the same colour giving the channel count |
+| Signal line | The plot's one W4 emphasis stroke: **2px** `--fg-primary` with `vector-effect="non-scaling-stroke"`, from the centre cross to point 01. No glow: `--glow` is `transparent` on the light ground. Emphasis is carried by weight and contrast — 2px at 15.7:1 against neighbouring 1px rays at 1.94:1 — and by the ray's own tick column at 16px pitch against 32px on the rest of the plot |
 | Sound objects | Five, per SP-13. Drawn in a `<g class="objs">` placed after the spokes and points and **before** the numerals, the `LP` cross, and the `LP` label in document order, so plot type always draws over an object and never under it |
-| Caption bar | Flush under the frame, 32px tall, 1px top rule, `label` token. Left cell `FIG. 01`, right cell `24.2 — REFORESTERS LABORATORY` |
+| Caption bar | Flush under the frame, 32px tall, 1px `--line` top rule (R2), `label` token, `--fg-muted` at ≥768px and `--fg-body` at ≤767px. Left cell `FIG. 01`, right cell `24.2 — REFORESTERS LABORATORY` |
 
 **Draw-on motion**, CSS `@keyframes` only, plays once on load, total ≤2000ms:
 
@@ -481,14 +533,15 @@ child, never its first. A record whose metadata column opens with
 | 2 | `YEAR —` | A year or a range |
 | 3 | `COMMISSION —` | Exactly one of two strings: `ASTRAL SPATIAL` or `PREDATES ASTRAL SPATIAL` |
 
-**Type.** `label` token, `--fg-muted`, line-height 2.0 — identical to the
-technical metadata rows beside it. Not smaller, not italic, not parenthetical,
-not a different colour. The credit carries the same visual weight as the
-hardware list because it carries the same kind of fact.
+**Type.** `label` token, `--fg-body`, in the same 32px register rows as the
+technical metadata beside it. Not smaller, not italic, not parenthetical, not a
+different colour. The credit carries the same visual weight as the hardware
+list because it carries the same kind of fact. When SP-17 moved the register to
+`--fg-body`, the credit line moved with it, which is the point of specifying
+them as one type.
 
-Row 1 wraps freely; it is the one row allowed more than one line, and it wraps
-at `label` size with the same 2.0 line-height, flush left with no hanging
-indent.
+Row 1 wraps freely; it is the one row allowed more than one line. It grows the
+row rather than overflowing it, flush left with no hanging indent.
 
 **Defect conditions**, all checkable in a screenshot:
 
@@ -497,14 +550,15 @@ indent.
 - A credit line set below the prose, or in the prose, rather than at the head
   of the metadata column.
 - A credit line at a smaller size or a lighter colour than the technical rows.
+- A credit line rendering `--fg-muted` at any width.
 
 **At ≤767px** the metadata column stacks below the prose. The credit line
 stays first within it, so reading order is prose → credit → technical rows.
 
 ### SP-10 — Site frame
 
-Every page. Fixed to the viewport, drawn as four solid `--ground` strips with
-a 1px `--line` rule on each inner edge. Geometry, colour, interruption,
+Every page. Fixed to the viewport, drawn as four `--frame-fill` strips with
+a 1px `--line-strong` rule on each inner edge (R1). Geometry, colour, interruption,
 corner ticks, and measurement marks are specified in the design-language
 skill under "The frame". This component states the markup and the
 interactions.
@@ -551,10 +605,15 @@ above the frame when focused. No other element declares a `z-index` above 1.
 
 | Band | Inset | Rule | Interruption | Corner tick arms | Left measurement marks |
 |---|---|---|---|---|---|
-| ≤767 | 8px | 1px `--line` | 16px each end | 8px, `--line-strong` | none |
-| 768–1023 | 16px | 1px `--line` | 24px each end | 16px, `--line-strong` | none |
-| 1024–1439 | 16px | 1px `--line` | 24px each end | 16px, `--line-strong` | 5 × 8px at 32px pitch, centred on `50vh` |
-| ≥1440 | 16px | 1px `--line` | 24px each end | 16px, `--line-strong` | 5 × 8px at 32px pitch, centred on `50vh` |
+| ≤767 | 8px | 1px `--line-strong` | 16px each end | 8px, `--fg-muted` | none |
+| 768–1023 | 16px | 1px `--line-strong` | 24px each end | 16px, `--fg-muted` | none |
+| 1024–1439 | 16px | 1px `--line-strong` | 24px each end | 16px, `--fg-muted` | 5 × 8px at 32px pitch, `--fg-muted`, centred on `50vh` |
+| ≥1440 | 16px | 1px `--line-strong` | 24px each end | 16px, `--fg-muted` | 5 × 8px at 32px pitch, `--fg-muted`, centred on `50vh` |
+
+The three colour changes in that table are the frame's whole contribution to
+SP-17. The geometry, the inset, the interruptions, the arm lengths, and the 1px
+width are all unchanged: at a 9px inset on a phone, 2px reads as browser
+chrome, so the weight is bought with the token and not with the width.
 
 **At 390px**, the whole frame costs 9px per side, 18px of 390, 4.6% of the
 width. It stays 1px, not 2px: nowhere else on the site is a rule 2px, and at a
@@ -566,10 +625,12 @@ preference. It is not drawn on load, it does not fade, and it does not react
 to scroll or hover.
 
 **Screenshot checks.** At 1440×900: a hairline rectangle 17px in from each
-viewport edge, interrupted 24px before each corner, with a 16px L-tick at each
-corner in a visibly darker grey, and five short ticks pointing inward from the
-left edge around the vertical centre. At 390×844: the same without the
-measurement ticks, 9px in, with 8px corner arms.
+viewport edge sampling `--line-strong`, interrupted 24px before each corner,
+with a 16px L-tick at each corner sampling `--fg-muted`, and five short ticks
+pointing inward from the left edge around the vertical centre, also
+`--fg-muted`. At 390×844: the same without the measurement ticks, 9px in, with
+8px corner arms. At both widths the corner tick is visibly darker than the edge
+rule it terminates.
 
 **Mobile fill.** `--frame-fill` is `transparent` below 768px and `--ground`
 from 768px up. Each strip sets `background-color: var(--frame-fill)`. Below
@@ -614,15 +675,19 @@ referred to in copy.
 
 **Home page census**, seven instances:
 
-| Instance | Rule | Size |
-|---|---|---|
-| 1 | Section 01 rule, right end | 16px / 12px |
-| 2 | Section 02 rule, right end | 16px / 12px |
-| 3 | Section 03 rule, right end | 16px / 12px |
-| 4 | Section 04 rule, right end | 16px / 12px |
-| 5 | `ALL PROJECTS` link row rule, right end | 14px |
-| 6 | `FULL BIOGRAPHIES` link row rule, right end | 14px |
-| 7 | Footer top rule, **left** end | 24px / 16px |
+| Instance | Rule | Size | Colour |
+|---|---|---|---|
+| 1 | Section 01 rule, right end | 16px / 14px | `--fg-primary` |
+| 2 | Section 02 rule, right end | 16px / 14px | `--fg-primary` |
+| 3 | Section 03 rule, right end | 16px / 14px | `--fg-primary` |
+| 4 | Section 04 rule, right end | 16px / 14px | `--fg-primary` |
+| 5 | `ALL PROJECTS` link row rule, right end | 14px | `currentColor` |
+| 6 | `FULL BIOGRAPHIES` link row rule, right end | 14px | `currentColor` |
+| 7 | Footer top rule, **left** end | 24px / 16px | `--fg-primary` |
+
+The `12px` mobile size in the previous revision was a typo against the skill,
+which sets the mark's floor at 14px because below it the three triangles
+collapse into the lines. 14px is the mobile size on every instance.
 
 Nowhere else. Not on the hero, not in the index band, not on the plot's
 caption bar, not on the image band caption, not on the contact band, not in
@@ -636,8 +701,9 @@ mark abbreviates and putting both in one frame explains the joke.
 
 **Link row change.** The `→` in `ALL PROJECTS →` and `FULL BIOGRAPHIES →` is
 deleted. The row's rule carries the mark at its right end instead, at 14px,
-`stroke: currentColor`, so it brightens from `--fg-muted` to `--fg-primary`
-with the row's existing 120ms colour transition. No `→` glyph remains anywhere
+`stroke: currentColor`, so it brightens from `--fg-body` to `--fg-primary`
+with the row's existing 120ms colour transition. Link-row text rests at
+`--fg-body`, not `--fg-muted`. No `→` glyph remains anywhere
 on the site.
 
 **Favicon.** `favicon.svg` is the mark on a `#EDEBE6` ground, 24×24 viewBox
@@ -1057,12 +1123,20 @@ points, the filled triangle, hairline circles, `--band` fills, catalogue
 numerals — and introduces no second visual language.
 
 **The sanctioned primitives, complete.** 1px hairline, straight or elliptical ·
-dashed hairline at `2 4` · 3×3 square point, `--fg-primary` · filled triangle,
-3.9 long × 2.1 across · hairline circle · `--band` flat fill · `label`, `index`
-numerals. Nothing else is drawn anywhere on the site. No arrowheads other than
-the triangle, no curves other than ellipses, no fill other than `--ground`,
+2px emphasis stroke, `--fg-primary`, one per drawing (W4) · dashed hairline at
+`2 4` · 4×4 CSS px square point, `--fg-primary` · filled triangle, 3.9 long ×
+2.1 across · hairline circle · `--band` flat fill · `label`, `index` numerals.
+Nothing else is drawn anywhere on the site. No arrowheads other than the
+triangle, no curves other than ellipses, no fill other than `--ground`,
 `--band`, and `--fg-primary` points, no hatching, no stipple, no outline boxes
 around things.
+
+**The ink floor.** Per the skill: no drawing is rendered entirely in `--line`.
+Every drawing on this site contains at least one `--fg-primary` element and at
+least one element at `--fg-body` or darker, and the stroke that carries the
+drawing's subject is never the lightest thing in it. The ink assignment is
+stated per drawing below, because "drawn in hairlines" was what produced five
+grey smudges on a phone.
 
 The triangle is a shared primitive, not the mark. The mark is the three-axis
 assembly of three hairlines and three triangles from one origin. A triangle
@@ -1074,20 +1148,20 @@ placement rule does not apply to it.
 Each of the three offering records gets one inline SVG in its metadata column,
 above the metadata rows, with 24px clear below it. `viewBox="0 0 288 180"`,
 rendered at 288×180 at ≥1024px and at the full content width × 0.625 at
-≤767px, where it sits between the prose and the metadata rows. Each carries a
-1px `--line` top rule with a `FIG.` number and a title at `label` in
-`--fg-muted`, in the same two-cell construction the plot's caption bar uses.
-≤2.5KB of markup each.
+≤767px, where it sits between the title and the metadata register. Each
+carries a 1px `--line` top rule (R2) with a `FIG.` number and a title at
+`label`, `--fg-muted` at ≥768px and `--fg-body` at ≤767px, in the same two-cell
+construction the plot's caption bar uses. ≤2.5KB of markup each.
 
 | Record | Drawing | Caption |
 |---|---|---|
-| `001` Creative | A source fan. One 3×3 point at `(24, 90)`, nine hairlines fanning to nine 3×3 points on a vertical line at x = 264, spaced 18 units apart from y = 18 to y = 162. Three of the nine rays are `--fg-primary`, the rest `--line`; the three carry 8-unit dashed ticks at 16-unit pitch | `FIG. 05 — SOURCE TO ARRAY` |
-| `002` Systems | A signal scale bar. One horizontal 1px `--line` rule at y = 72 from x = 16 to x = 272, with five 10-unit vertical ticks dropping from it at x = 16, 80, 144, 208, 272, and five `index`-size labels below at 9px: `LAPTOP`, `SQ-5`, `DANTE`, `Q-SYS`, `AMPS`. Above the rule, a second dashed `2 4` rule at y = 48 spanning only x = 144 to x = 272, labelled `AMBISONIC` — the span the templating covers | `FIG. 06 — SIGNAL PATH` |
-| `003` Fabrication | A measured elevation. A speaker enclosure drawn as a 1px `--line` outline, 96 wide × 132 tall at `(40, 24)`, with one hairline circle for the driver and one 3×3 point at the terminal position. Two dimension lines offset 16 units outside the body, each a 1px rule terminated at both ends by the shared triangle primitive, with dimensions set at `index` 9px: one horizontal, one vertical | `FIG. 07 — ENCLOSURE, ELEVATION` |
+| `001` Creative | A source fan. One 4×4 point at `(24, 90)`, nine hairlines fanning to nine 4×4 points on a vertical line at x = 264, spaced 18 units apart from y = 18 to y = 162. The centre ray is the drawing's one 2px emphasis stroke in `--fg-primary`; the two rays either side of it are 1px `--fg-primary`; the remaining six are 1px `--line`. The three emphasised rays carry 8-unit dashed ticks at 16-unit pitch in `--fg-muted` | `FIG. 05 — SOURCE TO ARRAY` |
+| `002` Systems | A signal scale bar. One horizontal **2px** `--fg-primary` spine at y = 72 from x = 16 to x = 272 — the drawing's emphasis stroke, because the path is the subject — with five 10-unit vertical ticks dropping from it at x = 16, 80, 144, 208, 272 in 1px `--fg-primary`, and five labels below at `index` 9px in `--fg-body`: `LAPTOP`, `SQ-5`, `DANTE`, `Q-SYS`, `AMPS`. Above the spine, a dashed `2 4` rule at y = 48 spanning only x = 144 to x = 272 in `--fg-muted`, labelled `AMBISONIC` at 9px `--fg-body` — the span the templating covers | `FIG. 06 — SIGNAL PATH` |
+| `003` Fabrication | A measured elevation. A speaker enclosure outline, 96 wide × 132 tall at `(40, 24)`, drawn as the drawing's **2px** `--fg-primary` emphasis stroke, with one 1px `--fg-primary` hairline circle for the driver and one 4×4 point at the terminal position. Two dimension lines offset 16 units outside the body, each a 1px `--line` rule terminated at both ends by the shared triangle primitive in `--fg-primary`, with dimensions set at `index` 9px in `--fg-body`: one horizontal, one vertical | `FIG. 07 — ENCLOSURE, ELEVATION` |
 
 No boxes around the labels, no shading inside the enclosure, no arrowheads
-other than the triangle. The three drawings are the same weight of line as the
-array plot and the mark, so the page reads as one drawing set.
+other than the triangle. One 2px stroke per drawing and no more, so the three
+drawings read as one set at the same weights as the array plot and the mark.
 
 The dimensions in `FIG. 07` are the enclosure's real dimensions when the
 fabrication commission can be described, and until then the drawing carries no
@@ -1100,13 +1174,19 @@ triangles still render; only the numerals wait.
 The twelve names stop being a three-column list and become a plotted register.
 The information gains one true field and the section gains its drawn element.
 
-- A 1px `--line` rule across the content width at the top of the register,
-  carrying three 8px dashed `2 4` ticks at 50%, 72%, and 94% of its length,
-  with three `label` headers above them: `INSTALLATION`, `SYSTEM`, `RECORD`.
+- A 1px `--line-strong` rule across the content width at the top of the
+  register (R1 — it is the register's axis and the thing every row measures
+  against), carrying three 8px dashed `2 4` ticks at 50%, 72%, and 94% of its
+  length in `--fg-muted`, with three `label` headers above them in
+  `--fg-primary`: `INSTALLATION`, `SYSTEM`, `RECORD`.
 - Twelve rows below it. Each row: the name at `body-s` in `--fg-body` flush
-  left, then a 1px `--line` rule running right from 8px after the name to the
-  row's tick position, terminating in a 3×3 `--fg-primary` point on the axis.
-- Row height 48px at ≥1024px, 44px at ≤767px, 1px `--line` between rows.
+  left, then a 1px **`--fg-muted`** connector running right from 8px after the
+  name to the row's tick position, terminating in a 4×4 `--fg-primary` point on
+  the axis. The connector is the row's one piece of information, so it is not
+  `--line`; a register whose twelve data rules are at 1.94:1 is a register of
+  nothing.
+- Row height 48px at ≥1024px, 44px at ≤767px, 1px `--line` between rows (R2).
+- No 2px stroke. This drawing's emphasis is its twelve terminal points.
 - One point per row. A name belonging to two categories gets the category the
   three principals' credit on it actually was; the register is a statement of
   fact, not a matrix.
@@ -1120,53 +1200,110 @@ connecting rule shortens accordingly. The names stay flush left at `body-s`
 #### G-03 — Shared datum under the portraits, home section 04
 
 The three portraits sit on one shared 1px `--line` rule that runs the full
-content width and passes behind all three, 24px below their bottom edges. An
-8px tick drops from the rule at each portrait's left edge, and a third tick at
-the rightmost portrait's right edge. The names sit 24px below the rule.
+content width and passes behind all three, 24px below their bottom edges (R2).
+An 8px tick in `--fg-muted` drops from the rule at each portrait's left edge,
+and a fourth tick at the rightmost portrait's right edge. The names sit 24px
+below the rule.
 
 One rule instead of three separate blocks is what makes three people read as
-one practice. 0 bytes, and it is the only thing added to that section.
+one practice. 0 bytes.
 
-#### G-04 — The contact aperture
+At ≤767px the datum renders. It was desktop-only, which left the mobile
+people section as three unrelated blocks and was one of the places the phone
+page had no drawn element at all. On mobile the rule runs the content width
+24px below each portrait's bottom edge — three rules, one per person, each with
+a tick at the portrait's left and right edges — because the three portraits are
+stacked and there is no single row to share.
 
-The contact band's primary action becomes the terminus of a drawn line rather
-than a line of a paragraph.
+#### G-04 — The contact aperture: absorbed into SP-18
 
-- Two 1px `--line` rules enter from the frame's inner edges, left and right, at
-  the vertical centre of the `START A PROJECT` cap box.
-- Each stops 24px short of the text, so the link sits in a gap in a rule — the
-  same construction the mark uses, at the scale of the page.
-- No mark in either gap: the gap holds the link, and SP-00 already excludes the
-  contact band from the mark census.
-- At ≤767px the two rules enter the same way; the gap is 16px each side. If the
-  text plus two 16px gaps leaves either rule under 24px long, both rules are
-  dropped and the band keeps its existing top and bottom rules only.
-  `START A PROJECT` at 30px measures about 215px inside a 350px content width,
-  leaving 135px for two 16px gaps and two 51px rules, so they render.
-
-This is the one place on the site where a rule is interrupted for type to sit
-in the gap. It is not an exception to L1, because nothing is crossed: it is the
-mark's construction, applied to a link.
+Withdrawn as a separate element. Its two entering rules and its gap-in-a-rule
+construction are now two parts of the action target, which is specified once in
+SP-18 and used at two scales. Nothing is lost; the component grew a target, two
+end-stops, and a second instance in the hero, and the 1px `--line` rules became
+the 2px `--fg-primary` emphasis stroke.
 
 #### G-05 — Prose budget
 
-The brochure problem is a count, so the fix is a count. On `/index.html`:
+The brochure problem is a count, so the fix is a count. The previous budget
+was eight blocks and 420 words, and the built page still read as paragraphs in
+columns. **Revised 2026-11-24**, for `/index.html`:
 
-| Limit | Value |
+| Limit | Previous | Value |
+|---|---|---|
+| Prose blocks (`lead`, `body`, `body-s` paragraphs) | ≤ 8 | **≤ 5** |
+| Total words of prose | ≤ 420 | **≤ 170** |
+| Consecutive paragraphs anywhere | ≤ 2 | **≤ 1** |
+| Sentences per prose block | ≤ 2 | ≤ 2 |
+| Sections with no drawn element | 0 | 0 |
+| Sections with no prose at all | — | **≥ 2** |
+
+**The five surviving prose blocks on the home page**, and nothing else:
+
+| # | Block | Token | Cap | Why it survives |
+|---|---|---|---|---|
+| 1 | Hero lead | `lead` | 1 sentence, ≤ 28 words | The claim has to be legible as a sentence once |
+| 2 | Section 01 positioning line | `body` | 1 sentence, ≤ 30 words | It is the only place the audience and the unequal relation between the three offerings are stated |
+| 3 | `W/01` prose | `body` | 2 sentences, ≤ 55 words | The only finished project. The workflow clause is the point of the section |
+| 4 | Credits framing line | `body` | 1 sentence, ≤ 20 words | Attribution honesty needs plain language |
+| 5 | Contact band next-step sentence | `body` | 2 sentences, ≤ 30 words | The primary action has to say what happens next |
+
+`≤ 1` consecutive paragraph means the page contains no instance anywhere of one
+paragraph followed by another. Checkable in a full-page screenshot.
+
+**The six deleted paragraphs**, and what carries their content instead:
+
+| Deleted | What now carries it |
 |---|---|
-| Prose blocks (`lead`, `body`, `body-s` paragraphs) | ≤ 8 |
-| Total words of prose | ≤ 420 |
-| Consecutive paragraphs anywhere | ≤ 2 |
-| Sentences per work-record prose block | ≤ 2 |
-| Sections with no drawn element | 0 |
+| `001` Creative prose | The title, the `FIG. 05` fan, and the four register rows. A sentence saying "sound designed for a specific room" between a drawing of a source feeding an array and a list reading `SPATIALIZED SOUND DESIGN` was the third statement of the same fact |
+| `002` Systems prose | `FIG. 06`, which draws the signal path the paragraph described device by device, plus eight register rows |
+| `003` Fabrication prose | `FIG. 07`, a measured elevation of the thing, plus four register rows |
+| `W/02` prose | Its SP-09 credit line, its register, and G-06, which plots its channel count against the Reforesters room. Its full-length prose lives on `work.html`, which is where a reader who wants it goes |
+| `W/04` prose | The plate, the index, and two register rows. Everything true that can be published about an unnamed in-progress commission is `STATUS — IN PROGRESS` and `CLIENT — UNNAMED` |
+| Hero next-step line | Deleted as a duplicate. It said what the contact band's sentence says. One `label` line under the hero target replaces it: `SCOPED IN WRITING BEFORE ANY CALL` |
+
+**The three converted blocks:**
+
+| Was | Becomes |
+|---|---|
+| Three `body-s` person credits in section 04 | Three registers. Each person's comma list becomes three `label` rows in the SP-03 register construction. Every named credit is kept exactly; only the punctuation goes |
+| Twelve-name credit list | G-02, already specified |
+| `W/02`'s scale claim | G-06, below |
 
 Every numbered section on the home page contains at least one of: the array
-plot, a G-01 diagram, the G-02 axis, the G-03 datum, the G-04 aperture, or an
-image plate. Checkable by counting in a full-page screenshot.
+plot, a G-01 diagram, G-02's axis, G-03's datum, G-06, the SP-18 target, or an
+image plate. Sections 01 and 04 contain no prose at all.
 
 Full-length prose lives on `work.html` and `studio.html`, where the job is
 detail and the bios are the proof. The home page's job is to be a drawing with
-enough words on it.
+enough words on it. The bios are explicitly exempt: they are the strongest
+proof the business has and the brief keeps them in substance.
+
+#### G-06 — Channel count, a scale plot
+
+Section 02's drawn element, and the replacement for `W/02`'s two paragraphs. It
+sits directly under the section label, above the IMG-01 band.
+
+- A horizontal axis: 1px `--line-strong` across the content width, with dashed
+  `2 4` ticks in `--fg-muted` at 0, 8, 16, and 24 channels, labelled at
+  `index` 9px in `--fg-body`.
+- Two rows under it. Each row: the project name at `body-s` in `--fg-body`
+  flush left, then a 1px `--fg-muted` connector running right to the row's
+  channel position, terminating in a 4×4 `--fg-primary` point, with the count
+  set at `index` in `--fg-primary` 8px past the point.
+- Row 1: `Reforesters Laboratory`, 24.2. Row 2: `MoFE`, 13.1.
+- Row height 48px at ≥1024px, 44px at ≤767px, 1px `--line` between.
+- Caption, two cells at `label`: `FIG. 03` · `CHANNEL COUNT, DELIVERED SYSTEMS`.
+- No 2px stroke. The emphasis is the two points and the two numerals.
+
+`W/04` is not on this plot. Its channel count is not published, and SP-16
+forbids filling an unknown metadata value. Two rows is the whole drawing: it is
+a comparison of two numbers, which is what a scale plot is for, and both
+numbers are facts the team supplied.
+
+The `FIG.` numbers renumber: the plot caption stays `FIG. 01`, IMG-01 becomes
+`FIG. 02`, G-06 is `FIG. 03`, and the G-01 diagrams become `FIG. 04`, `FIG. 05`,
+and `FIG. 06`. Figure numbers run in document order on each page.
 
 ### SP-16 — Placeholder copy
 
