@@ -381,13 +381,13 @@ img, svg { max-width: 100%; display: block; }
 .mk-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
 
 .rule-wrap { position: relative; }
-.rule-wrap .rule { margin: 0; }
+.rule-wrap { position: relative; }
+.rule-wrap .rule { margin: 0; width: calc(100% - 40px); }
 .mk-slot {
   position: absolute;
   top: 0;
   height: 1px;
   width: 28px;
-  background: var(--ground);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -406,7 +406,17 @@ img, svg { max-width: 100%; display: block; }
 .link-row a:focus-visible ~ .mk-slot-row .mk { color: var(--fg-primary); }
 .mk-slot-row .mk { transition: color var(--dur-fast) var(--ease-out); }
 
-.mk-slot-footer { left: var(--margin); width: 32px; }
+.mk-slot-footer { left: var(--margin); width: 32px; top: -1px; }
+.site-footer { border-top: 0; }
+.site-footer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: calc(var(--margin) + 40px);
+  right: 0;
+  height: 1px;
+  background: var(--line);
+}
 .mk-slot-footer .mk { width: 16px; height: 16px; }
 @media (min-width: 768px) {
   .mk-slot-footer { width: 40px; }
