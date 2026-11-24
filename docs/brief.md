@@ -143,6 +143,26 @@ build.
   travelling through that field: points moving along paths, not elements
   sliding in. This is where the site's motion budget is spent.
 
+### Notes from the 2026-11-24 desktop review
+
+- **Rules pass over text, text is never masked.** A hairline crossing a line
+  of type should cross it. The opaque knockout that punches the rule out
+  behind the text is wrong and comes out. This is the layered effect from
+  publicrecords.nyc: things overlap and both remain visible.
+- **Broken text lines.** Wrapping and line breaks are failing in several
+  places. Every block gets checked at both widths.
+- **The hero needs motion.** Sound objects travelling through the XYZ field,
+  in the manner of a Dolby Atmos renderer display: a sphere carrying a
+  number, moving on the plane. A greyed version of the axis mark changing
+  scale, several at once, is an acceptable simpler form. The hero is the one
+  place on the site that moves on its own.
+- **Scroll interactivity, mobile included.** Not a desktop-only flourish.
+- **Placeholder copy must look like placeholder.** "Project description goes
+  here lorem ipsum", not plausible prose. Nobody should mistake a stand-in
+  for a draft.
+- **More line art and graphic, less brochure.** The balance is currently too
+  far toward paragraphs in columns. Drawn elements carry more of the page.
+
 Installation photography warms the site later, once it exists. The design
 must work before it arrives and improve when it does.
 
