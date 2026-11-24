@@ -399,13 +399,13 @@ img, svg { max-width: 100%; display: block; }
   .mk-slot-section .mk { width: 16px; height: 16px; }
 }
 
-.link-row { position: relative; }
+.link-row { position: relative; margin-top: var(--s-4); }
 .mk-slot-row { right: 0; top: 0; width: 30px; }
 .link-row a:hover ~ .mk-slot-row .mk,
 .link-row a:focus-visible ~ .mk-slot-row .mk { color: var(--fg-primary); }
 .mk-slot-row .mk { transition: color var(--dur-fast) var(--ease-out); }
 
-.mk-slot-footer { left: 0; width: 32px; }
+.mk-slot-footer { left: var(--margin); width: 32px; }
 .mk-slot-footer .mk { width: 16px; height: 16px; }
 @media (min-width: 768px) {
   .mk-slot-footer { width: 40px; }
