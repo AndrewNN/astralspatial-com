@@ -534,7 +534,7 @@ img, svg { max-width: 100%; display: block; }
 }
 .obj-num {
   font-family: var(--font-grotesque);
-  font-size: var(--obj-fs);
+  font-size: calc(var(--obj-fs) * 1px);
   fill: var(--fg-primary);
   text-anchor: middle;
   dominant-baseline: central;
@@ -724,11 +724,11 @@ img, svg { max-width: 100%; display: block; }
 .mat-crossing {
   position: absolute;
   left: 0; right: 0;
-  bottom: 20px;
+  bottom: 12px;
   margin: 0;
   z-index: 2;
 }
-@media (min-width: 1024px) { .mat-crossing { bottom: 40px; } }
+@media (min-width: 1024px) { .mat-crossing { bottom: 44px; } }
 
 .records .record-w01-body {
   border-top: 1px solid var(--line);
