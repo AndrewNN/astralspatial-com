@@ -23,10 +23,12 @@
   --frame: 8px;
   --frame-gap: 16px;
   --tick-arm: 8px;
+  --obj-r: 17;
+  --obj-fs: 16;
 }
 
 @media (min-width: 768px) {
-  :root { --margin: 32px; --frame: 16px; --frame-gap: 24px; --tick-arm: 16px; }
+  :root { --margin: 32px; --frame: 16px; --frame-gap: 24px; --tick-arm: 16px; --obj-r: 11; --obj-fs: 10; }
 }
 @media (min-width: 1024px) { :root { --margin: 40px; } }
 @media (min-width: 1440px) { :root { --margin: 48px; } }
@@ -515,8 +517,29 @@ img, svg { max-width: 100%; display: block; }
   animation: plot-fade var(--dur-slow) var(--ease-out) forwards;
   animation-delay: 1360ms;
 }
+.plot-fade-objs {
+  opacity: 0;
+  animation: plot-fade var(--dur-slow) var(--ease-out) forwards;
+  animation-delay: 1700ms;
+}
 @keyframes plot-draw { to { stroke-dashoffset: 0; } }
 @keyframes plot-fade { to { opacity: 1; } }
+
+.obj-ring {
+  r: var(--obj-r);
+  fill: var(--ground);
+  stroke: var(--fg-primary);
+  stroke-width: 1;
+}
+.obj-num {
+  font-family: var(--font-grotesque);
+  font-size: var(--obj-fs);
+  fill: var(--fg-primary);
+  text-anchor: middle;
+  dominant-baseline: central;
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
+}
 
 .plot-caption {
   border-top: 1px solid var(--line);
@@ -871,7 +894,7 @@ main > section, main > div.img-band { padding-inline: 0; }
     transition-duration: 1ms !important;
     scroll-behavior: auto !important;
   }
-  .plot-draw-frame, .plot-draw-spoke, .plot-fade, .plot-fade-slow {
+  .plot-draw-frame, .plot-draw-spoke, .plot-fade, .plot-fade-slow, .plot-fade-objs {
     opacity: 1 !important;
     stroke-dashoffset: 0 !important;
   }
