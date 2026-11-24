@@ -14,6 +14,11 @@ Three devices carry the whole system and nothing else is added to them: the
 **hairline**, the **frame** around the page, and the **mark** — one small
 piece of array geometry, repeated, never explained.
 
+Two rules govern how they meet type. **A hairline passes over text; text is
+never masked.** And **type sits on a flat palette colour, never on a
+photograph.** Both are new as of 2026-11-24 and both reverse earlier
+decisions. Where an older note in this file disagrees with either, they win.
+
 The site ships `ground-light`, decided on 2026-11-23 after both grounds were
 built and reviewed. `ground-dark` stays documented below because it is a
 complete, matched set and a user-switchable dark mode is a possible later
@@ -278,9 +283,29 @@ take already appears in the spacing scale.
 | `--margin` | 20px | 32px | 40px | 48px |
 | `--frame` | 8px | 16px | 16px | 16px |
 | `--frame-gap` | 16px | 24px | 24px | 24px |
+| `--obj-r` | 17 | 11 | 11 | 11 |
+| `--obj-fs` | 16 | 10 | 10 | 10 |
 
 `--frame-gap` is the length of the interruption at each end of a frame edge's
-hairline. A fourth value anywhere in these variables is a defect.
+hairline. A fourth value anywhere in the first three variables is a defect.
+
+`--obj-r` and `--obj-fs` are the sound object's ring radius and numeral size
+(see "Sound objects"). They are the only two variables in the system whose
+values are **not** px and are not on the spacing scale: they are SVG user
+units inside the array plot's `viewBox="0 0 560 560"`. They exist precisely so
+the rendered result lands on one stated px value at every breakpoint — the
+plot scales 1.56× between 350px and 546px, and an object that scaled with it
+would be 13.7px across with a 6.3px numeral on a phone. Two values, like the
+type scale. A third is a defect.
+
+| | Plot render | Scale | Ring diameter | Numeral |
+|---|---|---|---|---|
+| ≥768px | 546px | 0.975 | 21.5 CSS px | 9.8 CSS px |
+| ≤767px | 350px | 0.625 | 21.3 CSS px | 10.0 CSS px |
+
+**A sound object measures 21 ±1 CSS px across and its numeral is 10 ±0.5 CSS
+px, at every viewport.** That is the checkable rule; the two variables are how
+it is reached.
 
 ### Icon sizes
 
@@ -291,18 +316,25 @@ lines.
 
 ### Stacking order
 
-Four levels. Nothing else declares a `z-index`.
+Five levels. Nothing else declares a `z-index`.
 
 | Level | What |
 |---|---|
-| `0` | Photographs, image plates, the array plot — every piece of artwork a text block may cross |
-| `1` | Layered text blocks and their `--ground` knockouts |
+| `0` | Photographs, image plates, the array plot, every drawn diagram — the artwork a rule or a text block may cross |
+| `1` | Text. Every heading, every paragraph, every label, in or out of a layered composition |
+| `2` | Hairlines that cross text. Only rules reach this level, and only 1px ones |
 | `40` | The site frame |
 | `50` | The skip link |
 
-A `z-index` of `2`, `99`, or `9999` in the stylesheet is a defect. No element
+Level 2 exists because of one decision: a hairline crossing a line of type
+passes over it. Nothing but a 1px rule is ever at level 2 — no fill, no panel,
+no image, no numeral.
+
+A `z-index` of `3`, `99`, or `9999` in the stylesheet is a defect. No element
 creates a stacking context by means of `opacity`, `filter`, or `transform` in
-a way that lifts artwork above level 0.
+a way that lifts artwork above level 0. Inside an SVG, z-order is document
+order and the same hierarchy applies: artwork, then type, then any rule that
+crosses it.
 
 ## Breakpoints
 
@@ -331,25 +363,82 @@ Tap targets are ≥44×44px below 768px, including inline email links, which get
 --ease-io:   cubic-bezier(0.65, 0, 0.35, 1)
 ```
 
-Rules:
+### The motion budget
 
-1. Only `opacity`, `transform`, `stroke-dashoffset`, and `border-color` /
-   `color` animate. Animating `width`, `height`, `top`, `left`, `margin`, or
-   `padding` is a defect.
+**One element on the site moves on its own: the sound objects in the hero
+array plot.** It carries the entire autonomous motion budget. Everything else
+that moves is a 120ms hover affordance or the plot's one-time draw-on.
+
+That is the whole inventory. A second autonomously moving element anywhere is
+a defect, whatever its duration.
+
+### Rules
+
+1. Only `opacity`, `transform`, `stroke-dashoffset`, `border-color` / `color`,
+   and the `transform` attribute of a sound-object group animate. Animating
+   `width`, `height`, `top`, `left`, `margin`, or `padding` is a defect.
 2. Hover and focus affordances: `--dur-fast`, `--ease-out`.
 3. Entrances: `--dur-slow`, `--ease-out`, stagger 60ms, maximum 8 staggered
    children. An entrance plays once; nothing re-animates on scroll-back.
 4. The array-plot draw is `--dur-draw`, `--ease-io`, once, on load.
-5. Nothing moves more than 16px. No parallax. No mouse-tracked transforms. No
-   scroll-driven scaling or rotation. Layered compositions are static: the
-   overlap is in the layout, never in a transform that follows the pointer.
-6. The frame and the mark never animate. They are at their final state on
+5. Nothing on the page moves more than 16px, with one exception: a sound
+   object travels its whole path. Its speed ceiling is **35 CSS px/s
+   instantaneous, at every viewport**.
+6. **No parallax. No mouse-tracked transforms. No pointer-position input of
+   any kind.** Layered compositions are static: the overlap is in the layout,
+   never in a transform.
+7. **Scroll drives exactly one scalar on the whole site**, and that scalar
+   changes exactly one property: the vertical foreshortening of the sound
+   objects' paths. It is a linear function of `scrollY`, clamped at both ends,
+   centred so that its mid-value is the authored geometry. No `position:
+   sticky`, no `scroll-behavior` override, no wheel or touch listener, no
+   scroll-triggered entrance animation, no scroll-driven opacity, and nothing
+   outside the plot's `<svg>` responds to scroll. Scroll interaction is on at
+   every width, including 390px — it is not a desktop flourish.
+8. A `scroll` listener is `{ passive: true }` and its entire body is one
+   assignment. All work happens in the single `requestAnimationFrame` loop.
+   `getBoundingClientRect` is never called inside that loop.
+9. The frame and the mark never animate. They are at their final state on
    first paint. The only exception is the mark on a link row inheriting that
    row's 120ms `color` transition.
-7. No element is invisible without JavaScript. Entrance animations start at
-   `opacity: 0` only inside a `@media (scripting: enabled)` guard or as a CSS
-   `animation` that ends at the resting state — never as a class a script must
-   add.
+10. No element is invisible without JavaScript. Entrance animations start at
+    `opacity: 0` only inside a `@media (scripting: enabled)` guard or as a CSS
+    `animation` that ends at the resting state — never as a class a script must
+    add. Anything a script positions is authored in the markup at its resting
+    position as a literal attribute.
+
+### Sound objects
+
+The one moving element. A small hairline ring carrying a number, travelling the
+array field, after a Dolby Atmos renderer display. Five of them.
+
+| Property | Value |
+|---|---|
+| Shape | `<circle>`, `fill: var(--ground)`, `stroke: var(--fg-primary)`, `stroke-width: 1` with `vector-effect="non-scaling-stroke"` |
+| Size | `--obj-r`, `--obj-fs`; rendered 21 ±1 CSS px across with a 10 ±0.5 CSS px numeral at every viewport |
+| Numeral | grotesque, `--fg-primary`, `tabular-nums`, `text-anchor: middle`, `dominant-baseline: central`, `letter-spacing: 0` |
+| Path | a closed ellipse centred on the plot's listening position, `x = cx + a·cos θ`, `y = cy + b·k·sin θ`, θ linear in time |
+| Count | 5 |
+| Periods | 22–41s, five distinct values with no small common multiple |
+| Speed | ≤ 35 CSS px/s instantaneous |
+| Containment | `a + r` is always inside the plot's outer speaker ring. An object never leaves the plot and never sits on the listening position |
+
+`vector-effect="non-scaling-stroke"` is permitted on a sound object and
+nowhere else. On the mark the stroke must scale with the shape so the
+proportion of line to triangle is constant. On an object the opposite is
+required: the ring must render at exactly 1px at every plot size.
+
+**Z-order inside the plot.** Objects draw after the rings, spokes, points, and
+signal line, and before the channel numerals, the listening-position cross,
+and its label. So an object's opaque `--ground` fill occludes hairlines it
+passes over — artwork occluding artwork, which is correct for a renderer
+object — and plot type always draws over an object. Nothing in this system
+puts artwork on top of type, inside an SVG or outside one.
+
+A filled `--fg-primary` disc is a defect: the system has no shaded shapes and
+a solid blob is not a drawing.
+
+### Reduced motion
 
 ```css
 @media (prefers-reduced-motion: reduce) {
@@ -363,7 +452,11 @@ Rules:
 ```
 
 Under reduced motion every element renders in its final state. The array plot
-is drawn complete. No content depends on an animation to become visible.
+is drawn complete. The five sound objects render at full opacity at their
+authored rest positions and never move; the script short-circuits on one
+`matchMedia` check before its loop starts, and the scroll scalar is pinned to
+its mid-value. The result is identical to the JavaScript-off render. No content
+depends on an animation to become visible.
 
 ## Lines and surfaces
 
@@ -374,11 +467,60 @@ is drawn complete. No content depends on an animation to become visible.
   corners and for an image plate's corners, which are the only two places a
   corner tick appears.
 - `border-radius` is `0` everywhere. There are no pills, no rounded cards, no
-  circular portraits.
+  circular portraits. A hairline `<circle>` inside a drawing is not a rounded
+  box: it is drawn geometry, and it is permitted.
 - `box-shadow` is not used, in either theme. `ground-dark` has one blur,
   `--glow`. `ground-light` has none.
-- No overlay on any image except the caption bar described in the spec and the
-  `--ground` knockouts described under "Layering". Neither uses opacity.
+- **No overlay on any image.** The only things that may sit over a photograph
+  are a 1px rule crossing it, and nothing else. No caption bar laid on the
+  image, no knockout, no scrim, no gradient, no `backdrop-filter`. Captions and
+  type that belong to a photograph sit in the plate's mat, which is beside the
+  image rather than on it.
+
+### The drawn primitives, complete
+
+Every drawing on the site — the array plot, the mark, the frame's ticks, the
+offering diagrams, the credits register, the sound objects — is assembled from
+this list and nothing else:
+
+| Primitive | Spec |
+|---|---|
+| Hairline | 1px, square ends, straight or elliptical |
+| Dashed hairline | 1px, `stroke-dasharray: 2 4` |
+| Point | 3×3px square, `--fg-primary` |
+| Triangle | filled, 3.9 long × 2.1 across its base, `currentColor` |
+| Circle | 1px hairline, `--ground` fill |
+| Flat fill | `--ground` or `--band` only |
+| Numeral and label | `index` and `label` tokens, down to 9px inside a drawing |
+
+No arrowheads other than the triangle. No curves other than straight lines and
+ellipses. No hatching, no stipple, no shading, no gradient, no outline box
+drawn around a label, no icon, no pictogram, no waveform, no spectrogram.
+
+The triangle is a shared primitive, not the mark. The mark is the three-axis
+assembly of three hairlines and three triangles from one origin. A triangle
+used alone — as a dimension-line terminator in a measured drawing, for
+instance — is not an instance of the mark, and the mark's placement rule does
+not apply to it. One triangle is a terminator; three from one origin is the
+signature.
+
+### Where a rule changes colour
+
+A rule is 1px `--line`, everywhere, with exactly two colour exceptions, both
+about being seen:
+
+| Over | Colour | Why |
+|---|---|---|
+| `--ground` or `--band` | `--line` `#B0AAA0` | The default. 1.94:1 and 1.78:1 — reads as a hairline, not a border |
+| A photograph or an image plate's interior | `--ground` `#EDEBE6` | `--line` has no guaranteed contrast against an unknown photographic tone. The photography treatment caps every image's white point at `#EDEBE6`, so a `--ground` hairline is at worst equal to the lightest pixel in the image and at best at 15.7:1 against its darkest |
+
+A single rule may therefore render in two colours along its length — `--line`
+across the page, `--ground` across the image. That is a drafting convention,
+not an inconsistency. The change happens at the plate's outer hairline.
+
+The asset constraint that makes the second row true is in "Photography" below.
+A rule is never interrupted, faded, dashed, or thickened to make it visible
+over something. It changes colour or it stays `--line`.
 
 ### The frame
 
@@ -432,7 +574,10 @@ not optional.
 **Geometry.** `viewBox="0 0 24 24"`, origin at `(9, 15)`, `stroke-width: 1`,
 `stroke: currentColor`, triangles `fill: currentColor`. No
 `vector-effect`, no `shape-rendering` override — the stroke scales with the
-mark so the proportion of line to triangle is constant at every size.
+mark so the proportion of line to triangle is constant at every size. The
+sound object is the single sanctioned `vector-effect` in the system, and the
+reason is the opposite requirement: there the ring must stay 1px while the
+plot around it scales.
 
 | Axis | Bearing | Length | Triangle tip |
 |---|---|---|---|
@@ -488,35 +633,89 @@ sitting on a rule.
 
 ### Layering
 
-Text passes over artwork. The composition is static or scroll-only. There is
-no mouse tracking, no parallax, and no transform tied to pointer position
-anywhere on the site.
+**Reversed 2026-11-24.** The opaque `--ground` knockout is withdrawn from the
+system. It punched the page colour out behind any type that crossed artwork,
+which is the opposite of the layering this site takes from publicrecords.nyc,
+where things overlap and both remain visible. It is also what produced a 200px
+hole in a page rule. The word does not return, and neither does the mechanic.
 
-Legibility is guaranteed by construction, not by judgement, and never by an
-opacity scrim. Two mechanics, and no third.
+Two principles replace it.
 
-**L1 — hairline underlap.** Text may overlap artwork whose content in the
-overlap region is 1px `--line` hairlines and nothing else. No knockout, no
-fill, no change to the type. The overlap may not exceed 25% of the text
-block's area, and no numeral, caption, filled point, or `--fg-primary` stroke
-may fall inside it. Checkable: sample the overlap region in a screenshot and
-the only non-ground pixels belong to 1px rules.
+**Rules pass over text. Text is never masked.** A hairline crossing a line of
+type crosses it, and both stay visible.
 
-**L2 — ground knockout.** Text crossing a photograph, an image plate's
-interior, or a `--band` fill sits on a solid `--ground` panel. The panel has
-no border, no radius, no shadow, and no opacity — it is the page colour,
-opaque, so the text keeps the same 15.7:1 it has everywhere else. Padding
-`--s-3` (24px) at ≥768px, `--s-2` (16px) at ≤767px. The panel bleeds off the
-left edge of its content column to the frame, so it shows three edges and
-reads as a strip of the page rather than a card.
+**Type sits on a flat palette colour, never on a photograph.** `--ground` at
+15.7:1 or `--band` at 14.6:1. A photograph has no guaranteed ratio, and with
+the knockout gone there is no mechanic that gives it one.
 
-Both mechanics put artwork at stacking level 0 and the text at level 1.
-Nothing below the text is clipped, masked, or blurred.
+Two mechanics, and no third.
 
-**Degradation.** A layered composition over an image slot that has no
-photograph yet keeps its exact geometry over the image plate instead. The
-plate's centred label moves out of the overlap region so the knockout never
-sits on it. A layout that only reads once photography arrives is wrong.
+#### L1 — hairline over text
+
+A 1px rule passes over a line of type. The rule is at stacking level 2, the
+type at level 1. Neither changes colour, size, or opacity. The rule is not
+interrupted, not faded, and not re-coloured at the crossing.
+
+Legibility is preserved by construction, not by judgement. Five constraints,
+all measurable in a screenshot crop:
+
+1. **The rule is 1px.** At the smallest size L1 permits — `title-s` 18px, cap
+   height about 12.6px — it removes 8% of the glyph's vertical extent at one y
+   value. The cut is thinner than every stem it crosses, so no stem is
+   severed, only crossed.
+2. **Only display type is crossed.** `statement`, `title`, and `title-s`.
+   Never `lead`, `body`, `body-s`, `label`, or `index`. **Prose is never
+   crossed anywhere on the site.** The effect lands on four or five words per
+   page, never on a paragraph.
+3. **The crossing height is bounded.** The rule's y falls in the middle third
+   of the crossed line's cap height, no closer than 2px to the baseline or to
+   the x-height line. On the baseline it reads as an underline; at the x-height
+   it merges with the bars of `e`, `a`, and `t` and the word turns to mud.
+4. **The rule is lighter than the type.** `--line` `#B0AAA0` over
+   `--fg-primary` `#141210` leaves the crossed glyph at 94%+ of its ink, and
+   the type's own contrast stays 15.7:1 everywhere.
+5. **At most two crossings per page**, never two on one text block. The device
+   reads as deliberate at two and as an accident at six.
+
+The same mechanic covers text overlapping a drawing whose content in the
+overlap is hairlines only — the overlap may not exceed 25% of the text block's
+area, and no numeral, caption, filled point, or `--fg-primary` stroke may fall
+inside it.
+
+One named exception to constraint 2: a single 1px **vertical** may cross `lead`
+at the end of a line's measure, where the crossed glyphs are one character
+wide and already read. A horizontal rule across `lead` stays forbidden.
+
+#### L2 — mat seating
+
+Type that belongs to a photograph sits inside the image plate, on the plate's
+own `--band` mat, which is drawn beneath both. The bottom mat is widened to
+hold it: 96px at ≥1024px, 48px at ≤767px, against 24px / 16px on the other
+three sides. An asymmetric window mount, which is how a print is mounted.
+
+`--fg-primary` on `--band` is 14.6:1 and `--fg-muted` is 5.5:1 — both clear AA
+at every size on the scale — whatever the photograph turns out to be, because
+the type is not over the photograph.
+
+A caption bar laid on an image is a defect. A caption sits in the mat.
+
+Both mechanics put artwork at level 0, text at level 1, and crossing rules at
+level 2. Nothing below the text is clipped, masked, or blurred, and nothing
+above it is anything but a 1px rule.
+
+**Degradation.** A layered composition over an image slot with no photograph
+yet keeps its exact geometry: the mat, the hairline, the caption, and the
+crossing rule are identical, and only the plate's interior fill changes when
+the photograph arrives. The plate's own centred label is centred in the area
+above the bottom mat so it never collides with the mat's type. A layout that
+only reads once photography arrives is wrong.
+
+**Forbidden.** Opaque knockouts behind type. Type over a photograph. Mouse
+tracking. Parallax. Scroll-linked translation of content. Opacity scrims.
+Gradient fades over images. `backdrop-filter`. Text set in a colour chosen to
+suit one photograph. Interrupting a rule so type can pass through the gap —
+with one exception, the contact aperture, where the gap holds a link and
+nothing is crossed.
 
 ### The array plot
 
@@ -536,6 +735,12 @@ instead, both measurable in a screenshot:
 
 The draw animation, `--dur-draw` with `--ease-io`, once on load, is identical
 in both themes.
+
+The plot is also the field the five sound objects travel through — see "Sound
+objects" under Motion. They are the only moving thing on the site and they
+exist nowhere but inside this plot. An object floating free on the page,
+outside the plot, is a defect: the plot is the field, and an object without a
+field is decoration.
 
 ## Photography
 
@@ -570,6 +775,20 @@ from the page the way a window mount separates a print from a wall. Portraits
 get no mat; their mapped white point already dissolves the top edge of the
 rectangle into the ground.
 
+Where type belongs to the photograph, the **bottom mat widens** to hold it —
+96px at ≥1024px, 48px at ≤767px — and the other three sides stay at 24px /
+16px. That is the only sanctioned way type and a photograph occupy the same
+plate, per L2 under "Layering". A caption bar laid on the image is a defect.
+
+**The crossing constraint.** A 1px rule may cross a photograph, rendering
+`--ground` across it (see "Where a rule changes colour"). For the rule to be
+visible, the photograph must earn it: **in the 24px band centred on the rule,
+the image contains no pixel lighter than `#C9C4BB`.** That is a shooting and
+retouching requirement recorded against the image slot in the spec, checkable
+with an eyedropper on the delivered asset, and easily met by the dim
+installation rooms this site photographs. Where it cannot be met, the rule
+does not cross that image.
+
 **The plate hairline.** It moves outward and darkens. On dark the 1px frame is
 `--line` directly against the photograph. On light it is 1px `--line-strong`
 on the outer edge of the mat, against `--ground`, never against the
@@ -603,9 +822,54 @@ them.
   education. Mystery is permitted. Vagueness is not.
 - Labels are nouns in caps: `SELECTED WORK`, `CREDITS`, `CONTACT`. Not verbs,
   not questions, not "Our Services".
-- The call to action names what happens next, in one sentence, in serif
-  underneath the address. It does not say "Get in touch" or "Let's talk".
+- **The call to action is a verb and the address is never rendered as text.**
+  The display element is `Start a project`. Under it, one serif sentence names
+  what happens next. It does not say "Get in touch", "Let's talk", "Reach out",
+  or "We'd love to hear from you". The accessible name of a contact link is its
+  visible text and nothing more — no `aria-label` spelling an address out.
 - British or American spelling: American.
+
+### Placeholder copy
+
+Copy that is not final reads as placeholder. A plausible stand-in gets
+reviewed as a draft, and a wrong fact that reads well survives into
+production.
+
+1. The block opens with a clause naming what the block is, then `goes here`,
+   then Latin filler for the remainder of its intended length:
+   `Project description goes here lorem ipsum dolor sit amet consectetur
+   adipiscing elit sed do eiusmod tempor.`
+2. Filler contains no proper noun, number, year, format, channel count,
+   hardware name, date, or place. Nothing in it can be mistaken for a fact or
+   quoted back.
+3. Filler sets at its block's real token, size, colour, and measure, so the
+   layout stays testable. It is filler in wording only.
+4. The element carries `data-placeholder`. The count is one grep.
+5. A metadata row whose value is unknown is **omitted**, never filled. There is
+   no `label`-size filler anywhere: a technical row reading `Lorem ipsum
+   routing` is the exact failure this rule exists to prevent.
+6. Filler is never written in this voice. If filler can be scored for copy
+   clarity, it is not obvious enough.
+
+### What cannot be written
+
+Some of the principals' prior work is under NDA. It is absent from the site,
+and it is not described generically either: a description specific enough to be
+useful is specific enough to identify. No title, no city, no room type, no
+date, no client, no indication of who worked on it. Nothing on the site says
+that anything is missing.
+
+### Line breaking
+
+Every block is checked at 390px and 1440px against four conditions:
+
+- no line shorter than three words except the last
+- no single word alone on the last line of a `title` or `statement`
+- no horizontal overflow — `document.scrollWidth` equals `clientWidth`
+- no glyph within 4px of the frame's inner rule
+
+`text-wrap: pretty` on prose and `text-wrap: balance` on `statement` and
+`title` are required, not optional.
 
 ### Proper nouns, exact
 

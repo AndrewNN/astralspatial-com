@@ -5,10 +5,41 @@ Values come from `.claude/skills/design-language/SKILL.md`; token names below
 refer to that file.
 
 Static HTML and CSS. One stylesheet, two self-hosted WOFF2 files, inline SVG,
-and exactly one piece of JavaScript: the six-line email rewrite in SP-05,
-inline at the end of `<body>`. No framework, no build step, no CDN request, no
-third-party script. Nothing else on the site requires JavaScript to render,
-and nothing is added to that budget.
+and one inline `<script>` block at the end of `<body>`. No framework, no build
+step, no CDN request, no third-party script, no module, no `fetch`.
+
+### JavaScript budget
+
+One block, hand-written vanilla, present on `/index.html` only. `work.html` and
+`studio.html` carry no script at all.
+
+| Limit | Value |
+|---|---|
+| Script blocks per page | 1 |
+| Script text, `wc -c` on the contents of `<script>` | ≤ 2560 bytes |
+| Lines | ≤ 90 |
+| External requests from script | 0 |
+| `requestAnimationFrame` loops | 1 |
+| Event listeners | 3: one `scroll` (passive), one `resize`, one `visibilitychange` |
+
+What the script is allowed to write, and nothing else:
+
+- the `transform` attribute on the five sound-object groups (SP-13)
+- the `r` and `font-size` of nothing — those are CSS (SP-13)
+- the `href` attribute on three `<a>` elements (SP-05)
+
+It adds no element, removes none, sets no class, sets no inline style property,
+never assigns `innerHTML`, and calls `getBoundingClientRect` zero times inside
+the loop.
+
+**Everything renders and reads with JavaScript off.** The hero's resting state
+is the drawn plot with its five objects at their authored positions, written
+into the markup as literal `transform` attributes. No element is hidden
+awaiting a script. Every link resolves. The contact route works (SP-05).
+
+Under `prefers-reduced-motion: reduce` the loop never starts: the script
+short-circuits on one `matchMedia` check and the page is identical to its
+JavaScript-off render.
 
 The site ships one theme, `ground-light`, ground `#EDEBE6`. There is no
 toggle, no `prefers-color-scheme` branch, and no dark stylesheet in the repo.
@@ -17,7 +48,9 @@ Two scored viewports: **390×844** and **1440×900**. Both are first-class.
 
 Three devices carry the design beyond the hairline grid: the frame (SP-10),
 the mark (SP-11), and layering (SP-12). Each is specified once as a component
-and then referenced.
+and then referenced. Three further components carry this revision: the sound
+objects (SP-13), the scroll scalar (SP-14), and the drawn elements (SP-15).
+SP-16 governs placeholder copy.
 
 ---
 
@@ -31,20 +64,21 @@ Three pages ship. A fourth slot is defined and held empty.
 | `/work.html` | Work | now | The records at full length, split by who commissioned them; a place for the next five |
 | `/studio.html` | Studio | now | The three CVs, the full capability register, the reserved collaborators slot |
 
-Nothing else. No contact page: the call to action is an email address, and a
-page whose only content is an address is a dead end. The address appears in
-the desktop header, the home hero, the contact band on all three pages, and
-the footer on all three pages.
+Nothing else. No contact page: the call to action is an email, and a page whose
+only content is an address is a dead end. The contact link (SP-05) appears four
+times per page — desktop header, hero or page head, contact band, footer — and
+the address itself is never rendered as text anywhere.
 
 ### Reserved: friends and collaborators
 
 Specified now, published later. It is `04 — FRIENDS AND COLLABORATORS` on
 `studio.html`, sitting between `03 — CAPABILITIES` and the contact band.
 
-- It uses the **credits register** component already built for home section
-  03: hairline rows, three columns at ≥1024px, one at ≤767px.
-- Each entry is three fields on one row: name, discipline, the project they
-  worked on.
+- It uses the **register** component built for home section 03 (SP-15 G-02):
+  one column of hairline rows, each row a name with a 1px rule running out to
+  a point on a shared axis.
+- Each entry is three fields on one row: name, discipline as its axis
+  position, and the project they worked on set at `body-s` after the name.
 - It inherits the standard section rhythm. Adding it moves the contact band
   down the page and changes nothing else. No new component, no new type size,
   no new breakpoint behaviour.
@@ -56,25 +90,40 @@ Specified now, published later. It is `04 — FRIENDS AND COLLABORATORS` on
 
 ### Work record numbering
 
-Four records exist. Indices are catalogue designations, assigned once, and are
+Three records ship. Indices are catalogue designations, assigned once, and are
 never re-flowed when a record is withheld or added.
 
 | Index | Record | Commission | Page |
 |---|---|---|---|
 | `W/01` | Reforesters Laboratory | Astral Spatial | home 02, work 01 |
 | `W/02` | MoFE | Predates Astral Spatial | home 02, work 02 |
-| `W/03` | Anechoic chamber, Detroit | Predates Astral Spatial | work 02 only, withheld until cleared |
+| `W/03` | Reserved | — | not published |
 | `W/04` | Unnamed fabrication commission | Astral Spatial | home 02, work 01 |
 
-`W/03` ships only when its details are confirmed and permission to publish is
-given. Until then it is absent, and `work.html` reads `W/01`, `W/02`, `W/04`.
-A gap in a catalogue number is correct catalogue behaviour and is not
-explained. Nothing on any page depends on the number of work records: records
-are a flow list of full-width rows, never a fixed-count grid, so removing one
-removes one row and changes no other measurement. The same holds in reverse
-for `W/05`.
+`W/03` is a reserved index. It is not published, it has no record, no image
+slot, no prose, no credit line, and no weight budget, and no page describes
+what it would hold. So `work.html` reads `W/01`, `W/02`, `W/04`. A gap in a
+catalogue number is correct catalogue behaviour and is not explained.
+
+Nothing on any page depends on the number of work records: records are a flow
+list of full-width rows, never a fixed-count grid, so adding or removing one
+changes one row and no other measurement. The same holds in reverse for
+`W/05`.
 
 Every work record carries SP-09. No exceptions.
+
+### Withheld work
+
+Some of the principals' prior work is under NDA and cannot be published. The
+spec states the constraint and names nothing: no title, no city, no room type,
+no date, no client, and no indication of which principals were involved, in
+any page, any markup, any comment, any alt text, any `FIG.` caption, or any
+image filename. A withheld project is not described generically either — a
+description specific enough to be useful is specific enough to identify.
+
+This is why the record component is a flow list and why indices are never
+re-flowed. A record that cannot be published is simply absent, and its absence
+costs one row and changes no measurement.
 
 ---
 
@@ -115,8 +164,8 @@ Full-bleed, static (not sticky), 1px `--line` bottom rule.
 - Left: `ASTRAL SPATIAL`, `wordmark` token, `--fg-primary`. On `/` it is a
   `<p>`; on other pages it is an `<a href="/">`.
 - Right, in one row, 32px gaps, vertically centred: `WORK`, `STUDIO`, a 1px
-  `--line` vertical divider 16px tall, then the email (SP-05) at `label` size
-  in `--fg-primary`.
+  `--line` vertical divider 16px tall, then the contact link (SP-05) reading
+  `CONTACT` at `label` size in `--fg-primary`.
 - Current page's nav item: `--fg-primary` instead of `--fg-muted`, no
   underline.
 
@@ -141,7 +190,10 @@ Row 1, navigation, `label` token, `--fg-muted`, current page `--fg-primary`:
 
 Row 2, status bar, `label` token, `--fg-muted`, five cells:
 `ASTRAL SPATIAL` · `NEW YORK` · `SPATIAL AUDIO, SYSTEMS, FABRICATION` ·
-the email (SP-05, `--fg-primary`, carries `id="email-fallback"`) · `© 2026`.
+the contact link (SP-05, reading `CONTACT`, `--fg-primary`) · `© 2026`.
+
+No cell renders an email address. `id="email-fallback"` is deleted from the
+document; SP-05 no longer uses an in-page fallback anchor.
 
 | | ≥1024px | ≤767px |
 |---|---|---|
@@ -215,48 +267,103 @@ right margin stays empty between the content and the frame.
 The vertical edge typography taken from publicrecords.nyc is not retained
 anywhere. What is retained from that reference is the layering, SP-12.
 
-### SP-05 — The email address
+### SP-05 — The contact link
 
-Clickable for a person, uninteresting to a scraper. The literal string
-`info@astralspatial.com` must not appear anywhere in the HTML source of any
-page, in any attribute, in any JSON-LD block, or in `sitemap.xml`.
+The call to action is a verb, not an address. The published address stays
+`info@astralspatial.com` and it is **never rendered as text anywhere on any
+page**: not in a heading, not in a status cell, not in an `alt`, not in an
+`aria-label`, not in JSON-LD, not in `sitemap.xml`, not in an SVG `<text>`.
+It exists in exactly one place per page: one `href`.
 
-Markup, one instance per placement:
+#### What the reader sees
+
+| Placement | Visible text | Token | Colour |
+|---|---|---|---|
+| Desktop header | `CONTACT` | `label` | `--fg-primary` |
+| Home hero | `Start a project` | `link-cta` | `--fg-primary` |
+| Contact band | `START A PROJECT` | `statement` | `--fg-primary` |
+| Footer status cell | `CONTACT` | `label` | `--fg-primary` |
+
+`START A PROJECT` at `statement` 56px measures about 400px, so it sits inside
+columns 1–8 (774px) on one line. At 30px it measures about 215px inside a
+350px content width. It must not wrap at either width, and at 390px it clears
+the frame's inner rule by more than 100px — which is also the fix for the
+clipped address the last critique measured at x=382.
+
+#### Accessible name
+
+The accessible name of every instance **is its visible text**. Nothing more.
+
+- No `aria-label` on any contact link, on any page. The four
+  `aria-label="Email Astral Spatial at info at astralspatial dot com"`
+  attributes in the current build are deleted. They spelled the address out in
+  the accessible tree, which defeated the obfuscation beside them and failed
+  Lighthouse's `label-content-name-mismatch` on all four instances.
+- No `title`, no visually hidden span, no `aria-describedby`.
+- A screen reader announces `link, Start a project`. That is a complete and
+  honest name for a link that opens a mail composer.
+
+#### Where the address is defined
+
+The contact band's link carries the real `href`, fully percent-encoded:
 
 ```html
-<a class="mail" href="#email-fallback" data-mail
-   data-u="info" data-d="moc.laitapslartsa"
-   aria-label="Email Astral Spatial at info at astralspatial dot com"
-  ><span>info</span><i class="at" aria-hidden="true"></i
-  ><span>astralspatial</span><i class="dot" aria-hidden="true"></i
-  ><span>com</span></a>
+<a class="cta-start statement" href="mailto:%69%6e%66%6f%40%61%73%74%72%61%6c%73%70%61%74%69%61%6c%2e%63%6f%6d">Start a project</a>
 ```
 
-CSS supplies the two characters that would make the string matchable:
+Every browser resolves a percent-encoded `mailto:` natively. No script is
+needed for it to work.
 
-```css
-.mail i { font-style: normal; }
-.mail .at::before  { content: "\0040"; }
-.mail .dot::before { content: "\002E"; }
-```
-
-One loop, inline at the end of `<body>`, rewrites the href:
+The other three instances carry `href="#contact"`. Three lines of script copy
+the real `href` onto them:
 
 ```js
-for (const a of document.querySelectorAll('[data-mail]')) {
-  a.href = 'mailto:' + a.dataset.u + String.fromCharCode(64) +
-           a.dataset.d.split('').reverse().join('');
-}
+var c = document.querySelector('.cta-start');
+if (c) for (var a of document.querySelectorAll('.cta-jump')) a.href = c.href;
 ```
 
-Without JavaScript, `href="#email-fallback"` jumps to the footer status cell,
-which renders the same address for reading and copying. That anchor exists on
-every page, so the link-checker finds zero broken links.
+**With JavaScript off**, the header, hero, and footer links scroll to the
+contact band, where the working mail link sits at 56px. Every route reaches a
+live mail composer in at most one additional click. No dead end, no broken
+link for the link checker — `#contact` is an element that exists on every
+page, and a `mailto:` is not an HTTP target.
 
-Styling: 1px `--fg-muted` underline at 6px offset; on hover and
-`:focus-visible` the underline goes `--fg-primary` over `--dur-fast`. At
-≤767px the link is `display: inline-block` with `padding: 8px 0` so its tap
-target is ≥44px tall.
+**Changing the address** is one edit per page: the single `mailto:` href in the
+contact band. `grep -c 'mailto:' *.html` returns exactly `1` for each of the
+three pages, and `grep -ric 'info@astralspatial' .` over the published files
+returns `0`.
+
+#### Honest limit
+
+No client-side scheme defeats a scraper that renders the page. A headless
+browser reads the resolved DOM, and `decodeURIComponent` is one call. Nor does
+percent-encoding defeat a regex author who expects it. What this removes is the
+surface a plain-text crawler finds: the literal address appears in no text
+node, no visible string, no accessible name, and no unencoded attribute on any
+page. The goal is reducing surface, not a guarantee.
+
+What is deliberately given up in exchange: a reader can no longer read the
+address off the page to type it elsewhere. The brief's call to action is a
+clickable mail route, and the clickable route works with and without
+JavaScript, so this is the right trade.
+
+#### Styling
+
+1px `--fg-muted` underline at 6px offset; on hover and `:focus-visible` the
+underline goes `--fg-primary` over `--dur-fast`. At ≤767px the link is
+`display: inline-block` with `padding: 8px 0` so its tap target is ≥44px tall.
+The `statement`-size instance in the contact band carries no underline — it is
+the terminus of the aperture rule described in SP-15 G-04, which is its
+affordance.
+
+#### Removed by this component
+
+The `data-mail`, `data-u`, and `data-d` attributes; the five-child
+`<span>`/`<i>` assembly; `.mail .at::before` and `.mail .dot::before`; the
+reversed-domain string `moc.laitapslartsa`; `id="email-fallback"`; and the
+loop that rewrote four hrefs from dataset values. All of it existed to render
+an address as text while hiding it from a crawler. The address is no longer
+rendered as text, so none of it is needed.
 
 ### SP-06 — Index band
 
@@ -292,12 +399,19 @@ The state of every image slot before its photograph exists. Costs 0KB.
 
 When the photograph arrives the fill changes and nothing else does.
 
-**When an SP-12 knockout overlaps the plate**, the plate's label is centred in
-the area left clear rather than in the plate box. At ≥1024px on the home
-section 02 band, the knockout covers the bottom 96px, so the label centres on
-the remaining 464px: 232px from the plate's top edge. At ≤767px the knockout
-covers the bottom 48px of a 220px band, so the label centres at 86px. The
-label is never behind a knockout and never clipped by one.
+**The mat.** Where the spec calls for a matted plate (SP-12 L2), the mat is
+`--band` and the plate's hairline sits on the mat's outer edge in
+`--line-strong`, per the skill's photography section. Mat widths: `--s-3`
+(24px) top, left, and right at ≥768px, `--s-2` (16px) at ≤767px. The bottom
+mat is wider where it carries type — 96px at ≥1024px, 48px at ≤767px — which
+is an asymmetric window mount, not a caption bar.
+
+**When type sits in the bottom mat**, the plate's own centred label is centred
+in the area above the bottom mat rather than in the plate box. At ≥1024px on
+the home section 02 band the bottom mat is 96px of 560px, so the label centres
+on the remaining 464px: 232px from the plate's top edge. At ≤767px it is 48px
+of 220px, so the label centres at 86px. The plate label and the mat type never
+collide and neither is clipped.
 
 ### SP-08 — Array plot
 
@@ -322,9 +436,10 @@ Contents:
 | Spokes | 8 hairlines, centre to each numbered point, 1px `--line` |
 | Measurement ticks | Left and bottom edges, 1px `--line`, `stroke-dasharray: 2 4`, with `--fg-muted` captions giving the channel count |
 | Signal line | One 1px `--fg-primary` line from the centre cross to point 01. No glow: `--glow` is `transparent` on the light ground. Emphasis is carried by contrast — `--fg-primary` at 15.7:1 against neighbouring rays at 1.94:1 — and by the ray's own tick column at 16px pitch against 32px on the rest of the plot |
+| Sound objects | Five, per SP-13. Drawn in a `<g class="objs">` placed after the spokes and points and **before** the numerals, the `LP` cross, and the `LP` label in document order, so plot type always draws over an object and never under it |
 | Caption bar | Flush under the frame, 32px tall, 1px top rule, `label` token. Left cell `FIG. 01`, right cell `24.2 — REFORESTERS LABORATORY` |
 
-**Motion**, CSS `@keyframes` only, plays once on load, total ≤2000ms:
+**Draw-on motion**, CSS `@keyframes` only, plays once on load, total ≤2000ms:
 
 1. Frame draws clockwise from top-left, `stroke-dashoffset` → 0,
    `--dur-draw`, `--ease-io`.
@@ -334,9 +449,13 @@ Contents:
    starting at 700ms. Maximum 8 staggered groups: points are grouped in
    threes.
 4. Numerals and caption bar fade in, `--dur-slow`, starting at 1400ms.
+5. The five sound objects fade in last, `opacity` 0→1, `--dur-slow`, all five
+   together, starting at 1700ms. They are at their authored rest positions
+   throughout the draw; they do not begin travelling until 2040ms (SP-13).
 
 Under `prefers-reduced-motion: reduce` every element renders at its final
-state with `animation: none`. The plot is never blank.
+state with `animation: none`, including the five objects at full opacity at
+their rest positions. The plot is never blank.
 
 **When photography arrives**: the plot moves to `work.html` beside the
 Reforesters record, where it is literally true, and IMG-01 takes the hero
@@ -521,82 +640,587 @@ The mark is never rendered below 14px anywhere else.
 
 ### SP-12 — Layering
 
-Text over artwork, static. Mechanics L1 and L2 are defined in the skill under
-"Layering". This component states where they are used and what each
-composition measures.
+**Reversed from the previous revision.** Rules pass *over* text and text is
+never masked. The opaque `--ground` knockout is withdrawn from the design, and
+with it the only mechanic that made type-on-photograph safe. Mechanics L1 and
+L2 are redefined in the skill under "Layering". This component states where
+they are used and what each composition measures.
 
-**L1 — hero, ≥1440px only.**
+In one sentence: **a hairline crossing a line of type crosses it, and both stay
+visible; type sits on the ground or on `--band`, never on a photograph.**
 
-The array plot's box widens left so it overlaps the hero text column by 48px.
-At ≥1440px the hero text spans columns 1–6 and the plot box spans columns 8–12
-shifted 48px left, so the plot's left 48px sits over the right 48px of the
-lead paragraph's measure.
+#### Why the knockout is gone
 
-The only thing inside the plot's left 48px is the plot frame's left rule, at
-x ≈ 0.5px of a 546px render. The next element inward is the dashed tick column
-at x ≈ 51px, outside the overlap. So the overlap crosses one 1px `--line`
-hairline and nothing else, which is exactly what L1 permits. No knockout, no
-change to the lead's colour or size.
+It punched the page colour out behind type. That is what produced the 200px
+hole in the `ALL PROJECTS` rule, and it is the opposite of the layering the
+brief takes from publicrecords.nyc, where things overlap and both remain
+visible. Every instance of `.w01-knockout` and `.w04-knockout` comes out of
+the markup and the stylesheet, and the word does not return.
+
+#### L1 — hairline over text
+
+A 1px rule, or a plot hairline, passes over a line of type. The rule is at
+stacking level 2, the type at level 1. Neither changes colour, size, or
+opacity. The rule is not interrupted, not faded, and not re-coloured at the
+crossing.
+
+Legibility is preserved by five constraints, all measurable in a screenshot:
+
+1. **The rule is 1px.** At the smallest size L1 permits — `title-s` 18px, cap
+   height about 12.6px — a 1px horizontal interruption removes 8% of the
+   glyph's vertical extent at one y value. Latin letterforms survive a single
+   1px horizontal cut: the cut is thinner than every stem it crosses, so no
+   stem is severed, only crossed.
+2. **Only display type is crossed.** `statement`, `title`, and `title-s`
+   only. A rule never crosses `lead`, `body`, `body-s`, `label`, or `index`.
+   Prose is never crossed anywhere on the site. This is the hard line: the
+   effect is applied to four or five words on a page, never to a paragraph.
+3. **The crossing height is bounded.** The rule's y must fall in the middle
+   third of the crossed line's cap height, and no closer than 2px to the
+   baseline or to the x-height line. A rule on the baseline reads as an
+   underline; a rule at the x-height merges with the horizontal bars of `e`,
+   `a`, and `t` and the word turns to mud. Checkable: measure the rule's y
+   against the line's cap box in a crop.
+4. **The rule is lighter than the type.** `--line` `#B0AAA0` crossing
+   `--fg-primary` `#141210` leaves the crossed glyph at 94%+ of its ink and
+   the 1px crossing line at 1.94:1 against the ground on either side of the
+   word. The type never drops below `--fg-primary`, so its own contrast is
+   15.7:1 everywhere, unchanged.
+5. **At most two crossings per page**, and never two on the same text block.
+   The device reads as deliberate at two instances and as an accident at six.
+
+**Hero use, ≥1440px only.** Unchanged in geometry, changed in z-order. The
+array plot's box widens left so it overlaps the hero text column by 48px. The
+only thing inside the plot's left 48px is the plot frame's left rule, at
+x ≈ 0.5px of a 546px render; the dashed tick column at x ≈ 51px is outside the
+overlap. That single 1px `--line` vertical now draws **over** the last
+characters of the lead paragraph's measure rather than under them.
+
+One exception to constraint 2, named here so it is not read as a defect: this
+vertical crosses `lead`, not display type. It is permitted because it is a
+single vertical at the end of a line's measure, where the crossed glyphs are
+at most one character wide and the reader has already read them. It is the one
+vertical crossing on the site. A horizontal rule across `lead` remains
+forbidden.
 
 Below 1440px the hero does not layer: at 1024–1439px there is not enough
 column width to overlap without pulling the plot's tick column into the text,
-and at ≤767px the plot is below the text. Stated so the critic does not score
-a missing overlap at 1440 and below as a defect.
+and at ≤767px the plot is below the text.
 
-**L2 — home section 02 image band.** This is the site's principal layered
-composition and it works at both scored viewports.
+#### When a rule crosses a photograph
 
-Order of elements: the section rule and label, then the image band, then the
-W/01 record overlapping it.
+`--line` `#B0AAA0` against an unknown photographic tone has no guaranteed
+contrast, so the rule changes colour and nothing else:
+
+- **Over the ground or over `--band`:** 1px `--line`. The default.
+- **Over a photograph or a plate's interior:** 1px `--ground` `#EDEBE6`. The
+  skill's photography treatment maps every installation photograph so its
+  whitest pixel is `#EDEBE6` and its blackest is `#141210`, so a `--ground`
+  hairline is at worst equal to the lightest pixel in the image and at best
+  sits at 15.7:1 against its darkest.
+- **The asset constraint that makes that true:** in the 24px band centred on
+  the rule, the photograph must contain no pixel lighter than `#C9C4BB`. That
+  is a shooting and retouching requirement recorded against the image slot in
+  section 6, checkable with an eyedropper on the delivered asset, and it is
+  easily met by the dim installation rooms this site photographs. A plate with
+  no photograph yet is `--ground` fill, so the rule over it stays `--line`
+  until the asset lands.
+- The transition happens at the plate's outer hairline. One rule can therefore
+  render in two colours along its length — `--line` across the page, `--ground`
+  across the image. That is a drafting convention, not an inconsistency, and it
+  is stated so the critic does not score it as one.
+
+#### L2 — mat seating
+
+**Type never sits on a photograph.** It sits on `--ground` (15.7:1) or on
+`--band` `#E5E2DC` (14.6:1 for `--fg-primary`, 5.5:1 for `--fg-muted` — both
+clear AA at every size on the scale). Both are flat palette colours with
+measured ratios. A photograph has no ratio, and with the knockout withdrawn
+there is no mechanic that gives it one.
+
+So the layered composition is built the other way round: the type sits inside
+the image plate, on the plate's own `--band` mat, which is part of the plate
+and is drawn beneath both. The bottom mat is widened to hold it. A print in a
+window mount with a deep bottom margin — the type is mounted with the
+photograph, not laid on top of it.
 
 | | ≥1024px | ≤767px |
 |---|---|---|
-| Image band height | 560px | 220px |
-| Caption bar position | band's **top** edge | band's **top** edge |
-| Record overlap | 96px | 48px |
-| Knockout span | columns 1–8, bleeding left to the frame | full content width, bleeding left to the frame |
-| Knockout padding | 24px | 16px |
-| Knockout fill | `--ground`, opaque | `--ground`, opaque |
+| Mat, top / left / right | 24px | 16px |
+| Mat, bottom | 96px | 48px |
+| Plate hairline | 1px `--line-strong`, mat's outer edge | same |
+| Type in the bottom mat | `W/01` at `index`, title at `title` | `W/01` at `index`, title at `title` 24px |
 
-What sits on the knockout: the W/01 record's 1px top rule, its `W/01` index,
-and its `<h3>` title. The prose begins below the band's bottom edge, on the
-page, not on the knockout.
+Legibility: `--fg-primary` on `--band` is 14.6:1 whatever the photograph turns
+out to be, because the type is not over the photograph. Nothing depends on how
+dark the image is.
 
-The caption bar moves from the band's bottom edge to its top edge in this
-configuration, so the knockout and the caption never meet. Everywhere else —
-work.html's IMG-01 band, the plot's caption — the caption bar stays at the
-bottom.
+Degradation: with SP-07 in the slot the mat, the hairline, and the type are
+identical; only the plate's interior fill changes when the photograph arrives.
 
-Bleed: the knockout extends `var(--margin)` to the left of column 1, so its
-left edge coincides with the frame's inner rule and is invisible. Three edges
-show: top, right, bottom. No border, no radius, no shadow, no opacity.
+#### Census
 
-Legibility: the title and index sit on opaque `--ground`, so they carry
-`--fg-primary` at 15.7:1 and `--fg-muted` at 5.75:1, the same ratios as
-anywhere else on the page. Nothing depends on how dark the photograph is.
+Two mechanics, no third. Per page:
 
-Degradation: with SP-07 in the slot the geometry is identical and the plate's
-label moves up out of the overlap per SP-07. The composition reads the same
-before and after the photograph exists, which is the test.
+| Page | L1 crossings | L2 mats |
+|---|---|---|
+| home | 2 — the ≥1440px hero vertical, and the `W/01` record's top rule across the image band | 1 — the section 02 image band |
+| work | 1 — the `W/01` record's top rule across the IMG-01 band | 1 — IMG-01 |
+| studio | 0 | 0 |
 
-**L2 — home section 02, record W/04.** The vertical image slot sits in columns
-9–12. At ≥1024px the record's SP-09 credit line sits on a 200px-wide `--ground`
-knockout overlapping the slot's bottom-left corner by 32px horizontally and
-32px vertically, bleeding left out of column 9. At ≤767px the slot sits below
-the prose and the credit line overlaps its top-left corner by 24px, bleeding
-left to the frame.
+No layering on `studio.html`: the bios are the longest prose on the site and
+nothing crosses them.
 
-This is the one place a credit line is layered, and it is deliberate: the
-sentence that says who built the thing sits on the picture of the thing.
+**Forbidden everywhere.** Opaque knockouts behind type. Type over a
+photograph. Mouse-tracked transforms. Parallax. Scroll-linked translation of
+content. `opacity` scrims. Gradient fades over images. `backdrop-filter`. Text
+set in a colour chosen to suit one photograph. Interrupting a rule so type can
+pass through the gap.
 
-**Census.** Three layered compositions on home, one of them desktop-only. No
-layering on `studio.html` — the bios are the longest prose on the site and
-nothing crosses them. On `work.html`, the IMG-01 band repeats the section 02
-composition with the W/01 record, and no other.
+#### The home section 02 composition, measured
 
-**Forbidden everywhere.** Mouse-tracked transforms, parallax of any kind,
-scroll-linked translation, `opacity` scrims, gradient fades over images,
-`backdrop-filter`, and text set in a colour chosen to suit one photograph.
+The site's principal layered composition. It works at both scored viewports and
+it uses both mechanics at once.
+
+Order of elements: section rule and label, then the image band as a matted
+plate, then the `W/01` record whose top rule crosses the band.
+
+| | ≥1024px | ≤767px |
+|---|---|---|
+| Plate outer box | full-bleed to the frame's inner edge, 560px tall | full-bleed, 220px tall |
+| Mat, top / left / right | 24px `--band` | 16px `--band` |
+| Mat, bottom | 96px `--band` | 48px `--band` |
+| Photograph box inside the mat | width − 48px × 440px | width − 32px × 156px |
+| Plate hairline | 1px `--line-strong`, outer edge of the mat | same |
+| `W/01` index in the bottom mat | `index`, `--fg-muted`, 24px from the mat's left inner edge, baseline 32px below the photograph | `index`, 16px from the left, baseline 16px below |
+| Title in the bottom mat | `title` 32px, `--fg-primary`, left-aligned to the index | `title` 24px |
+| Caption bar | `FIG. 02` · `REFORESTERS LABORATORY, WILLIAMSBURG` · `24.2 CHANNEL`, `label`, `--fg-muted`, sitting in the **top** mat, 24px tall | same, in the top mat, 16px tall, two cells on one line and `24.2 CHANNEL` dropped |
+| Record top rule | 1px, runs full-bleed and **crosses the plate** at 40px above the plate's bottom edge | 1px, crosses at 20px above the bottom edge |
+
+The record's top rule is the page's second L1 crossing. It runs the full width,
+so along its length it is `--line` where it crosses the ground, `--ground`
+where it crosses the photograph, and `--line` again across the mat. Where it
+crosses the title's cap box it crosses the title — at 40px above the plate
+bottom with a 32px-tall title set 48px up from that edge, it passes through
+the title's lower third, inside the middle-third window L1 requires. That is
+the one place on the home page where a visitor sees a hairline run through a
+word, and it is the composition Andrew asked for.
+
+The prose of `W/01` begins below the plate, on the ground.
+
+Degradation: with SP-07 in the slot the mat, the hairline, the caption, the
+index, the title, and the crossing rule are all identical. Only the interior
+fill changes when the photograph arrives, and the crossing rule's colour over
+that interior changes from `--line` to `--ground` at the same time.
+
+#### Record W/04, revised
+
+The vertical image slot sits in columns 9–12. Its SP-09 credit line is **not**
+layered. It sits where SP-09 requires it: as the first child of the record's
+metadata column, above the technical rows, separated by a 1px `--line` rule
+with 16px clear above and below, flush left at `label` size.
+
+The previous revision floated the credit on a 200px `--ground` knockout
+outset 32px below the plate. That is withdrawn: the knockout is gone, the
+outset pushed the credit 31px outside its own record and punched a hole in the
+`ALL PROJECTS` rule below it, and a credit line is `label`-size type, which L1
+forbids crossing. Nothing is layered on this record.
+
+The vertical plate keeps its four corner ticks and its centred label. It gets
+no mat — a mat is only specified where type sits in it.
+
+### SP-13 — Sound objects
+
+The hero moves. Five sound objects travel through the array field, in the
+manner of a Dolby Atmos renderer display: a small ring carrying a number,
+moving on the plane. They live inside the SP-08 array plot's SVG, so they cost
+zero network bytes and inherit the plot's scaling.
+
+**This is the only element on the site that moves on its own.** It carries the
+whole motion budget. Nothing else animates except hover affordances and the
+one-time draw-on.
+
+#### Why the objects and not the greyed mark
+
+Andrew sanctioned a greyed axis mark changing scale as a simpler alternative.
+It is rejected. The mark's placement rule (SP-11) is that it only ever sits in
+a gap in a 1px rule and never moves; animating copies of it floating free in a
+plot breaks the rule that keeps the mark meaning one thing, and makes the
+site's signature a moving decoration. The objects are a different and truthful
+object: the plot is a field, the objects are what travels through it, and a
+renderer display is the reference Andrew named.
+
+#### Geometry
+
+One `<g class="obj">` per object inside `<g class="objs">`, positioned by its
+own `transform="translate(x y)"`. Each group holds two children, in order:
+
+```html
+<g class="obj" transform="translate(476 280)">
+  <circle r="var(--obj-r)" vector-effect="non-scaling-stroke"/>
+  <text y="0">03</text>
+</g>
+```
+
+| Property | Value |
+|---|---|
+| Circle | `fill: var(--ground)`, `stroke: var(--fg-primary)`, `stroke-width: 1` with `vector-effect="non-scaling-stroke"` |
+| Radius | `var(--obj-r)` — 11 viewBox units at ≥768px, 17 at ≤767px |
+| Numeral | `var(--obj-fs)` — 10 viewBox units at ≥768px, 16 at ≤767px. `--fg-primary`, grotesque, `text-anchor: middle`, `dominant-baseline: central`, `font-variant-numeric: tabular-nums`, `letter-spacing: 0` |
+
+`vector-effect="non-scaling-stroke"` is permitted here and nowhere else. The
+skill forbids it on the mark, where the stroke must scale with the shape. On
+an object the opposite is required: the ring must render at exactly 1px at
+every plot size, because the plot scales 1.56× between breakpoints and a
+scaled stroke would be 0.63px on mobile and render as a grey smudge.
+
+#### The number is readable because the object is the same physical size at
+#### every viewport
+
+The two-value radius and font size are chosen so the rendered result is
+constant, not proportional:
+
+| | Plot render | Scale | Ring diameter | Numeral |
+|---|---|---|---|---|
+| ≥768px | 546px / 560 viewBox | 0.975 | 21.5 CSS px | 9.8 CSS px |
+| ≤767px | 350px / 560 viewBox | 0.625 | 21.3 CSS px | 10.0 CSS px |
+
+**The checkable rule: a sound object measures 21 ±1 CSS px across and its
+numeral is 10 ±0.5 CSS px, at 390px and at 1440px alike.** An object that
+scales with the plot ends up 13.7px across on mobile with a 6.3px numeral,
+which is unreadable, which is why the variables take two values like the type
+scale does.
+
+A 10px grotesque numeral has a cap height of about 7.2px. Two digits measure
+about 10px. The ring's inscribed square at r = 10.7px is 15.1px. So the numeral
+sits with 2.5px of clear space on each side, on an opaque `--ground` fill, at
+15.7:1. It is the same size as the plot's existing channel numerals, which are
+already on the page and already legible.
+
+Numerals are `03`, `11`, `29`, `38`, `57`. They are object identifiers, not
+channel numbers: a renderer numbers objects independently of speakers, and
+reusing the plot's channel numerals would say something false. No numeral
+duplicates one already in the plot.
+
+#### Paths
+
+Each object travels a closed ellipse centred on the plot's listening position
+`(280, 280)`, foreshortened vertically at the mark's own Z ratio so it reads as
+a circle seen in perspective rather than as an oval.
+
+x = 280 + a·cos θ  ·  y = 280 + b·k·sin θ  ·  θ = θ₀ + 2πt/T
+
+`k` is the scroll scalar's output (SP-14); it is 1 at rest.
+
+| Obj | Numeral | a | b | T | Direction | θ₀ | Rest `translate` | Peak speed |
+|---|---|---|---|---|---|---|---|---|
+| 1 | `03` | 196 | 82 | 36s | clockwise | 0° | `476 280` | 33.4 px/s |
+| 2 | `11` | 150 | 63 | 34s | counter | 118° | `210 336` | 27.0 px/s |
+| 3 | `29` | 120 | 54 | 22s | clockwise | 212° | `178 251` | 33.4 px/s |
+| 4 | `38` | 172 | 72 | 41s | counter | 295° | `353 215` | 25.7 px/s |
+| 5 | `57` | 128 | 56 | 31s | clockwise | 160° | `160 299` | 25.3 px/s |
+
+`a` and `b` are viewBox units. Peak speed is instantaneous, at the ends of the
+major axis, in CSS px/s at the 1440px render; mobile is 0.64× of it.
+
+**Five objects.** Four reads as sparse and does not say "a field"; eight at
+21px each inside a 546px plot starts to crowd the geometry the plot exists to
+show, and eight numerals at 10px become noise. Five fills the field and leaves
+every numeral legible.
+
+Checkable constraints:
+
+1. **No object leaves the plot.** Max radius is object 1 at a + r = 207
+   viewBox units; the outer speaker ring is at 228 and the plot frame at 280.
+   Every object stays inside the array at all times, at every value of `k`.
+2. **No object sits at the centre.** Min distance from `(280, 280)` is
+   object 3's b·0.70 = 37.8 units, which clears the 8-unit `LP` cross.
+3. **Speed ceiling: 35 CSS px/s instantaneous, at any viewport, for any
+   object.** Measurable from two frames of a screen recording.
+4. **Periods are 36, 34, 22, 41, 31 seconds** — five distinct values with no
+   small common multiple, so the configuration does not visibly repeat.
+5. **Directions alternate**, three clockwise and two counter, so the field
+   does not read as a single rotating wheel.
+
+#### Z-order inside the plot
+
+`<g class="objs">` sits after the rings, spokes, points, and signal line, and
+**before** the channel numerals, the `LP` cross, and the `LP` label. So:
+
+- An object's `--ground` fill occludes plot hairlines and points as it passes
+  over them. That is correct — a renderer object is opaque, and this is artwork
+  occluding artwork.
+- Plot type always draws over an object, never under it. **Nothing in this
+  design puts artwork on top of type.** That is the same principle as change 1
+  above, applied inside the SVG, and it is why no clearance zone around the
+  numerals is needed.
+
+#### Entry and exit
+
+Objects fade in with the plot's draw-on at 1700ms (SP-08) and begin travelling
+at 2040ms. Once travelling they never stop, fade, or reset while the tab is
+visible. On `visibilitychange` to hidden the loop is cancelled; on return it
+resumes from the elapsed wall-clock time, so the objects are where they would
+have been. `requestAnimationFrame` already throttles in a background tab; the
+explicit cancel is so a long background period does not produce one large jump.
+
+#### Degradation
+
+| Condition | Result |
+|---|---|
+| JavaScript off | The five objects render at their authored rest `translate` values, written as literal attributes in the markup. The hero is a complete drawn plot with five numbered objects in it |
+| `prefers-reduced-motion: reduce` | The script short-circuits before the loop starts. Identical to the JavaScript-off render. No object moves, and the scroll scalar is pinned to `k = 1` |
+| Tab hidden | Loop cancelled, objects frozen |
+| SVG unsupported | Not a supported condition; the plot already requires SVG |
+
+The resting state is not a fallback that looks broken. It is the drawn plot the
+site shipped before this revision, with five objects added to it.
+
+### SP-14 — The scroll scalar
+
+Scroll interactivity, at 390px and at 1440px alike. Not a desktop flourish.
+
+**What scroll drives.** One scalar, which drives one property. Scroll position
+sets the viewing elevation on the array field: as the reader descends the page
+the camera descends toward the plane, and the objects' elliptical paths flatten
+toward a line. It is the obvious candidate — the objects' position on the field
+— expressed as the field's own geometry rather than as a translation of
+anything on the page.
+
+**The mapping.**
+
+```
+p = clamp( (H - t) / (H + h), 0, 1 )
+k = 1.30 - 0.60 * p
+```
+
+- `H` — viewport height, from `innerHeight`, cached, recomputed on `resize`
+- `h` — the plot's rendered height, 546 or 350, cached
+- `t` — the plot's viewport-relative top, computed as `plotTop - scrollY` from
+  a cached document-space `offsetTop`. No `getBoundingClientRect` in the loop
+- `p` — 0 when the plot's top edge is at the bottom of the viewport, 1 when its
+  bottom edge has passed the top of the viewport
+- `k` — the semi-minor multiplier, applied as `b · k` in SP-13's path equation
+
+**Bounds.** `k` is clamped to `[0.70, 1.30]` and nothing else in the document
+responds to scroll. The mapping is centred so that **`p = 0.5` gives `k = 1.00`,
+the authored geometry** — the same geometry the JavaScript-off and
+reduced-motion renders show. At 1440×900 with the plot top at y ≈ 200, `p` at
+scroll 0 is 0.484 and `k` is 1.01, so the first paint and the no-script paint
+are visually the same page.
+
+**Magnitude.** The largest `b` is 82 viewBox units, so the full `k` range moves
+that object vertically by 82 × 0.60 = 49 viewBox units, which is 48 CSS px at
+1440px and 31 CSS px at 390px — across the plot's entire traverse of the
+viewport, about 1446px of scroll on desktop and 1194px on mobile. The coupling
+is 3.3% of scroll distance. It is smooth because it is a continuous linear
+function of `scrollY` with no easing, no spring, and no threshold, and it is
+bounded because `p` is clamped.
+
+**At the top and the bottom of the page.** `p` clamps at both ends. iOS
+rubber-banding produces a negative `scrollY`, which clamps `p` to 0 and `k` to
+1.30 — no overshoot, no NaN, no snap-back. Scrolled past the plot, `p` pins at
+1 and `k` at 0.70, and the plot is off-screen anyway. At the document bottom
+nothing is in motion that the reader can see, and returning to the top walks
+`k` back up continuously.
+
+**It cannot fight the scroll.** The listener is `{ passive: true }` and its
+whole body is one assignment of `scrollY` to a variable. All work happens in
+the rAF loop that SP-13 already runs, so scroll adds no second loop and no
+layout read. There is no `scroll-behavior` override, no `position: sticky`, no
+scroll hijack, no wheel or touch listener, no transform on any scrolling
+container, and no element outside the plot's `<svg>` changes with scroll.
+
+**Rejected.** Mouse-tracked parallax, which the brief rules out in those words
+and which does not exist on a phone. Scroll-driven entrance animations on body
+content, which make a page that looks empty until it is scrolled. Scroll-linked
+translation of the image bands, which is parallax under another name.
+Scroll-driven opacity on anything.
+
+Under `prefers-reduced-motion: reduce` the scroll scalar is off and `k = 1`
+permanently. A user-driven change is still motion, and the whole script
+short-circuits on one check rather than branching in two places.
+
+### SP-15 — Drawn elements
+
+More line art and graphic, less brochure. The page is currently paragraphs in
+columns; drawn elements take over part of the load. Everything below comes from
+the vocabulary already on the page — 1px rules, dashed `2 4` ticks, 3×3 square
+points, the filled triangle, hairline circles, `--band` fills, catalogue
+numerals — and introduces no second visual language.
+
+**The sanctioned primitives, complete.** 1px hairline, straight or elliptical ·
+dashed hairline at `2 4` · 3×3 square point, `--fg-primary` · filled triangle,
+3.9 long × 2.1 across · hairline circle · `--band` flat fill · `label`, `index`
+numerals. Nothing else is drawn anywhere on the site. No arrowheads other than
+the triangle, no curves other than ellipses, no fill other than `--ground`,
+`--band`, and `--fg-primary` points, no hatching, no stipple, no outline boxes
+around things.
+
+The triangle is a shared primitive, not the mark. The mark is the three-axis
+assembly of three hairlines and three triangles from one origin. A triangle
+used alone as a dimension-line terminator is not a mark instance and SP-11's
+placement rule does not apply to it.
+
+#### G-01 — Offering diagrams, home section 01
+
+Each of the three offering records gets one inline SVG in its metadata column,
+above the metadata rows, with 24px clear below it. `viewBox="0 0 288 180"`,
+rendered at 288×180 at ≥1024px and at the full content width × 0.625 at
+≤767px, where it sits between the prose and the metadata rows. Each carries a
+1px `--line` top rule with a `FIG.` number and a title at `label` in
+`--fg-muted`, in the same two-cell construction the plot's caption bar uses.
+≤2.5KB of markup each.
+
+| Record | Drawing | Caption |
+|---|---|---|
+| `001` Creative | A source fan. One 3×3 point at `(24, 90)`, nine hairlines fanning to nine 3×3 points on a vertical line at x = 264, spaced 18 units apart from y = 18 to y = 162. Three of the nine rays are `--fg-primary`, the rest `--line`; the three carry 8-unit dashed ticks at 16-unit pitch | `FIG. 05 — SOURCE TO ARRAY` |
+| `002` Systems | A signal scale bar. One horizontal 1px `--line` rule at y = 72 from x = 16 to x = 272, with five 10-unit vertical ticks dropping from it at x = 16, 80, 144, 208, 272, and five `index`-size labels below at 9px: `LAPTOP`, `SQ-5`, `DANTE`, `Q-SYS`, `AMPS`. Above the rule, a second dashed `2 4` rule at y = 48 spanning only x = 144 to x = 272, labelled `AMBISONIC` — the span the templating covers | `FIG. 06 — SIGNAL PATH` |
+| `003` Fabrication | A measured elevation. A speaker enclosure drawn as a 1px `--line` outline, 96 wide × 132 tall at `(40, 24)`, with one hairline circle for the driver and one 3×3 point at the terminal position. Two dimension lines offset 16 units outside the body, each a 1px rule terminated at both ends by the shared triangle primitive, with dimensions set at `index` 9px: one horizontal, one vertical | `FIG. 07 — ENCLOSURE, ELEVATION` |
+
+No boxes around the labels, no shading inside the enclosure, no arrowheads
+other than the triangle. The three drawings are the same weight of line as the
+array plot and the mark, so the page reads as one drawing set.
+
+The dimensions in `FIG. 07` are the enclosure's real dimensions when the
+fabrication commission can be described, and until then the drawing carries no
+numerals at all — a measured drawing with invented measurements is a lie, and
+SP-16's filler rule forbids plausible fake facts. The dimension lines and
+triangles still render; only the numerals wait.
+
+#### G-02 — Credits as a register with an axis, home section 03
+
+The twelve names stop being a three-column list and become a plotted register.
+The information gains one true field and the section gains its drawn element.
+
+- A 1px `--line` rule across the content width at the top of the register,
+  carrying three 8px dashed `2 4` ticks at 50%, 72%, and 94% of its length,
+  with three `label` headers above them: `INSTALLATION`, `SYSTEM`, `RECORD`.
+- Twelve rows below it. Each row: the name at `body-s` in `--fg-body` flush
+  left, then a 1px `--line` rule running right from 8px after the name to the
+  row's tick position, terminating in a 3×3 `--fg-primary` point on the axis.
+- Row height 48px at ≥1024px, 44px at ≤767px, 1px `--line` between rows.
+- One point per row. A name belonging to two categories gets the category the
+  three principals' credit on it actually was; the register is a statement of
+  fact, not a matrix.
+
+At ≤767px the axis rule and its three headers stay at the top of the register,
+the three tick positions compress to 46%, 70%, 94% of a 350px width, and the
+connecting rule shortens accordingly. The names stay flush left at `body-s`
+14px. No wrapping: the longest name, `Reforesters Laboratory`, measures about
+140px at 14px, leaving 20px of clear space before the 46% tick at x = 161.
+
+#### G-03 — Shared datum under the portraits, home section 04
+
+The three portraits sit on one shared 1px `--line` rule that runs the full
+content width and passes behind all three, 24px below their bottom edges. An
+8px tick drops from the rule at each portrait's left edge, and a third tick at
+the rightmost portrait's right edge. The names sit 24px below the rule.
+
+One rule instead of three separate blocks is what makes three people read as
+one practice. 0 bytes, and it is the only thing added to that section.
+
+#### G-04 — The contact aperture
+
+The contact band's primary action becomes the terminus of a drawn line rather
+than a line of a paragraph.
+
+- Two 1px `--line` rules enter from the frame's inner edges, left and right, at
+  the vertical centre of the `START A PROJECT` cap box.
+- Each stops 24px short of the text, so the link sits in a gap in a rule — the
+  same construction the mark uses, at the scale of the page.
+- No mark in either gap: the gap holds the link, and SP-00 already excludes the
+  contact band from the mark census.
+- At ≤767px the two rules enter the same way; the gap is 16px each side. If the
+  text plus two 16px gaps leaves either rule under 24px long, both rules are
+  dropped and the band keeps its existing top and bottom rules only.
+  `START A PROJECT` at 30px measures about 215px inside a 350px content width,
+  leaving 135px for two 16px gaps and two 51px rules, so they render.
+
+This is the one place on the site where a rule is interrupted for type to sit
+in the gap. It is not an exception to L1, because nothing is crossed: it is the
+mark's construction, applied to a link.
+
+#### G-05 — Prose budget
+
+The brochure problem is a count, so the fix is a count. On `/index.html`:
+
+| Limit | Value |
+|---|---|
+| Prose blocks (`lead`, `body`, `body-s` paragraphs) | ≤ 8 |
+| Total words of prose | ≤ 420 |
+| Consecutive paragraphs anywhere | ≤ 2 |
+| Sentences per work-record prose block | ≤ 2 |
+| Sections with no drawn element | 0 |
+
+Every numbered section on the home page contains at least one of: the array
+plot, a G-01 diagram, the G-02 axis, the G-03 datum, the G-04 aperture, or an
+image plate. Checkable by counting in a full-page screenshot.
+
+Full-length prose lives on `work.html` and `studio.html`, where the job is
+detail and the bios are the proof. The home page's job is to be a drawing with
+enough words on it.
+
+### SP-16 — Placeholder copy
+
+Placeholder copy reads as placeholder. The last build shipped plausible prose
+in slots awaiting Andrew's copy, which is worse than no copy: a stand-in that
+reads as a draft gets reviewed as a draft, and a wrong fact that reads well
+survives into production.
+
+**The rule.** Any block whose final wording has not been supplied renders as
+obvious filler, in this exact form:
+
+1. The block opens with a clause naming what the block is, then `goes here`,
+   then Latin filler for the remainder of its intended length. For example:
+   `Project description goes here lorem ipsum dolor sit amet consectetur
+   adipiscing elit sed do eiusmod tempor incididunt ut labore.`
+2. Filler never contains a proper noun, a number, a year, a format, a channel
+   count, a hardware name, a date, or a place. Nothing in a filler block can be
+   mistaken for a fact or quoted back.
+3. Filler sets at its block's real token, size, colour, and measure, so the
+   layout is still testable. It is filler in wording only.
+4. The element carries `data-placeholder`. The count is one grep, and the
+   production gate can refuse a deploy while any remain.
+5. A metadata row whose value is unknown is **omitted**, never filled. There is
+   no `label`-size filler anywhere: a technical row reading
+   `Lorem ipsum routing` is the exact failure this rule exists to prevent.
+6. Filler is never written in the voice section's register. If a critic scores
+   a filler block for copy clarity, the filler is not obvious enough.
+
+**Settled copy, which is not filler and does not change.** The `<h1>`; the
+three offering names `Creative`, `Systems`, `Fabrication`; the twelve credit
+names including `Alanis Morissette`; the three bio texts and their named
+credits; the three one-line home credits in section 04; the wordmark; every
+section label and index-band label; the hero lead; the next-step line; the
+contact sentence; the audience line in section 01; `Start a project`; every
+`FIG.` number and plate label; and every SP-09 `CREDIT`, `YEAR`, and
+`COMMISSION` value, which are facts the team supplied.
+
+**Blocks that render as filler now**, pending Andrew's copy pass:
+
+| Block | Filler opens |
+|---|---|
+| `001` prose | `Creative scope goes here lorem ipsum` |
+| `002` prose | `Systems scope goes here lorem ipsum` |
+| `003` prose | `Fabrication scope goes here lorem ipsum` |
+| `W/01` prose | `Project description goes here lorem ipsum` |
+| `W/02` prose | `Project description goes here lorem ipsum` |
+| `W/04` prose | `Project description goes here lorem ipsum` |
+| `work.html` standfirsts and all record prose | `Standfirst goes here lorem ipsum` |
+| `studio.html` 01 Practice paragraphs | `Practice description goes here lorem ipsum` |
+
+Lengths match the copy intent already recorded for each block, so a filler
+`W/01` paragraph is about 280 characters because the real one will be, and the
+measure and the record height are tested at the right size.
+
+**Line breaking, every block, both widths.** The last review found wrapping
+failing in several places. Every block is checked at 390px and 1440px against
+four conditions, all screenshot-checkable: no line shorter than three words
+except the last; no single word alone on the last line of a `title` or
+`statement`; no horizontal overflow at `document.scrollWidth` 390; and no
+glyph within 4px of the frame's inner rule. `text-wrap: pretty` on prose and
+`text-wrap: balance` on `statement` and `title` are required, not optional.
 
 ---
 
@@ -626,24 +1250,27 @@ both inside the first screen at 390×844.
 | Eyebrow `( NEW YORK )` | 1–7 | `label` | `--fg-muted` |
 | `<h1>` statement, 3 lines | 1–7 (774px) | `statement` 56px | `--fg-primary` |
 | Lead, 2 lines | 1–6 (660px) | `lead` 28px | `--fg-body` |
-| Email, SP-05 | 1–6 | `link-cta` 24px | `--fg-primary` |
+| Contact link, SP-05, reading `Start a project` | 1–6 | `link-cta` 24px | `--fg-primary` |
 | Next-step line | 1–6 | `body-s` 15px | `--fg-muted` |
 | SP-08 array plot | 8–12 (546px), top-aligned to the statement. At ≥1440px the box shifts 48px left into the text column per SP-12 L1 | — | — |
 
 Vertical gaps, top of hero downward: eyebrow → statement 32px; statement →
-lead 40px; lead → email 48px; email → next-step line 8px.
+lead 40px; lead → contact link 48px; contact link → next-step line 8px.
 
-At 1440×900 this puts the baseline of the email link at roughly y=604 and the
-index band fully visible, with the top of section 01's space at the fold.
+At 1440×900 this puts the baseline of `Start a project` at roughly y=604 and
+the index band fully visible, with the top of section 01's space at the fold.
+The plot's box top-aligns to the statement at y ≈ 200, which is the value
+SP-14's scroll mapping assumes.
 
 **Layout ≤767px.** Single column, 20px margins, hero top padding 48px.
 
-Order: eyebrow → `<h1>` at 30px over 4 lines → lead at 20px → email at 20px →
-next-step line at 14px → array plot at 350×350.
+Order: eyebrow → `<h1>` at 30px over 4 lines → lead at 20px →
+`Start a project` at 20px → next-step line at 14px → array plot at 350×350.
 
-Gaps: 24, 24, 32, 8, 40. The email baseline lands near y=488, inside the
-first screen. The plot's caption bar falls below the fold by design and is the
-first thing scrolling reveals.
+Gaps: 24, 24, 32, 8, 40. The link's baseline lands near y=488, inside the first
+screen. The plot sits at y ≈ 620, so its top edge is just below the fold: the
+first thing scrolling reveals is a field of moving objects, and that is the
+first and most important place SP-14's scroll scalar is felt.
 
 **Copy intent.**
 
@@ -652,7 +1279,7 @@ first thing scrolling reveals.
 | Eyebrow | City | Locates the practice in one word |
 | `<h1>` statement | That this is spatial audio made as a work, not specified from a catalogue. Three lines, upper case, ≤30 characters per line | The single claim the whole site rests on. A curator reads only this and knows whether to continue |
 | Lead | The two halves, unequal: sound designed for a room, and the control logic and workflow that let an artist use that room without an engineer. One sentence, maybe two | Converts the claim into something a commissioner can scope |
-| Email | The address, visible as text | The primary action, instance 2 of 4 |
+| Contact link | `Start a project`. The address is not rendered | The primary action, instance 2 of 4 |
 | Next-step line | What happens after the email: the work is described and scoped before anyone gets on a call. One sentence | Removes the "is this a sales funnel" question. Explicitly not "Get in touch" |
 
 ### Index band
@@ -668,14 +1295,20 @@ leads. Systems supports. Fabrication is third and is not a catalogue install.
 
 Three SP-03 records, 64px apart at ≥1024px, 48px at ≤767px.
 
-| Index | Title | Prose must say | Metadata rows |
-|---|---|---|---|
-| `001` | Creative | Sound designed for a specific room: spatialized sound design, interactive work, and existing pieces adapted into spatial formats. 2–3 sentences | `SPATIALIZED SOUND DESIGN`, `INTERACTIVE PROGRAMMING`, `ADAPTATION TO SPATIAL FORMATS`, `COMPOSITION FOR ARRAYS` |
-| `002` | Systems | The logic and the artist-facing workflow, often on hardware someone else installed. A room built by others, made usable, is the service. 2–3 sentences | `CONTROL LOGIC`, `ROOM TUNING`, `SYSTEM ARCHITECTURE`, `Q-SYS PROGRAMMING`, `AMBISONIC TEMPLATING`, `DANTE ROUTING`, `DOLBY ATMOS`, `WAVE FIELD SYNTHESIS` |
-| `003` | Fabrication | Speakers, haptics, and electroacoustic instruments built as objects for one room, not specified from a catalogue. 2–3 sentences | `CUSTOM SPEAKERS`, `CUSTOM HAPTICS`, `ACOUSTIC & ELECTROACOUSTIC INSTRUMENTS`, `ENCLOSURES` |
+| Index | Title | Prose intent | Diagram | Metadata rows |
+|---|---|---|---|---|
+| `001` | Creative | Sound designed for a specific room: spatialized sound design, interactive work, and existing pieces adapted into spatial formats. **1 sentence, filler per SP-16 until the copy pass** | G-01 `FIG. 05` | `SPATIALIZED SOUND DESIGN`, `INTERACTIVE PROGRAMMING`, `ADAPTATION TO SPATIAL FORMATS`, `COMPOSITION FOR ARRAYS` |
+| `002` | Systems | The logic and the artist-facing workflow, often on hardware someone else installed. A room built by others, made usable, is the service. **1 sentence, filler per SP-16** | G-01 `FIG. 06` | `CONTROL LOGIC`, `ROOM TUNING`, `SYSTEM ARCHITECTURE`, `Q-SYS PROGRAMMING`, `AMBISONIC TEMPLATING`, `DANTE ROUTING`, `DOLBY ATMOS`, `WAVE FIELD SYNTHESIS` |
+| `003` | Fabrication | Speakers, haptics, and electroacoustic instruments built as objects for one room. **1 sentence, filler per SP-16**. The clause "not specified from a catalogue" does not appear here: it is the `<h1>`, and spending the strongest line on the page twice weakens both | G-01 `FIG. 07` | `CUSTOM SPEAKERS`, `CUSTOM HAPTICS`, `ACOUSTIC & ELECTROACOUSTIC INSTRUMENTS`, `ENCLOSURES` |
+
+The three titles are settled copy and do not change.
+
+Each record's metadata column opens with its G-01 diagram, then 24px of clear,
+then the metadata rows. At ≤767px the diagram sits between the prose and the
+metadata rows at the full content width, 350×219.
 
 No icons. No cards. The three records are distinguished by their index
-numbers and their rules, nothing else.
+numbers, their rules, and their drawings, nothing else.
 
 ### 02 — Selected work
 
@@ -688,29 +1321,35 @@ All copy in this section is placeholder until Andrew's copy pass. What is
 fixed now is the record set, the index numbers, the SP-09 structure, and the
 layout. The prose is intent only.
 
-**Image band IMG-01.** Full-bleed to the frame's inner edge. Height 560px at
-≥1024px, 220px at ≤767px. `object-fit: cover`, `width="1600" height="900"`
-attributes set to prevent layout shift, `fetchpriority="high"`, not lazy.
+**Image band IMG-01.** A matted plate, full-bleed to the frame's inner edge,
+per SP-12 L2. Outer box 560px tall at ≥1024px, 220px at ≤767px. Mat `--band`:
+24px top, left, and right and 96px at the bottom at ≥1024px; 16px and 48px at
+≤767px. 1px `--line-strong` hairline on the mat's outer edge. The photograph
+sits flush inside the mat with `object-fit: cover`, `width="1600"
+height="900"` attributes set to prevent layout shift, `fetchpriority="high"`,
+not lazy.
 
-The caption bar sits at the band's **top** edge in this section, because the
-W/01 record's knockout occupies the bottom edge per SP-12. 40px tall at
-≥1024px, two stacked 36px rows at ≤767px. `background: var(--band)` — opaque,
-not a scrim — 1px `--line` bottom rule in this orientation, `label` token,
-`--fg-muted`. Cells: `FIG. 02` · `REFORESTERS LABORATORY, WILLIAMSBURG` ·
-`24.2 CHANNEL`.
+The caption bar sits in the **top mat**, which is where the mat already is —
+it is not an overlay and it has no fill of its own. `FIG. 02` ·
+`REFORESTERS LABORATORY, WILLIAMSBURG` · `24.2 CHANNEL` at `label` in
+`--fg-muted`, 24px tall at ≥1024px. At ≤767px the top mat is 16px and carries
+two cells, `FIG. 02` and `REFORESTERS LABORATORY`; `24.2 CHANNEL` is dropped
+rather than wrapped.
 
-Before the photograph exists this is SP-07 at the same dimensions, with the
-label centred in the area the knockout leaves clear.
+The bottom mat carries the `W/01` index and the record title, per SP-12.
 
-**Record W/01**, SP-03, layered per SP-12 L2 over the band above it:
+Before the photograph exists this is SP-07 inside the same mat, with the
+plate's own label centred in the area above the bottom mat.
 
-- Title: `REFORESTERS LABORATORY`.
-- Prose must say: a 24.2 channel listening room and adaptogen cafe in
-  Williamsburg; the scope was software, not hardware; Astral Spatial built the
-  control logic and tuned the room; the deliverable was a workflow, so a
-  visiting artist arrives with their own work and plays it in ambisonics
-  without an engineer rebuilding the room for them. That last clause is the
-  point of the whole section and must survive editing.
+**Record W/01**, SP-03, its top rule crossing the plate per SP-12 L1:
+
+- Title: `REFORESTERS LABORATORY`, set in the plate's bottom mat.
+- Prose intent: a 24.2 channel listening room and adaptogen cafe in
+  Williamsburg; the scope was software, not hardware; the deliverable was a
+  workflow, so a visiting artist arrives with their own work and plays it in
+  ambisonics without an engineer rebuilding the room for them. That last clause
+  is the point of the whole section and must survive editing. **Two sentences
+  maximum, filler per SP-16 until the copy pass.**
 - SP-09: `CREDIT — ASTRAL SPATIAL` · `YEAR — 2025` ·
   `COMMISSION — ASTRAL SPATIAL`.
 - Technical rows: `SCOPE — SOFTWARE`, `Q-SYS PROGRAMMING`,
@@ -720,13 +1359,12 @@ label centred in the area the knockout leaves clear.
 **Record W/02**, SP-03, no image slot on home:
 
 - Title: `MOFE`.
-- Prose must say: a spatial system at scale, and the clearest single example
-  of one on the site; Andrew Fox designed the system and commissioned Jupiter
-  Sound to execute it; Chloe Alexandra Thompson tuned it and refined the sound
-  design within it; it predates the agency and is two of the three principals
-  doing together exactly what the practice now sells. Two to three sentences.
-  The prose states the facts; the SP-09 block states the attribution. Neither
-  apologises.
+- Prose intent: a spatial system at scale, and the clearest single example of
+  one on the site; it predates the agency and is two of the three principals
+  doing together exactly what the practice now sells. **Two sentences maximum,
+  filler per SP-16 until the copy pass.** The prose does not restate the
+  attribution: the SP-09 block beside it carries the names, and the last build
+  printed the same credit twice, word for word, as half of this record's prose.
 - SP-09: `CREDIT — SYSTEM DESIGN, ANDREW FOX; EXECUTION, JUPITER SOUND;
   TUNING AND SOUND DESIGN, CHLOE ALEXANDRA THOMPSON` ·
   `YEAR — 2020–2022` · `COMMISSION — PREDATES ASTRAL SPATIAL`.
@@ -738,18 +1376,20 @@ label centred in the area the knockout leaves clear.
 lower half:
 
 - Index `W/04`. Title: a neutral designation, not a client name.
-- Prose must say: a custom speaker installation in progress; the first project
+- Prose intent: a custom speaker installation in progress; the first project
   where the physical build is Astral Spatial's own; the client cannot be named
-  yet. Two sentences. No implied scale, no adjectives about the client.
+  yet. **Two sentences maximum, filler per SP-16 until the copy pass.** No
+  implied scale, no adjectives about the client.
 - SP-09: `CREDIT — ASTRAL SPATIAL` · `YEAR — 2026` ·
-  `COMMISSION — ASTRAL SPATIAL`. Layered over the image slot per SP-12 L2.
+  `COMMISSION — ASTRAL SPATIAL`. **Not layered.** First child of the metadata
+  column, flush left, 1px `--line` rule with 16px clear below it, then the
+  technical rows. The floated knockout is withdrawn per SP-12.
 - Technical rows: `STATUS — IN PROGRESS`, `CLIENT — UNNAMED`.
 - Image slot IMG-05 in columns 9–12, 432×540 displayed, 4:5. SP-07 plate until
   the photograph exists, labelled `PLATE — FABRICATION IN PROGRESS`. At ≤767px
   it sits below the prose at 350×438.
 
-Records are 64px apart at ≥1024px, 48px at ≤767px, per SP-03. `W/03` does not
-appear on home.
+Records are 64px apart at ≥1024px, 48px at ≤767px, per SP-03.
 
 **Link row.** 1px `--line` rule carrying the mark at its right end per SP-11,
 then a 56px row: `ALL PROJECTS` at `label`, `--fg-muted`, hover
@@ -764,15 +1404,24 @@ brief is explicit that they belong to the people rather than the agency.
 **Framing line**, `body`, columns 1–6 at ≥1024px, one sentence. It must make
 the attribution unambiguous without apologising.
 
-**Credits register.** 48px below the framing line.
+**Credits register.** 48px below the framing line. Built as G-02: an axis rule
+with three dashed ticks headed `INSTALLATION`, `SYSTEM`, `RECORD`, then twelve
+single-column rows, each running a 1px `--line` from its name out to a 3×3
+`--fg-primary` point on the axis. 48px rows at ≥1024px, 44px at ≤767px, 1px
+`--line` between.
 
-- ≥1024px: three columns of four rows. Each row 48px tall, 1px `--line` bottom
-  rule, name at `body-s` in `--fg-body`, flush left.
-- ≤767px: one column, twelve rows, 44px tall, 1px `--line` between.
+The three-column list of the previous revision is withdrawn. Twelve names in
+three columns is the most brochure-like block on the page and it carried one
+field of information; the register carries two and is drawn.
 
-Names, exact and in this order: MoFE, Meow Wolf, Reforesters Laboratory, Life
-is Beautiful, Ben Frost, Richard Mosse, Sony Music, Domino Records, Mexican
-Summer, Polyvinyl Records, Kaki King, **Alanis Morissette**.
+Names, exact and in this order, with their axis position: MoFE (system), Meow
+Wolf (installation), Reforesters Laboratory (system), Life is Beautiful
+(installation), Ben Frost (record), Richard Mosse (installation), Sony Music
+(record), Domino Records (record), Mexican Summer (record), Polyvinyl Records
+(record), Kaki King (record), **Alanis Morissette** (record).
+
+Axis positions are the team's to confirm in the copy pass. Where a name is
+wrong, one point moves and nothing else changes.
 
 The current site spells Morissette wrong. It is checked by the rubric.
 
@@ -785,8 +1434,9 @@ Three entries, alphabetical by surname: Michael Amacio, Andrew Fox, Chloe
 Alexandra Thompson.
 
 **≥1024px**: three across, each spanning 4 columns. Portrait 240×300 flush
-left in its column, then name at `title-s`, then a one-line credit at
-`body-s`. Gaps: portrait → name 24px; name → credit 8px.
+left in its column, then the G-03 shared datum rule 24px below the portraits'
+bottom edges, then name at `title-s` 24px below the rule, then a one-line
+credit at `body-s` 8px below the name.
 
 One-line credits, each naming a specific verifiable thing:
 
@@ -813,17 +1463,21 @@ at ≤767px. 1px `--line` rule top and bottom.
 | Element | Token | Size | Colour |
 |---|---|---|---|
 | Label `05 — CONTACT` | `label` | 12/11px | `--fg-muted` |
-| Email, SP-05 | `statement` | 56/30px | `--fg-primary` |
+| Contact link, SP-05, reading `START A PROJECT` | `statement` | 56/30px | `--fg-primary` |
+| G-04 aperture rules | 1px `--line` | — | `--line` |
 | Next-step sentence | `body` | 18/16px | `--fg-body` |
 | Location line `NEW YORK` | `label` | 12/11px | `--fg-muted` |
 
-Gaps: label → email 48px (≥1024) / 32px (≤767); email → sentence 24px / 16px;
-sentence → location 48px / 32px. Email and text span columns 1–8 at ≥1024px.
+Gaps: label → link 48px (≥1024) / 32px (≤767); link → sentence 24px / 16px;
+sentence → location 48px / 32px. The link and the sentence span columns 1–8 at
+≥1024px; the aperture rules span from frame edge to frame edge.
 
-At 56px the rendered string `INFO@ASTRALSPATIAL.COM` measures about 580px, so
-it fits columns 1–8 (774px) on one line. At 30px on a 390px viewport it
-measures about 317px and fits the 350px content width on one line. It must not
-wrap at either width.
+`START A PROJECT` at 56px measures about 400px and at 30px about 215px. It fits
+on one line at both widths with room to spare, and at 390px it clears the
+frame's inner rule by more than 100px. It must not wrap. The previous build's
+`INFO@ASTRALSPATIAL.COM` at 30px measured 354px against a 350px content width
+and ran under the frame strip; that defect is removed by the change of string,
+not by a size override.
 
 Copy intent: the sentence names what to send — the room, the work, the dates —
 and what happens next. It does not say "Get in touch", "Let's talk", "Reach
@@ -831,11 +1485,13 @@ out", or "We'd love to hear from you".
 
 ### Call-to-action census
 
-Four instances, all pointing at the same address: desktop header, hero,
-contact band, footer. The contact band is the visually dominant one by a
-factor of more than two in type size. That satisfies rubric item 8's "one
-primary action, visually dominant, repeated at least twice, specific about
-what happens next".
+Four instances, all reaching the same address: desktop header `CONTACT`, hero
+`Start a project`, contact band `START A PROJECT`, footer `CONTACT`. The
+contact band is the visually dominant one by a factor of 2.3 in type size, and
+it is the only one that carries the `mailto:` href directly (SP-05). That
+satisfies rubric item 8's "one primary action, visually dominant, repeated at
+least twice, specific about what happens next" — the next step is named in the
+sentence under the link, and the link itself is the verb.
 
 ---
 
@@ -871,11 +1527,11 @@ Work Astral Spatial was commissioned for. Two records, `W/01` and `W/04`,
 
 **Record W/01**, at full length:
 
-- IMG-01 band at the top of the section, same dimensions as on home. The same
-  file; cached. The caption bar sits at the band's **bottom** edge here and
-  the record below it does not layer — the layered composition belongs to the
-  home page, and on a page whose job is detail the full image reads better
-  uninterrupted.
+- IMG-01 band at the top of the section, same matted plate and same dimensions
+  as on home. The same file; cached. Here the bottom mat is 24px, not 96px,
+  because no type sits in it, and the caption bar stays in the top mat. The
+  record's top rule still crosses the plate per SP-12 L1 — one crossing on this
+  page — but the title and index sit on the ground below it, not in the mat.
 - Prose runs 4–6 paragraphs instead of one: the room, the scope boundary
   (software, not hardware), the signal path from a visiting artist's laptop
   through the Allen & Heath SQ-5, over Dante, into the d&b audiotechnik
@@ -889,12 +1545,12 @@ Work Astral Spatial was commissioned for. Two records, `W/01` and `W/04`,
   hero.
 
 **Record W/04**, as on home, with IMG-05 at 432×540 and its SP-09 credit line
-layered over the slot per SP-12 L2. No additional claims.
+unlayered at the head of the metadata column. No additional claims.
 
 ### 02 — Prior work, by the principals
 
-Work two or three of the principals did before Astral Spatial existed. The
-section label does the attribution once; SP-09 does it per record.
+Work the principals did before Astral Spatial existed. The section label does
+the attribution once; SP-09 does it per record. One record ships.
 
 **Standfirst**, `body`, columns 1–6, one or two sentences: this work predates
 the agency, it was done by these people individually or with other firms
@@ -912,29 +1568,24 @@ scale. It does not use the words "although", "unfortunately", or "only".
   3–11 at ≥1024px, 350×197 at ≤767px. Caption bar `FIG. 04` · `MOFE` ·
   `13.1 SYSTEM`. SP-07 plate until shot.
 
-**Record W/03 — Anechoic chamber, Detroit.** Withheld until its details are
-confirmed and permission to publish is given.
+`W/02` is the only record in this section. `W/03` is a reserved index with no
+record behind it, per section 1.
 
-- Prose intent, once cleared: what the chamber is, what Chloe Alexandra
-  Thompson and Michael Amacio did in it, and when. Two to three sentences.
-- SP-09: `CREDIT — CHLOE ALEXANDRA THOMPSON, MICHAEL AMACIO` ·
-  `YEAR —` to be confirmed · `COMMISSION — PREDATES ASTRAL SPATIAL`.
-- Image slot IMG-08, 432×540 at ≥1024px, 350×438 at ≤767px, in columns 9–12.
-  SP-07 plate until shot.
-- **Withholding condition.** `W/03` does not ship until both the details and
-  the permission exist. The `YEAR —` row cannot be published empty or as `TBC`;
-  if the year is unknown the record is not ready.
-- **Withholding leaves no hole.** The record is one full-width row in a flow
-  list. Removing it removes one row and one 64px gap, and changes no other
-  measurement on the page. The index `W/03` is not reassigned, so with the
-  record absent the page reads `W/01`, `W/02`, `W/04` and the gap is left
-  unexplained. The section still has `W/02` in it, so it never renders empty;
-  if a future state leaves this section with no records at all, the section
-  and its standfirst are removed together rather than shown empty.
-- Builder instruction: ship `W/03` commented out of the markup is **not**
-  acceptable — an HTML comment is readable by anyone who views source, and the
-  permission is outstanding. The record does not exist in the file until it is
-  cleared.
+**How a withheld record behaves**, stated once so the mechanism exists without
+anything to attach it to:
+
+- The record is one full-width row in a flow list. Its absence costs one row
+  and one 64px gap and changes no other measurement on the page.
+- Its index is never reassigned, so the page reads `W/01`, `W/02`, `W/04` and
+  the gap is left unexplained.
+- This section still has `W/02` in it, so it never renders empty. If a future
+  state leaves it with no records at all, the section and its standfirst are
+  removed together rather than shown empty.
+- **A withheld record does not exist in the file.** Not as markup, not as a
+  commented-out block — an HTML comment is readable by anyone who views source
+  — not as a plate, not as an image filename, not in `sitemap.xml`, and not as
+  a sentence anywhere on the site describing what is missing. The spec names
+  the constraint and nothing else, per section 1.
 
 ### 03 — In development
 
@@ -1056,14 +1707,13 @@ downloaded at the scored viewport.
 
 | ID | Page | Intrinsic | Displayed ≥1024 / ≤767 | Budget | Must show |
 |---|---|---|---|---|---|
-| IMG-01 | home 02, work 01 | 1600×900 | full-bleed 560px / 220px tall | 110KB | The Reforesters Laboratory listening room from a seated listener's position, wide enough that the array reads as an array. Low ambient light, the room's own light sources visible. No people, or one figure at the frame edge for scale. Horizontal |
+| IMG-01 | home 02, work 01 | 1600×900 | matted plate, 560px / 220px tall | 110KB | The Reforesters Laboratory listening room from a seated listener's position, wide enough that the array reads as an array. Low ambient light, the room's own light sources visible. No people, or one figure at the frame edge for scale. Horizontal. **Crossing constraint:** a 1px `--ground` rule crosses this image 40px above the plate's bottom edge, so in the 24px band centred on that line the image must contain no pixel lighter than `#C9C4BB`. Checkable with an eyedropper on the delivered asset |
 | IMG-02 | home 04, studio 02 | 640×800 | 240×300 / 120×150 | 22KB | Michael Amacio. Existing `img/ma.jpg`, recropped to 4:5, baked greyscale |
 | IMG-03 | home 04, studio 02 | 640×800 | 240×300 / 120×150 | 22KB | Andrew Fox. Existing `img/af.jpg`, recropped to 4:5, baked greyscale |
 | IMG-04 | home 04, studio 02 | 640×800 | 240×300 / 120×150 | 22KB | Chloe Alexandra Thompson. Existing `img/chloe.jpg`, recropped to 4:5, baked greyscale. Currently 239KB; it must come in at the same budget as the other two |
 | IMG-05 | home 02, work 02 | 960×1200 | 432×540 / 350×438 | 45KB | The custom speaker enclosure under construction. Raw material, joinery, or a driver mount visible. Workshop light. Nothing that identifies the client. Vertical |
 | IMG-06 | work 01 | 1200×800 | 900×600 / 350×233 | 80KB | The control surface and signal path at Reforesters: the SQ-5, the rack, or a Q-SYS screen. It must look like equipment in a working room, not a product shot |
 | IMG-07 | work 02 | 1200×675 | 900×506 / 350×197 | 70KB | The MoFE room with the array readable as an array, wide, from a listener's height. The scale is the point, so the frame must contain enough of the room to show it. No identifiable faces. Horizontal |
-| IMG-08 | work 02 | 960×1200 | 432×540 / 350×438 | 40KB | The Detroit anechoic chamber interior: the wedge lining, ideally with one figure for scale. It must read as a room with no reflections, which means the walls, not a detail. Ships only with `W/03`. Vertical |
 | OG-01 | all | 1200×630 | not rendered | 60KB | `#EDEBE6` ground, the array plot in `#B0AAA0` hairlines, the mark, and the wordmark in `#141210`. Flat, two-tone, so it compresses small |
 
 The three portrait slots serve two pages. At `studio.html` the same 640×800
@@ -1079,25 +1729,35 @@ Rubric floors: total under 500KB, largest single asset under 150KB.
 
 | Asset | Home | Work | Studio |
 |---|---|---|---|
-| HTML, inline SVG, inline JS | 28KB | 30KB | 30KB |
-| `style.css` | 16KB | 16KB | 16KB |
+| HTML, inline SVG, inline JS | 38KB | 30KB | 30KB |
+| `style.css` | 18KB | 18KB | 18KB |
 | `archivo-narrow-400.woff2` | 24KB | 24KB | 24KB |
 | `source-serif-4-400.woff2` | 24KB | 24KB | 24KB |
 | Favicon set | 7KB | 7KB | 7KB |
-| Photography | 110 + 66 + 45 = 221KB | 110 + 80 + 45 + 70 + 40 = 345KB | 66KB |
-| **Total, fully shot** | **320KB** | **446KB** | **167KB** |
-| **Total, plates only** | **99KB** | **101KB** | **167KB** |
+| Photography | 110 + 66 + 45 = 221KB | 110 + 80 + 45 + 70 = 305KB | 66KB |
+| **Total, fully shot** | **332KB** | **408KB** | **169KB** |
+| **Total, plates only** | **111KB** | **103KB** | **169KB** |
 
 Largest single asset: 110KB. Floor is 150KB. `work.html` fully shot is the
-closest page to the 500KB floor at 446KB, and that figure assumes `W/03` has
-shipped with IMG-08. Everything below IMG-01 on that page is `loading="lazy"`,
-so the figure counts bytes a reader reaches by scrolling, not bytes at first
-paint.
+closest page to the 500KB floor at 408KB. Everything below IMG-01 on that page
+is `loading="lazy"`, so the figure counts bytes a reader reaches by scrolling,
+not bytes at first paint.
 
-`style.css` grows 2KB for the frame, the mark, and the two layering mechanics,
-and loses the rail. The frame and the mark add no network requests at all: the
-frame is four empty spans styled with gradients, and the mark is one `<symbol>`
-under 300 bytes reused by `<use>`.
+The home page's HTML grows 10KB over the previous revision and stays the
+smallest text asset on any page:
+
+| Addition | Cost |
+|---|---|
+| Five sound objects, SP-13 | ≤ 0.8KB of markup |
+| Three G-01 diagrams | ≤ 2.5KB each, ≤ 7.5KB |
+| G-02 axis and twelve connector rules | ≤ 1.2KB |
+| Inline script, SP-13 + SP-14 + SP-05 | ≤ 2.5KB |
+| Removed: four `<span>`/`<i>` email assemblies and their attributes | −1.6KB |
+
+`style.css` grows 2KB for the objects, the aperture, the mat, and the drawn
+elements, and loses the two knockout blocks, the rail, and the `.mail .at` /
+`.mail .dot` rules. Nothing added in this revision makes a network request:
+every drawing is inline SVG and the script is inline.
 
 ---
 
@@ -1141,7 +1801,16 @@ Accessibility requirements that carry the Lighthouse floor of 90:
   strip.
 - Landmarks: `<header>`, `<nav>`, `<main id="main">`, `<footer>`.
 - `font-weight: 400` set explicitly on `h1`–`h6` so no synthetic bold renders.
-- Tap targets ≥44×44px below 768px, including the email link.
+- Tap targets ≥44×44px below 768px, including every contact link.
+- **No `aria-label` on any contact link.** Each one's accessible name is its
+  visible text, which clears Lighthouse's `label-content-name-mismatch` on all
+  four instances.
+- The five sound objects are inside the plot's single `role="img"` SVG, which
+  carries one `aria-label` for the whole diagram. The objects add no accessible
+  nodes, no `<title>`, and no live region. Their numerals are SVG `<text>` and
+  are not announced separately.
+- No element's visibility, position in reading order, or accessible name
+  depends on the script.
 
 ---
 
@@ -1156,23 +1825,29 @@ Everything that moves, with the evidence a critic can check.
 | M4 | SP-03 record top rule `--line` → `--line-strong`, index numeral `translateX(8px)` | Hover, ≥1024px, `pointer: fine` | 120ms / `--ease-out` | Hover screenshot of record `001` |
 | M5 | Index band cell text `--fg-muted` → `--fg-primary` | Hover | 120ms / `--ease-out` | Hover screenshot of the index band |
 | M6 | Link row text and its mark brighten together, the mark via `stroke: currentColor` | Hover, `:focus-visible` | 120ms / `--ease-out` | Hover screenshot of the `ALL PROJECTS` row showing text and mark at `--fg-primary` |
+| M7 | Five sound objects travel elliptical paths through the array field, SP-13 | Page load, from 2040ms, continuous while the tab is visible | 22–41s per object, linear in θ, no easing | Screen recording at 1440×900 and 390×844. Two frames 1s apart: every object has moved, none exceeds 35 CSS px/s, none leaves the plot frame, every numeral is readable at 10px |
+| M8 | The field's elevation changes with scroll: every object's semi-minor axis is multiplied by `k`, SP-14 | Scroll, continuous | None — a linear function of `scrollY`, no transition, no easing | Screenshots at scroll 0 and at the plot's exit. `k` ranges 1.30 → 0.70; the largest object moves 48 CSS px vertically across 1446px of scroll at 1440px, 31px across 1194px at 390px |
 
 M2, the right-edge rail label swap, is withdrawn with SP-04.
 
-Nothing else moves. The frame does not move, draw, or fade. The mark does not
-move; only M6's colour change touches it. No parallax, no mouse tracking, no
-scroll-driven scale or rotation, no carousel, no autoplaying media, no
-scroll-triggered entrance animations on body content, and no transform
-anywhere that reads pointer position.
+M7 and M8 are the whole autonomous motion budget, and they are both inside one
+`<svg>` on one page. Nothing else moves. The frame does not move, draw, or
+fade. The mark does not move; only M6's colour change touches it. No parallax,
+no mouse tracking, no scroll-triggered entrance animations on body content, no
+carousel, no autoplaying media, no `position: sticky`, no scroll hijack, and no
+transform anywhere that reads pointer position. No element outside the hero
+plot responds to scroll.
 
-Under `prefers-reduced-motion: reduce`: M1 renders complete, M3–M6 change
-state with no transition. The frame, the mark, and every layered composition
-are identical to their normal render. No content is hidden or unreachable.
+Under `prefers-reduced-motion: reduce`: M1 renders complete, M3–M6 change state
+with no transition, **M7 never starts and M8 is pinned to `k = 1`**. The frame,
+the mark, and every layered composition are identical to their normal render.
+No content is hidden or unreachable.
 
-Without JavaScript: M1, M3, M4, M5, M6 all work, the frame and the mark render,
-every layered composition renders, and the email links jump to the footer
-address. Every page is fully readable and every link resolves. The only
-JavaScript on the site is the SP-05 email rewrite.
+Without JavaScript: M1 and M3–M6 all work; M7 and M8 do not exist, and the five
+objects render at their authored rest positions, which is a complete drawing.
+The frame, the mark, every drawn element, and every layered composition render.
+The three jump links scroll to the contact band, where the mail link works
+natively. Every page is fully readable and every link resolves.
 
 ---
 
@@ -1191,27 +1866,46 @@ JavaScript on the site is the SP-05 email rewrite.
 - The system font stack.
 - "Alanis Morisette".
 
-### From the current build, by this revision
+### From the current build, by the previous revision
 
 - `.rail` and its `@media` blocks in `style.css`, the `<div class="rail">`
   element, and every `data-rail` attribute. SP-04 is withdrawn.
 - The `→` glyph in `ALL PROJECTS →` and `FULL BIOGRAPHIES →`. The mark on the
   row's rule replaces it.
 - The nine-square favicon. The mark replaces it.
-- The band caption's position at the bottom of the home section 02 image band.
-  It moves to the top of the band so the W/01 knockout can take the bottom.
 - The dark stylesheet and any `ground-dark` `:root` block. The repo ships one
   theme.
 
+### From the current build, by this revision
+
+- **Both `--ground` knockouts.** `.w01-knockout` and `.w04-knockout`, their
+  markup, their absolute positioning, their padding, and the 200px opaque box
+  that punched a hole in the `ALL PROJECTS` rule. The word does not return.
+- **Type on photographs.** No type sits on an image anywhere. The mat carries
+  it instead.
+- **The email address as rendered text.** Four instances. With them: the
+  `<span>`/`<i>` assembly, `data-u`, `data-d`, `moc.laitapslartsa`,
+  `.mail .at::before`, `.mail .dot::before`, `id="email-fallback"`, and the
+  four-href rewrite loop.
+- **Four `aria-label` attributes** spelling the address out in the accessible
+  tree.
+- **`INFO@ASTRALSPATIAL.COM` at `statement` size** in the contact band.
+  `START A PROJECT` replaces it, which also removes the 390px clip.
+- **The twelve-name three-column credit list.** G-02's register replaces it.
+- **The closing sentences of records `001` and `003`**, which restated their own
+  openings, and `003`'s verbatim reuse of the `<h1>`'s strongest clause.
+- **`W/02`'s prose credit**, which duplicated its own SP-09 block word for word.
+- Every piece of plausible placeholder prose. SP-16 governs what replaces it.
+
 Kept: the bio text in substance, the three headshots, the twelve credit names,
-`info@astralspatial.com`, and the light ground `#EDEBE6`.
+`info@astralspatial.com` as the contact route, and the light ground `#EDEBE6`.
 
 Kept from the current build, unchanged: the type scale and every size on it,
-the spacing scale, the grid, the breakpoints, SP-00 through SP-03, SP-05
-through SP-08, the index band, the contact band, the footer, the array plot
-including its geometry and draw animation, the portrait treatment, and the
-email obfuscation with its fallback anchor. This revision adds three devices
-and one component and withdraws one. It is not a rebuild.
+the spacing scale, the grid, the breakpoints, the palette, SP-00 through SP-04,
+SP-06 through SP-11, the index band, the footer, the array plot's geometry and
+draw animation, and the portrait treatment. This revision changes one mechanic
+(layering), replaces one component (SP-05), and adds four (SP-13 to SP-16). It
+is not a rebuild.
 
 ---
 
@@ -1237,11 +1931,22 @@ The brief leaves these open. Each is a choice, with what it rejects.
    proof the business has) and a five-page site with separate Services and
    Contact pages (not enough content, and a contact page is a dead end when
    the action is an email).
-4. **Email as CSS-assembled text plus a six-line inline `mailto` rewrite,
-   with an in-page fallback anchor.** Rejected: a contact form (no backend, and
-   the brief rules out handing strangers a funnel), the reversed-string CSS
-   trick alone (displays but is not clickable), and Cloudflare's automatic
-   obfuscation (injects a script the repo does not control).
+4. **The call to action is a verb, and the address lives in one
+   percent-encoded `href` per page.** Reversed from the previous revision,
+   which rendered the address at `statement` size as CSS-assembled text and
+   rebuilt four hrefs with script. Andrew's decision: the display element is
+   `Start a project`, the address is never rendered as text, and the
+   `aria-label` stops spelling it out. Percent-encoding needs no script, so
+   the contact route now works with JavaScript off, which the previous scheme
+   did not. Rejected: a contact form (no backend, and the brief rules out
+   handing strangers a funnel); a fourth `/contact.html` page as the no-JS
+   fallback (a page whose only content is an address is the dead end the IA
+   already rejected); rendering the address in the footer for copying (Andrew
+   ruled it out, and it was the single richest target on the page);
+   Cloudflare's automatic obfuscation (injects a script the repo does not
+   control). The honest limit is recorded in SP-05: a rendering scraper reads
+   the resolved DOM and `decodeURIComponent` is one call. This reduces surface;
+   it does not guarantee anything.
 5. **An inline SVG array plot as the hero visual.** Rejected: a stock image, a
    video, an empty hero, and a large wordmark. It is 0 network bytes, it is
    the hairline-diagram device the brief takes from other-people.net and
@@ -1261,8 +1966,8 @@ The brief leaves these open. Each is a choice, with what it rejects.
    heading. The names belong to the three people's prior work, and the brief
    says to frame them accordingly.
 10. **No chromatic accent.** Rejected: a single signal colour. Emphasis is
-    brightness. The only non-flat value in the system is one 12px white glow
-    on one hairline in the array plot.
+    contrast. On the light ground there is no glow and no non-flat value
+    anywhere in the system.
 11. **No right-edge section rail.** Reversed from the previous revision, which
     specified one. The frame now draws a fixed hairline 17px from the right
     edge; a second fixed vertical 23px further in reads as an error, and the
@@ -1307,30 +2012,85 @@ The brief leaves these open. Each is a choice, with what it rejects.
     crosshair-and-ray mark, which read as a resize handle at small sizes; and
     heavier triangles, which muddy below 16px. The Z axis is foreshortened,
     which is what carries the dimensionality. Minimum size is 14px.
-19. **Layering is static, with two mechanics and no third.** Rejected: the
-    mouse-tracked parallax that produces the effect on publicrecords.nyc,
-    which the brief rules out in those words; opacity scrims over photographs,
-    which the design language forbids; gradient fades and `backdrop-filter`,
-    same reason; and choosing a text colour to suit a particular photograph,
-    which makes legibility a per-image judgement instead of a property of the
-    system. L2's opaque `--ground` knockout keeps every contrast ratio
-    identical to the rest of the page whatever the photograph turns out to be.
-20. **The principal layered composition is on the home image band and it
-    works at 390px.** Rejected: layering only on desktop, which would have
-    made the mobile page a different and plainer design; and layering the hero
-    statement over the array plot at every width, which would put the plot's
-    `12` numeral and dashed tick column behind serif prose. The hero's overlap
-    is L1 and exists at ≥1440px only, where 48px of overlap crosses exactly
-    one hairline.
-21. **`work.html` is split by who commissioned the work, not by status.**
+19. **Rules pass over text. Nothing masks text.** Reversed from the previous
+    revision, which punched an opaque `--ground` panel out behind any type
+    crossing artwork. Andrew's words: text should pass under the border lines,
+    not be masked by it. The knockout was also what produced the 200px hole in
+    the `ALL PROJECTS` rule, so the mechanic failed on its own terms as well
+    as on the brief's. What goes with it: the knockout was the only thing
+    making type-on-photograph safe, so **type on photographs goes too**. There
+    is no mechanic that gives an unknown photographic tone a guaranteed
+    contrast ratio, and inventing one — a scrim, a gradient, a per-image text
+    colour — is forbidden by the design language. The replacement is the mat:
+    type sits on `--band`, which is a flat palette colour at a measured
+    14.6:1, and the mat is part of the plate rather than laid over it.
+    Rejected: re-colouring or interrupting the rule where it crosses a word,
+    which is the knockout again in miniature; running the rule *under* the
+    type with the type knocked out of it, same thing; and keeping the knockout
+    only for the one composition that needed it, which keeps a mechanic alive
+    for one instance and invites its return.
+20. **Two L1 crossings per page, on display type only.** Rejected: crossing
+    prose, which costs a reader real legibility for a graphic effect; crossing
+    `label` and `index` rows, where a 1px cut through an 11px letterform is a
+    quarter of its cap height; and leaving the number of crossings to
+    judgement, which is how a device becomes a texture. The one sanctioned
+    exception is the ≥1440px hero vertical crossing the `lead`, which is named
+    in SP-12 with its reason.
+21. **The hero moves: five numbered sound objects travelling the array
+    field.** Andrew's note, and the one element on the site with autonomous
+    motion. Rejected: the greyed axis mark changing scale, which he offered as
+    a simpler form — it breaks SP-11's placement rule, which is the thing
+    keeping the mark meaning one thing, and it makes the site's signature a
+    moving decoration. Also rejected: objects on straight tracks (reads as a
+    conveyor, not a field); objects outside the plot, floating on the page
+    (the field is the plot); more than five (the numerals become noise and the
+    geometry the plot exists to show is crowded); filled `--fg-primary` discs
+    (shaded blobs, and the system has no filled circles); and scaling the
+    objects with the plot, which makes them 13.7px across with a 6.3px numeral
+    at 390px.
+22. **Scroll drives one scalar, which drives the field's elevation, at every
+    width.** Rejected: mouse-tracked parallax, which the brief rules out in
+    those words and which does not exist on a phone; scroll-driven entrance
+    animations, which make a page that looks empty until it is scrolled;
+    scroll-linked translation of the image bands, which is parallax renamed;
+    `position: sticky` on the plot so the effect lasts longer, which turns the
+    hero into a scroll-jacked panel; and scroll-driven opacity on anything.
+    The mapping is linear, clamped at both ends, centred so that `k = 1` is the
+    authored geometry, and couples 48px of object movement to 1446px of scroll.
+    It is on by default at 390px, which is the point of the note.
+23. **Placeholder copy is obvious filler, governed by a rule rather than by
+    taste.** Rejected: writing good stand-in prose and marking it in a comment,
+    which puts a note inside a deliverable and still reads as a draft in a
+    screenshot; leaving the blocks empty, which breaks every layout
+    measurement; and `lorem ipsum` with no leading clause, which does not say
+    which block is unfinished. The `data-placeholder` attribute makes the count
+    a grep and lets the production gate refuse a deploy while any remain.
+24. **Five drawn additions and a prose budget, all from the existing
+    vocabulary.** Rejected: photography as the answer to the brochure problem,
+    because the photographs do not exist yet and the design must work before
+    they arrive; a second graphic language — isometric drawings, icons,
+    waveforms, spectrograms, a logo lockup — which would make the array plot
+    and the mark one register among several; and decorative line art with no
+    information in it, which is the brochure problem with thinner lines. Every
+    addition carries a fact: a signal path, a dimension, a discipline, a
+    shared datum, or the primary action.
+25. **`work.html` is split by who commissioned the work, not by status.**
     Rejected: the previous `01 Complete` / `02 In progress` split, which put
-    MoFE and the Detroit chamber in the same bucket as agency commissions and
+    the principals' prior work in the same bucket as agency commissions and
     left attribution to the credit lines alone. The brief says a curator
     should be able to tell without asking; a section heading does that before
     any record is read, and SP-09 then says it again per record.
-22. **Catalogue indices are assigned once and never re-flowed.** `W/03` being
-    withheld leaves the page reading `W/01`, `W/02`, `W/04`. Rejected:
-    renumbering on publication, which would make every index unstable and
+26. **Catalogue indices are assigned once and never re-flowed.** `W/03` is a
+    reserved index with no record behind it, so the page reads `W/01`, `W/02`,
+    `W/04`. Rejected: renumbering, which would make every index unstable and
     break any link or reference to a record; and a visible placeholder row for
-    the withheld record, which advertises a thing there is no permission to
+    an unpublished record, which advertises a thing there is no permission to
     discuss. A gap in a catalogue number is normal and is not explained.
+27. **Work that cannot be published is absent, not described.** No title, no
+    city, no room type, no date, no client, no indication of who worked on it,
+    and no generic description — a description specific enough to be useful is
+    specific enough to identify. Rejected: a plate labelled with the category
+    of the withheld work; an `UNANNOUNCED` row standing in for it specifically,
+    as distinct from the `03 — IN DEVELOPMENT` plates, which refer to nothing;
+    and a commented-out record in the markup, which anyone can read from view
+    source. The spec names the constraint in section 1 and nothing else.
