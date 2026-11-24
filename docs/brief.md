@@ -81,7 +81,34 @@ What is real:
   aspirational. It gets a placeholder on the site now and a name when it can
   be published.
 
+- **MoFE.** A spatial system at scale, and the clearest single example of one.
+  Andrew designed the system and commissioned Jupiter Sound to execute it;
+  Chloe Alexandra Thompson tuned it and refined sound design within it. Not an
+  Astral Spatial commission — it predates the agency — but it is two of the
+  three principals doing together exactly what the agency sells.
+
+- **An anechoic chamber in Detroit.** Chloe Alexandra Thompson and Michael
+  Amacio, within the last year. Not an Astral Spatial commission. Details and
+  permission to publish are both outstanding.
+
 - Further projects in development, unnamed until they can be shown.
+
+### How work that predates the agency is attributed
+
+Two of the three work examples were done by these people before Astral Spatial
+existed, one of them with a third party executing the build. Presenting them
+as agency commissions would be a lie, and the art world is the audience least
+likely to forgive one.
+
+Every work record therefore carries an explicit credit line naming who did
+what. Reforesters reads as Astral Spatial. The other two name the individuals
+and the year, and say plainly that the work predates the agency. A curator
+reading the page should be able to tell, without asking, which projects the
+company delivered and which its people did elsewhere.
+
+This is not a weakness to be minimised. Three people who have each done this
+work at scale, now working together, is the actual proposition. The site
+should say that rather than imply a backlog it does not have.
 - **The individual CVs.** This is the strongest proof the business has. All
   three have done significant work elsewhere, and the current site's bios
   carry the specifics: a 32–148 speaker array specialist and Max Certified
@@ -112,9 +139,27 @@ Four references, and what each one contributes:
 The common thread across all four is thin line, generous space, small type,
 and no resemblance whatsoever to a startup landing page.
 
-The current site's white-on-black austerity was the right instinct but the
-execution is finished. Ground colour is open: three of the four references
-are light, one is dark.
+### Ground: light, decided
+
+Both grounds were built and reviewed on staging on 2026-11-23. Light wins. It
+reads better, it feels more spacious, and it matches the references. The dark
+build felt cramped. Ground is `#EDEBE6` and the site is a single light theme.
+
+A user-switchable dark mode is a possible later addition, not part of this
+build.
+
+### Three directions carried forward
+
+- **A thin frame.** A 1–2px rule framing the site itself, not just its
+  sections. The frame may carry the array plot's geometry rather than being a
+  plain rectangle.
+- **A repeated motif.** The spatial geometry of the array plot, reduced to a
+  small mark that recurs as a section separator and as an icon. Other People's
+  eye is the model: one small shape, used often enough to become the site's
+  signature, never explained.
+- **Layering.** Text passing over and under imagery, as on publicrecords.nyc,
+  at mobile width as well as desktop. The layered effect is wanted; the
+  mouse-tracked parallax that produced it there is not.
 
 Installation photography warms the site later, once it exists. The design
 must work before it arrives and improve when it does.
