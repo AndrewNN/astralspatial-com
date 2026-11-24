@@ -1002,7 +1002,9 @@ img, svg { max-width: 100%; display: block; }
 .site-footer {
   position: relative;
   border-top: 1px solid var(--line);
-  margin-top: var(--s-7);
+  margin-top: 0;
+  padding-top: var(--s-4);
+  padding-bottom: var(--s-4);
 }
 @media (min-width: 1024px) {
   .site-footer { margin-top: var(--s-9); }
@@ -1012,11 +1014,17 @@ img, svg { max-width: 100%; display: block; }
   padding: 0;
   list-style: none;
 }
-.footer-nav li {
+.footer-nav {
+  display: flex;
+  gap: var(--s-4);
+  align-items: center;
+  min-height: 44px;
   border-bottom: 1px solid var(--line);
-  height: 44px;
+}
+.footer-nav li {
   display: flex;
   align-items: center;
+  min-height: 44px;
 }
 @media (min-width: 1024px) {
   .footer-nav { display: flex; gap: 32px; height: 48px; align-items: center; }
@@ -1037,14 +1045,28 @@ img, svg { max-width: 100%; display: block; }
   padding: 0;
   list-style: none;
 }
+.footer-status {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: var(--s-3);
+  row-gap: var(--s-1);
+  padding-top: var(--s-3);
+}
 .footer-status li {
-  border-bottom: 1px solid var(--line);
-  height: 44px;
   display: flex;
   align-items: center;
   color: var(--fg-muted);
+  border-bottom: 0;
 }
-.footer-status li:last-child { border-bottom: 0; }
+.footer-status li:not(:last-child)::after {
+  content: "";
+  display: inline-block;
+  width: 1px;
+  height: 9px;
+  margin-left: var(--s-3);
+  background: var(--line);
+}
+.footer-status .footer-email { min-height: 44px; }
 .footer-status li.footer-email { color: var(--fg-primary); }
 @media (min-width: 1024px) {
   .footer-status {
@@ -1092,4 +1114,17 @@ main > section, main > div.img-band { padding-inline: 0; }
   font-weight: 400;
   font-style: normal;
   font-display: swap;
+}
+
+.js .g-diagram .plate-corner,
+.js .g-diagram text { opacity: 0; transition: opacity var(--dur-slow) var(--ease-out) 360ms; }
+.js .g-diagram.drawn .plate-corner,
+.js .g-diagram.drawn text { opacity: 1; }
+
+.js .g-diagram .plate-corner,
+.js .g-diagram text { opacity: 0; transition: opacity var(--dur-slow) var(--ease-out) 420ms; }
+.js .g-diagram.drawn .plate-corner,
+.js .g-diagram.drawn text { opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .js .g-diagram .plate-corner, .js .g-diagram text { opacity: 1; }
 }
