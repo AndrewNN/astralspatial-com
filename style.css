@@ -1201,3 +1201,37 @@ main > section, main > div.img-band { padding-inline: 0; }
   transition: color var(--dur-fast) var(--ease-out);
 }
 .theme-toggle:hover, .theme-toggle:focus-visible { color: var(--fg-primary); }
+
+.bio { margin-top: var(--s-3); }
+.bio-body { max-width: 68ch; }
+.bio > summary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  cursor: pointer;
+  color: var(--fg-muted);
+  list-style: none;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+.bio > summary::-webkit-details-marker { display: none; }
+.bio > summary::after {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-left: var(--s-2);
+  border-right: 1px solid currentColor;
+  border-bottom: 1px solid currentColor;
+  transform: translateY(-2px) rotate(45deg);
+  transition: transform var(--dur) var(--ease-out);
+}
+.bio[open] > summary::after { transform: translateY(1px) rotate(-135deg); }
+.bio > summary:hover, .bio > summary:focus-visible { color: var(--fg-primary); }
+.bio[open] > summary { color: var(--fg-primary); }
+.bio-body {
+  padding-top: var(--s-2);
+  border-top: 1px solid var(--line-detail);
+  margin-top: var(--s-1);
+}
+.bio-text { margin: 0 0 var(--s-3) 0; color: var(--fg-body); }
+.bio-tags { margin: 0; color: var(--fg-muted); }
