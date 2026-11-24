@@ -94,7 +94,7 @@ Vertical gaps per the skill's section rhythm table: 128/24/48 at ≥1024px,
 64/16/32 at ≤767px.
 
 The rule carries the mark (SP-11) at its right end: a 32px gap at ≥768px with
-the 16px mark centred in it, a 28px gap at ≤767px with the 12px mark centred
+the 16px mark centred in it, a 28px gap at ≤767px with the 14px mark centred
 in it. The gap is at the right end of the content width, so the rule reads as
 starting at the left margin and terminating in the mark. One mark per section
 rule, never two.
@@ -463,10 +463,17 @@ link and frame:
 ```html
 <svg class="mk-defs" aria-hidden="true" focusable="false"
      style="position:absolute;width:0;height:0;overflow:hidden">
-  <symbol id="mk" viewBox="0 0 16 16">
-    <path d="M1.5 11.5H7.5M4.5 8.5V14.5M4.5 11.5L12.5 3.5"
-          stroke="currentColor" fill="none"/>
-    <rect x="11" y="2" width="3" height="3" fill="currentColor"/>
+  <symbol id="mk" viewBox="0 0 24 24">
+    <g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="butt">
+      <line x1="9" y1="15" x2="9" y2="6.93"/>
+      <line x1="9" y1="15" x2="18.07" y2="15"/>
+      <line x1="9" y1="15" x2="5.9" y2="17.79"/>
+    </g>
+    <g fill="currentColor" stroke="none">
+      <polygon points="9,3.5 10.05,7.4 7.95,7.4"/>
+      <polygon points="21.5,15 17.6,16.05 17.6,13.95"/>
+      <polygon points="3.35,20.09 5.55,16.7 6.95,18.26"/>
+    </g>
   </symbol>
 </svg>
 ```
@@ -487,8 +494,8 @@ referred to in copy.
 | 2 | Section 02 rule, right end | 16px / 12px |
 | 3 | Section 03 rule, right end | 16px / 12px |
 | 4 | Section 04 rule, right end | 16px / 12px |
-| 5 | `ALL PROJECTS` link row rule, right end | 12px |
-| 6 | `FULL BIOGRAPHIES` link row rule, right end | 12px |
+| 5 | `ALL PROJECTS` link row rule, right end | 14px |
+| 6 | `FULL BIOGRAPHIES` link row rule, right end | 14px |
 | 7 | Footer top rule, **left** end | 24px / 16px |
 
 Nowhere else. Not on the hero, not in the index band, not on the plot's
@@ -502,16 +509,15 @@ caption bar stays text-only, because the plot already *is* the geometry the
 mark abbreviates and putting both in one frame explains the joke.
 
 **Link row change.** The `→` in `ALL PROJECTS →` and `FULL BIOGRAPHIES →` is
-deleted. The row's rule carries the mark at its right end instead, at 12px,
+deleted. The row's rule carries the mark at its right end instead, at 14px,
 `stroke: currentColor`, so it brightens from `--fg-muted` to `--fg-primary`
 with the row's existing 120ms colour transition. No `→` glyph remains anywhere
 on the site.
 
-**Favicon.** `favicon.svg` is the mark on a `#EDEBE6` ground, 16×16 viewBox
-scaled to a 32×32 box with 2px of padding, strokes in `#141210`. It replaces
-the nine-square grid previously specified. ≤600 bytes. At 16px the crosshair
-arms are 3px each side of centre and still resolve; the mark is never rendered
-below 12px anywhere else.
+**Favicon.** `favicon.svg` is the mark on a `#EDEBE6` ground, 24×24 viewBox
+scaled to a 32×32 box with 2px of padding, strokes and triangles in
+`#141210`. It replaces the nine-square grid previously specified. ≤700 bytes.
+The mark is never rendered below 14px anywhere else.
 
 ### SP-12 — Layering
 
@@ -1294,10 +1300,13 @@ The brief leaves these open. Each is a choice, with what it rejects.
     stricter and self-enforcing: a mark not centred in a gap in a rule is a
     defect, so the mark means "a rule terminates here" and nothing else. It is
     never explained, named, or captioned.
-18. **The mark is the crosshair, ray, and point, reduced from the plot.**
-    Rejected: an abstract shape with no source, which would be decoration; the
-    full array ring, which does not resolve at 12px; and reusing the plot's
-    `LP` cross alone, which reads as a plus sign and carries no direction.
+18. **The mark is a three-axis gizmo: Y up, X right, Z foreshortened toward
+    the viewer, each axis ending in a filled triangle.** Chosen by Andrew from
+    five candidates rendered at size. Rejected: a symmetric 120° triad, which
+    reads as a flat asterisk rather than three dimensions; an earlier
+    crosshair-and-ray mark, which read as a resize handle at small sizes; and
+    heavier triangles, which muddy below 16px. The Z axis is foreshortened,
+    which is what carries the dimensionality. Minimum size is 14px.
 19. **Layering is static, with two mechanics and no third.** Rejected: the
     mouse-tracked parallax that produces the effect on publicrecords.nyc,
     which the brief rules out in those words; opacity scrims over photographs,

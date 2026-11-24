@@ -284,10 +284,10 @@ hairline. A fourth value anywhere in these variables is a defect.
 
 ### Icon sizes
 
-Inline SVG marks render at 12px, 16px, or 24px square. Nothing else. 12px is
-not a spacing value; it is the existing length of a plate corner tick and the
-`label` cap height, and marks are sized to sit on a rule without outweighing
-the type beside it.
+Inline SVG marks render at 14px, 16px, or 24px square. Nothing else. Marks
+are sized to sit on a rule without outweighing the type beside it. 14px is
+the floor because below it the mark's three triangles collapse into its
+lines.
 
 ### Stacking order
 
@@ -421,23 +421,49 @@ no content depends on it.
 
 ### The mark
 
-One shape, reduced from the array plot: a listening-position crosshair, a
-hairline ray, and the array point the ray reaches. It is the site's signature
-and it is never captioned, labelled, named in alt text, or explained.
+Three axes from one origin, each ending in a filled triangle: Y up, X right,
+Z forward and down toward the viewer. The site's signature. It is never
+captioned, labelled, named in alt text, or explained.
 
-**Geometry.** `viewBox="0 0 16 16"`, `stroke-width: 1`,
-`shape-rendering: crispEdges`, `stroke: currentColor`, `fill: currentColor`.
+The Z axis is shorter than the other two. That foreshortening is what makes
+the mark read as three dimensions rather than as a flat asterisk, and it is
+not optional.
 
-| Element | Coordinates |
-|---|---|
-| Crosshair, horizontal arm | `(1.5, 11.5)` to `(7.5, 11.5)` |
-| Crosshair, vertical arm | `(4.5, 8.5)` to `(4.5, 14.5)` |
-| Ray | `(4.5, 11.5)` to `(12.5, 3.5)` |
-| Point | `rect x=11 y=2 width=3 height=3`, filled |
+**Geometry.** `viewBox="0 0 24 24"`, origin at `(9, 15)`, `stroke-width: 1`,
+`stroke: currentColor`, triangles `fill: currentColor`. No
+`vector-effect`, no `shape-rendering` override — the stroke scales with the
+mark so the proportion of line to triangle is constant at every size.
 
-Declared once per page as a `<symbol id="mk">` inside a zero-size inline
-`<svg>` at the top of `<body>`, then placed with `<use href="#mk">`. No image
-request, no second file, no icon font.
+| Axis | Bearing | Length | Triangle tip |
+|---|---|---|---|
+| Y | 90° | 11.5 | `(9, 3.5)` |
+| X | 0° | 12.5 | `(21.5, 15)` |
+| Z | 222° | 7.6 | `(3.35, 20.09)` |
+
+Each triangle is 3.9 long and 2.1 across its base. Each line stops 3.43 short
+of its tip so the stroke does not print through the triangle.
+
+```
+<symbol id="mk" viewBox="0 0 24 24">
+  <g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="butt">
+    <line x1="9" y1="15" x2="9" y2="6.93"/>
+    <line x1="9" y1="15" x2="18.07" y2="15"/>
+    <line x1="9" y1="15" x2="5.9" y2="17.79"/>
+  </g>
+  <g fill="currentColor" stroke="none">
+    <polygon points="9,3.5 10.05,7.4 7.95,7.4"/>
+    <polygon points="21.5,15 17.6,16.05 17.6,13.95"/>
+    <polygon points="3.35,20.09 5.55,16.7 6.95,18.26"/>
+  </g>
+</symbol>
+```
+
+Declared once per page as a `<symbol>` inside a zero-size inline `<svg>` at
+the top of `<body>`, then placed with `<use href="#mk">`. No image request,
+no second file, no icon font.
+
+**Minimum size is 14px.** Below that the three triangles collapse into the
+lines and the mark reads as a smudge. 12px is not a sanctioned size.
 
 **Where it is allowed.** The mark only ever sits in a gap in a 1px rule, at
 that rule's right end, vertically centred on the rule, with the gap 8px wider
@@ -445,8 +471,8 @@ than the mark on each side. Three placements, and no others:
 
 | Placement | Size ≥768 | Size ≤767 | Colour |
 |---|---|---|---|
-| Section rule, right end | 16px | 12px | `--fg-muted` |
-| Link row rule, right end | 12px | 12px | `currentColor`, so it brightens with the row |
+| Section rule, right end | 16px | 14px | `--fg-muted` |
+| Link row rule, right end | 14px | 14px | `currentColor`, so it brightens with the row |
 | Footer top rule, **left** end | 24px | 16px | `--fg-muted` |
 
 The footer instance is the single mirrored one and marks the end of the
