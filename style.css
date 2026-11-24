@@ -79,13 +79,8 @@ img, svg { max-width: 100%; display: block; }
 }
 .watermark svg { width: 100%; height: 100%; display: block; }
 .watermark line, .watermark polygon { vector-effect: non-scaling-stroke; }
-.wm-1 { top: 4.1%; right: -26vw; }
-.wm-2 { top: 13.6%; left: -30vw; }
-.wm-3 { top: 23.1%; right: -26vw; }
-.wm-4 { top: 32.6%; left: -30vw; }
-.wm-5 { top: 42.2%; right: -26vw; }
-.wm-6 { top: 51.7%; left: -30vw; }
-.wm-7 { top: 61.2%; right: -26vw; }
+.wm-1, .wm-3, .wm-5, .wm-7 { right: -26vw; }
+.wm-2, .wm-4, .wm-6 { left: -30vw; }
 @media (min-width: 768px) {
   .watermark { width: 50vw; }
   .wm-1, .wm-3, .wm-5, .wm-7 { right: -12vw; }
@@ -1127,4 +1122,36 @@ main > section, main > div.img-band { padding-inline: 0; }
 .js .g-diagram.drawn text { opacity: 1; }
 @media (prefers-reduced-motion: reduce) {
   .js .g-diagram .plate-corner, .js .g-diagram text { opacity: 1; }
+}
+
+.js .cred-register .cred-rule {
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+.js .cred-register.drawn .cred-rule {
+  transform: scaleX(1);
+  transition: transform 1400ms cubic-bezier(.65,0,.35,1);
+}
+.js .cred-register .cred-name,
+.js .cred-register .cred-axis-h { opacity: 0; }
+.js .cred-register.drawn .cred-name,
+.js .cred-register.drawn .cred-axis-h {
+  opacity: 1;
+  transition: opacity 640ms cubic-bezier(0.2,0,0,1);
+}
+.js .cred-register.drawn .cred-row:nth-child(1) .cred-rule, .js .cred-register.drawn .cred-row:nth-child(1) .cred-name { transition-delay: 0ms; }
+.js .cred-register.drawn .cred-row:nth-child(2) .cred-rule, .js .cred-register.drawn .cred-row:nth-child(2) .cred-name { transition-delay: 70ms; }
+.js .cred-register.drawn .cred-row:nth-child(3) .cred-rule, .js .cred-register.drawn .cred-row:nth-child(3) .cred-name { transition-delay: 140ms; }
+.js .cred-register.drawn .cred-row:nth-child(4) .cred-rule, .js .cred-register.drawn .cred-row:nth-child(4) .cred-name { transition-delay: 210ms; }
+.js .cred-register.drawn .cred-row:nth-child(5) .cred-rule, .js .cred-register.drawn .cred-row:nth-child(5) .cred-name { transition-delay: 280ms; }
+.js .cred-register.drawn .cred-row:nth-child(6) .cred-rule, .js .cred-register.drawn .cred-row:nth-child(6) .cred-name { transition-delay: 350ms; }
+.js .cred-register.drawn .cred-row:nth-child(7) .cred-rule, .js .cred-register.drawn .cred-row:nth-child(7) .cred-name { transition-delay: 420ms; }
+.js .cred-register.drawn .cred-row:nth-child(8) .cred-rule, .js .cred-register.drawn .cred-row:nth-child(8) .cred-name { transition-delay: 490ms; }
+.js .cred-register.drawn .cred-row:nth-child(9) .cred-rule, .js .cred-register.drawn .cred-row:nth-child(9) .cred-name { transition-delay: 560ms; }
+.js .cred-register.drawn .cred-row:nth-child(10) .cred-rule, .js .cred-register.drawn .cred-row:nth-child(10) .cred-name { transition-delay: 630ms; }
+.js .cred-register.drawn .cred-row:nth-child(11) .cred-rule, .js .cred-register.drawn .cred-row:nth-child(11) .cred-name { transition-delay: 700ms; }
+.js .cred-register.drawn .cred-row:nth-child(12) .cred-rule, .js .cred-register.drawn .cred-row:nth-child(12) .cred-name { transition-delay: 770ms; }
+@media (prefers-reduced-motion: reduce) {
+  .js .cred-register .cred-rule { transform: scaleX(1); }
+  .js .cred-register .cred-name, .js .cred-register .cred-axis-h { opacity: 1; }
 }
