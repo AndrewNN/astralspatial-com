@@ -33,6 +33,26 @@
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
 
+<div class="frame" aria-hidden="true">
+  <span class="fr fr-t"></span><span class="fr fr-r"></span>
+  <span class="fr fr-b"></span><span class="fr fr-l"></span>
+</div>
+
+<svg class="mk-defs" aria-hidden="true" focusable="false">
+  <symbol id="mk" viewBox="0 0 24 24">
+    <g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="butt">
+      <line x1="9" y1="15" x2="9" y2="6.93"/>
+      <line x1="9" y1="15" x2="18.07" y2="15"/>
+      <line x1="9" y1="15" x2="5.9" y2="17.79"/>
+    </g>
+    <g fill="currentColor" stroke="none">
+      <polygon points="9,3.5 10.05,7.4 7.95,7.4"/>
+      <polygon points="21.5,15 17.6,16.05 17.6,13.95"/>
+      <polygon points="3.35,20.09 5.55,16.7 6.95,18.26"/>
+    </g>
+  </symbol>
+</svg>
+
 <header class="site-header">
   <div class="shell header-inner">
     <p class="wordmark">Astral Spatial</p>
@@ -45,13 +65,9 @@
   </div>
 </header>
 
-<div class="rail" aria-hidden="true">
-  <span class="label">01 — What we do</span>
-</div>
-
 <main id="main">
 
-<section class="hero shell-section" data-rail="01 — What we do">
+<section class="hero shell-section">
   <div class="hero-grid">
     <div class="hero-text">
       <p class="label hero-eyebrow">( New York )</p>
@@ -181,9 +197,12 @@
   </ul>
 </nav>
 
-<section id="what-we-do" class="shell-section" data-rail="01 — What we do">
+<section id="what-we-do" class="shell-section">
   <div class="shell section-head">
-    <hr class="rule">
+    <div class="rule-wrap">
+      <hr class="rule">
+      <span class="mk-slot mk-slot-section" aria-hidden="true"><svg class="mk" aria-hidden="true" focusable="false"><use href="#mk"></use></svg></span>
+    </div>
     <span class="label">01 — What we do</span>
   </div>
   <div class="shell">
@@ -235,13 +254,16 @@
   </div>
 </section>
 
-<section id="selected-work" class="shell-section" data-rail="02 — Selected work">
+<section id="selected-work" class="shell-section">
   <div class="shell section-head">
-    <hr class="rule">
+    <div class="rule-wrap">
+      <hr class="rule">
+      <span class="mk-slot mk-slot-section" aria-hidden="true"><svg class="mk" aria-hidden="true" focusable="false"><use href="#mk"></use></svg></span>
+    </div>
     <span class="label">02 — Selected work</span>
   </div>
 
-  <div class="img-band">
+  <div class="img-band img-band-w01">
     <div class="plate">
       <span class="plate-corner tl" aria-hidden="true"></span>
       <span class="plate-corner tr" aria-hidden="true"></span>
@@ -249,22 +271,29 @@
       <span class="plate-corner br" aria-hidden="true"></span>
       <p class="label plate-label">Plate — installation, Reforesters Laboratory</p>
     </div>
-    <div class="band-caption">
+    <div class="band-caption band-caption-top">
       <span class="label cell cell-fig">Fig. 02</span>
       <span class="label cell cell-loc">Reforesters Laboratory, Williamsburg</span>
       <span class="label cell cell-ch">24.2 channel</span>
+    </div>
+    <div class="w01-knockout">
+      <span class="index record-index">W/01</span>
+      <h3 class="title record-title">Reforesters Laboratory</h3>
     </div>
   </div>
 
   <div class="shell">
     <ol class="records">
-      <li class="record">
-        <span class="index record-index">W/01</span>
+      <li class="record record-w01-body">
         <div class="record-main">
-          <h3 class="title record-title">Reforesters Laboratory</h3>
-          <p class="body record-body">Reforesters Laboratory is a 24.2 channel listening room and adaptogen cafe in Williamsburg. The scope was software, not hardware: Astral Spatial built the control logic and tuned the room already installed. The deliverable is a workflow. A visiting artist arrives with their own work and plays it in ambisonics without an engineer rebuilding the room for them.</p>
+          <p class="body record-body">24.2 channel listening room and adaptogen cafe, Williamsburg. Scope — software, not hardware: control logic and room tuning on an already-installed system. Deliverable — a workflow. A visiting artist arrives with their own work and plays it in ambisonics, no engineer rebuilding the room.</p>
         </div>
         <ul class="label record-meta">
+          <li class="record-credit">
+            <span>Credit — Astral Spatial</span>
+            <span>Year — 2025</span>
+            <span>Commission — Astral Spatial</span>
+          </li>
           <li>Scope — software</li>
           <li>Q-SYS programming</li>
           <li>Ambisonic templating</li>
@@ -277,20 +306,42 @@
       <li class="record">
         <span class="index record-index">W/02</span>
         <div class="record-main">
-          <h3 class="title record-title">Private Commission</h3>
-          <p class="body record-body">A custom speaker installation is underway, the first project where the physical build is Astral Spatial's own. The client cannot be named yet.</p>
-          <ul class="label record-meta">
+          <h3 class="title record-title">MoFE</h3>
+          <p class="body record-body">13.1 system, 2020–2022. System design — Andrew Fox; execution — Jupiter Sound; tuning and sound design — Chloe Alexandra Thompson. Predates Astral Spatial: two of the three principals doing, at scale, what the practice now sells.</p>
+        </div>
+        <ul class="label record-meta">
+          <li class="record-credit">
+            <span>Credit — System design, Andrew Fox; execution, Jupiter Sound; tuning and sound design, Chloe Alexandra Thompson</span>
+            <span>Year — 2020–2022</span>
+            <span>Commission — Predates Astral Spatial</span>
+          </li>
+          <li>Scope — system design, tuning, sound design</li>
+          <li>13.1 system</li>
+          <li>Status — complete</li>
+        </ul>
+      </li>
+      <li class="record record-w04">
+        <span class="index record-index">W/04</span>
+        <div class="record-main">
+          <h3 class="title record-title">Unnamed fabrication commission</h3>
+          <p class="body record-body">Custom speaker enclosure, in progress. First project where the physical build is Astral Spatial's own. Client not yet named.</p>
+        </div>
+        <div class="record-img-col">
+          <ul class="label record-meta record-meta-w04">
             <li>Status — in progress</li>
             <li>Client — unnamed</li>
           </ul>
-        </div>
-        <div class="record-img-col">
           <div class="plate plate-vert">
             <span class="plate-corner tl" aria-hidden="true"></span>
             <span class="plate-corner tr" aria-hidden="true"></span>
             <span class="plate-corner bl" aria-hidden="true"></span>
             <span class="plate-corner br" aria-hidden="true"></span>
             <p class="label plate-label">Plate — fabrication in progress</p>
+            <div class="w04-knockout">
+              <span>Credit — Astral Spatial</span>
+              <span>Year — 2026</span>
+              <span>Commission — Astral Spatial</span>
+            </div>
           </div>
         </div>
       </li>
@@ -298,13 +349,17 @@
   </div>
 
   <div class="shell link-row">
-    <a href="/work.html"><span class="label">All projects →</span></a>
+    <a href="/work.html"><span class="label">All projects</span></a>
+    <span class="mk-slot mk-slot-row" aria-hidden="true"><svg class="mk" aria-hidden="true" focusable="false"><use href="#mk"></use></svg></span>
   </div>
 </section>
 
-<section id="credits" class="shell-section" data-rail="03 — Credits">
+<section id="credits" class="shell-section">
   <div class="shell section-head">
-    <hr class="rule">
+    <div class="rule-wrap">
+      <hr class="rule">
+      <span class="mk-slot mk-slot-section" aria-hidden="true"><svg class="mk" aria-hidden="true" focusable="false"><use href="#mk"></use></svg></span>
+    </div>
     <span class="label">03 — Credits</span>
   </div>
   <div class="shell">
@@ -326,16 +381,19 @@
   </div>
 </section>
 
-<section id="who-we-are" class="shell-section" data-rail="04 — Who we are">
+<section id="who-we-are" class="shell-section">
   <div class="shell section-head">
-    <hr class="rule">
+    <div class="rule-wrap">
+      <hr class="rule">
+      <span class="mk-slot mk-slot-section" aria-hidden="true"><svg class="mk" aria-hidden="true" focusable="false"><use href="#mk"></use></svg></span>
+    </div>
     <span class="label">04 — Who we are</span>
   </div>
   <div class="shell">
     <ul class="people">
       <li class="person">
         <div class="person-inner">
-          <img class="person-photo" src="/img/ma.jpg" width="640" height="800" alt="Michael Amacio" loading="lazy" decoding="async">
+          <img class="person-photo" src="/img/ma.jpg" width="480" height="600" alt="Michael Amacio" loading="lazy" decoding="async">
           <div>
             <h3 class="title-s person-name">Michael Amacio</h3>
             <p class="body-s person-credit">Philip Glass Ensemble, <em>32 Sounds</em>, Richard Mosse.</p>
@@ -344,7 +402,7 @@
       </li>
       <li class="person">
         <div class="person-inner">
-          <img class="person-photo" src="/img/af.jpg" width="640" height="800" alt="Andrew Fox" loading="lazy" decoding="async">
+          <img class="person-photo" src="/img/af.jpg" width="480" height="600" alt="Andrew Fox" loading="lazy" decoding="async">
           <div>
             <h3 class="title-s person-name">Andrew Fox</h3>
             <p class="body-s person-credit">Dolby Atmos mixes for Sony, Domino, Mexican Summer; audio director at MoFE.</p>
@@ -353,7 +411,7 @@
       </li>
       <li class="person">
         <div class="person-inner">
-          <img class="person-photo" src="/img/chloe.jpg" width="640" height="800" alt="Chloe Alexandra Thompson" loading="lazy" decoding="async">
+          <img class="person-photo" src="/img/chloe.jpg" width="480" height="600" alt="Chloe Alexandra Thompson" loading="lazy" decoding="async">
           <div>
             <h3 class="title-s person-name">Chloe Alexandra Thompson</h3>
             <p class="body-s person-credit">32–148 speaker arrays, Max Certified Trainer, AES on wave field synthesis.</p>
@@ -363,11 +421,12 @@
     </ul>
   </div>
   <div class="shell link-row">
-    <a href="/studio.html"><span class="label">Full biographies →</span></a>
+    <a href="/studio.html"><span class="label">Full biographies</span></a>
+    <span class="mk-slot mk-slot-row" aria-hidden="true"><svg class="mk" aria-hidden="true" focusable="false"><use href="#mk"></use></svg></span>
   </div>
 </section>
 
-<section id="contact" class="contact-band" data-rail="05 — Contact">
+<section id="contact" class="contact-band">
   <div class="shell grid-12">
     <p class="label contact-label" style="grid-column:1/13">05 — Contact</p>
     <p class="contact-email"><a class="mail statement" href="#email-fallback" data-mail data-u="info" data-d="moc.laitapslartsa" aria-label="Email Astral Spatial at info at astralspatial dot com"><span>info</span><i class="at" aria-hidden="true"></i><span>astralspatial</span><i class="dot" aria-hidden="true"></i><span>com</span></a></p>
@@ -379,6 +438,7 @@
 </main>
 
 <footer class="site-footer">
+  <span class="mk-slot mk-slot-footer" aria-hidden="true"><svg class="mk" aria-hidden="true" focusable="false"><use href="#mk"></use></svg></span>
   <div class="shell">
     <nav aria-label="Footer">
       <ul class="footer-nav">

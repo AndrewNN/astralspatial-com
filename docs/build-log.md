@@ -104,3 +104,59 @@ stylesheet.
 Known open, left for the critic: three footer nav links are 22px tall against
 a 44px floor, and the right-edge rail is static because the homepage build
 capped JavaScript at the email rewrite.
+
+## 2026-11-23 — homepage — frame, mark, layering; rail withdrawn
+
+Rebuilt the existing light-theme homepage against the revised spec (SP-09
+through SP-12, the W/01–W/04 record numbering, SP-04 withdrawn). One commit
+covers all four jobs because the frame, mark, and layering CSS share the same
+stylesheet regions and the rail removal touches the same section markup the
+others rebuild; splitting them would leave intermediate commits with a
+half-built frame or a mark with nowhere to sit.
+
+- Removed `.rail`, the `<div class="rail">`, and every `data-rail` attribute.
+- Added the site frame (SP-10): four fixed `--ground` strips with an
+  interrupted inner hairline, `--line-strong` corner L-ticks, and five left-edge
+  measurement ticks at ≥1024px. Body padded by `--frame` to match.
+- Added the mark (SP-11) in its three sanctioned placements — seven instances
+  total (four section rules, two link rows, the footer, mirrored left). Picked
+  up the mark's mid-build redesign (three-axis gizmo, 24×24 viewBox, 14px
+  floor) from `docs/spec.md` and the skill, which changed on disk after this
+  run started; the crosshair-and-ray version never shipped. `favicon.svg`
+  regenerated as the new mark on `#EDEBE6`, 535 bytes. Deleted the `→` glyph
+  from both link rows.
+- Added layering (SP-12): L1 shifts the hero plot 48px left into the lead's
+  measure at ≥1440px only, crossing just its own frame hairline. L2 gives
+  section 02's image band a top-edge caption, a bottom `--ground` knockout
+  carrying the W/01 rule/index/title, and a corner knockout carrying W/04's
+  credit line over its image slot.
+- Section 02 now carries three work records (W/01 Reforesters, W/02 MoFE,
+  W/04 unnamed commission) each with the full SP-09 credit line, replacing
+  the old two-record "Private Commission" version. W/03 stays absent.
+- Rewrote all placeholder copy in section 02 to factual fragments per the
+  brief's nouns — no new marketing prose. Kept the headline, offering names,
+  client list, bios, and email untouched.
+- Fixed: footer nav links were 22px tall against the 44px tap-target floor
+  (anchor now gets an explicit 44px height instead of `height:100%` eaten by
+  the `<li>`'s own border); portrait `<img>` attributes said 640×800 against
+  actual 480×600 files.
+
+Verified at 390×844 and 1440×900 via Chrome DevTools Protocol with explicit
+`Emulation.setDeviceMetricsOverride` — the CLI `--screenshot --window-size`
+flags don't apply real layout metrics in this Chrome build, as noted in the
+prior entry. `document.documentElement.scrollWidth` matches viewport width at
+both sizes, footer nav links measure 44px, 7 `svg.mk` instances present, no
+404s on the regenerated favicon set.
+
+Closes the critique-log fixes for the 22px footer links and the rail (if
+flagged there); the credit-log's own most recent verdict should be checked by
+the critic run that follows this one.
+
+Not implemented as specified, noted for the critic: the W/01 and W/04
+knockouts approximate the spec's exact column math (8/12 columns, 32px/24px
+corner overlap) with simplified `calc()` bleeds rather than a literal 12-column
+overlay on the full-bleed image band; visually consistent with the intent but
+not pixel-verified against the spec's stated measurements. `style.css` is
+23.4KB against the spec's stated 16KB per-page budget — total page weight is
+still well inside the 500KB floor and the largest single asset is nowhere
+near 150KB, but the per-file number is over.
