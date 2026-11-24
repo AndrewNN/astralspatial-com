@@ -334,6 +334,7 @@ img, svg { max-width: 100%; display: block; }
 
 .hero-cta .cta-jump, .contact-email .cta-start {
   position: relative;
+  text-transform: uppercase;
   display: inline-block;
   padding: var(--s-2) var(--s-3);
   border: 0;
@@ -518,14 +519,24 @@ img, svg { max-width: 100%; display: block; }
 }
 
 .hero {
-  padding-top: var(--s-7);
+  padding-top: var(--s-5);
   padding-bottom: 0;
+}
+@media (min-width: 1024px) {
+  .hero { padding-top: var(--s-7); }
 }
 @media (min-width: 1024px) {
   .hero { padding-top: var(--s-7); padding-bottom: var(--s-7); }
 }
 .hero-grid {
-  display: block;
+  display: flex;
+  flex-direction: column;
+}
+.hero-plot { order: 1; margin-top: 0; margin-bottom: var(--s-6); }
+.hero-text { order: 2; }
+@media (min-width: 1024px) {
+  .hero-plot { order: 0; margin-bottom: 0; }
+  .hero-text { order: 0; }
 }
 @media (min-width: 1024px) {
   .hero-grid { display: grid; grid-template-columns: repeat(12, 1fr); column-gap: 24px; }
