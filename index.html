@@ -146,6 +146,7 @@
       <span class="nav-divider" aria-hidden="true"></span>
       <a class="cta-jump nav-mail label" href="#contact">Contact</a>
     </nav>
+      <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false">Dark</button>
   </div>
 </header>
 
@@ -523,8 +524,11 @@
   </div>
 
   <div class="shell link-row">
+    <div class="rule-wrap">
+      <hr class="rule">
+      <span class="mk-slot mk-slot-row" aria-hidden="true"><svg class="mk" aria-hidden="true" focusable="false"><use href="#mk"></use></svg></span>
+    </div>
     <a href="/work.html"><span class="label">All projects</span></a>
-    <span class="mk-slot mk-slot-row" aria-hidden="true"><svg class="mk" aria-hidden="true" focusable="false"><use href="#mk"></use></svg></span>
   </div>
 </section>
 
@@ -609,10 +613,6 @@
     </ul>
     </div>
   </div>
-  <div class="shell link-row">
-    <a href="https://astralsound.nyc" rel="noopener"><span class="label">Full biographies</span></a>
-    <span class="mk-slot mk-slot-row" aria-hidden="true"><svg class="mk" aria-hidden="true" focusable="false"><use href="#mk"></use></svg></span>
-  </div>
 </section>
 
 <section id="contact" class="contact-band">
@@ -655,6 +655,19 @@
 <script>
 (function(){
 document.documentElement.className+=' js';
+var R=document.documentElement,TK='as-theme';
+try{if(localStorage.getItem(TK)==='dark')R.setAttribute('data-theme','dark');}catch(e){}
+var tb=document.querySelector('[data-theme-toggle]');
+if(tb){
+  var sync=function(){var d=R.getAttribute('data-theme')==='dark';
+    tb.textContent=d?'Light':'Dark';tb.setAttribute('aria-pressed',d?'true':'false');};
+  sync();
+  tb.addEventListener('click',function(){
+    var d=R.getAttribute('data-theme')==='dark';
+    if(d)R.removeAttribute('data-theme');else R.setAttribute('data-theme','dark');
+    try{localStorage.setItem(TK,d?'light':'dark');}catch(e){}
+    sync();});
+}
 var m=document.querySelector('.cta-start');
 if(m){var h=m.href,j=document.querySelectorAll('.cta-jump');for(var i=0;i<j.length;i++)j[i].href=h;}
 var RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -664,7 +677,7 @@ function armFig(f){var L=f.querySelectorAll('line');for(var i=0;i<L.length;i++){
   var n=L[i].getTotalLength?L[i].getTotalLength():0;if(!n)continue;
   L[i].style.strokeDasharray=n;L[i].style.strokeDashoffset=n;}}
 function drawFig(f){var L=f.querySelectorAll('line');for(var i=0;i<L.length;i++){
-  L[i].style.transition='stroke-dashoffset 1400ms cubic-bezier(.65,0,.35,1) '+(i*100)+'ms';
+  L[i].style.transition='stroke-dashoffset 2100ms cubic-bezier(.65,0,.35,1) '+(i*150)+'ms';
   L[i].style.strokeDashoffset=0;}
   f.classList.add('drawn');}
 if(!RM&&'IntersectionObserver' in window){

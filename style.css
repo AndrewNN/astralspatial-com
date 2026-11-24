@@ -399,8 +399,9 @@ img, svg { max-width: 100%; display: block; }
   .mk-slot-section .mk { width: 16px; height: 16px; }
 }
 
-.link-row { position: relative; margin-top: var(--s-4); }
-.mk-slot-row { right: 0; top: 0; width: 30px; }
+.link-row { margin-top: var(--s-4); }
+.link-row .rule-wrap { margin-bottom: var(--s-2); }
+.mk-slot-row { right: 0; width: 30px; }
 .link-row a:hover ~ .mk-slot-row .mk,
 .link-row a:focus-visible ~ .mk-slot-row .mk { color: var(--fg-primary); }
 .mk-slot-row .mk { transition: color var(--dur-fast) var(--ease-out); }
@@ -1137,28 +1138,64 @@ main > section, main > div.img-band { padding-inline: 0; }
 }
 .js .cred-register.drawn .cred-rule {
   transform: scaleX(1);
-  transition: transform 1400ms cubic-bezier(.65,0,.35,1);
+  transition: transform 2100ms cubic-bezier(.65,0,.35,1);
 }
 .js .cred-register .cred-name,
 .js .cred-register .cred-axis-h { opacity: 0; }
 .js .cred-register.drawn .cred-name,
 .js .cred-register.drawn .cred-axis-h {
   opacity: 1;
-  transition: opacity 640ms cubic-bezier(0.2,0,0,1);
+  transition: opacity 960ms cubic-bezier(0.2,0,0,1);
 }
 .js .cred-register.drawn .cred-row:nth-child(1) .cred-rule, .js .cred-register.drawn .cred-row:nth-child(1) .cred-name { transition-delay: 0ms; }
-.js .cred-register.drawn .cred-row:nth-child(2) .cred-rule, .js .cred-register.drawn .cred-row:nth-child(2) .cred-name { transition-delay: 70ms; }
-.js .cred-register.drawn .cred-row:nth-child(3) .cred-rule, .js .cred-register.drawn .cred-row:nth-child(3) .cred-name { transition-delay: 140ms; }
-.js .cred-register.drawn .cred-row:nth-child(4) .cred-rule, .js .cred-register.drawn .cred-row:nth-child(4) .cred-name { transition-delay: 210ms; }
-.js .cred-register.drawn .cred-row:nth-child(5) .cred-rule, .js .cred-register.drawn .cred-row:nth-child(5) .cred-name { transition-delay: 280ms; }
-.js .cred-register.drawn .cred-row:nth-child(6) .cred-rule, .js .cred-register.drawn .cred-row:nth-child(6) .cred-name { transition-delay: 350ms; }
-.js .cred-register.drawn .cred-row:nth-child(7) .cred-rule, .js .cred-register.drawn .cred-row:nth-child(7) .cred-name { transition-delay: 420ms; }
-.js .cred-register.drawn .cred-row:nth-child(8) .cred-rule, .js .cred-register.drawn .cred-row:nth-child(8) .cred-name { transition-delay: 490ms; }
-.js .cred-register.drawn .cred-row:nth-child(9) .cred-rule, .js .cred-register.drawn .cred-row:nth-child(9) .cred-name { transition-delay: 560ms; }
-.js .cred-register.drawn .cred-row:nth-child(10) .cred-rule, .js .cred-register.drawn .cred-row:nth-child(10) .cred-name { transition-delay: 630ms; }
-.js .cred-register.drawn .cred-row:nth-child(11) .cred-rule, .js .cred-register.drawn .cred-row:nth-child(11) .cred-name { transition-delay: 700ms; }
-.js .cred-register.drawn .cred-row:nth-child(12) .cred-rule, .js .cred-register.drawn .cred-row:nth-child(12) .cred-name { transition-delay: 770ms; }
+.js .cred-register.drawn .cred-row:nth-child(2) .cred-rule, .js .cred-register.drawn .cred-row:nth-child(2) .cred-name { transition-delay: 105ms; }
+.js .cred-register.drawn .cred-row:nth-child(3) .cred-rule, .js .cred-register.drawn .cred-row:nth-child(3) .cred-name { transition-delay: 210ms; }
+.js .cred-register.drawn .cred-row:nth-child(4) .cred-rule, .js .cred-register.drawn .cred-row:nth-child(4) .cred-name { transition-delay: 315ms; }
+.js .cred-register.drawn .cred-row:nth-child(5) .cred-rule, .js .cred-register.drawn .cred-row:nth-child(5) .cred-name { transition-delay: 420ms; }
+.js .cred-register.drawn .cred-row:nth-child(6) .cred-rule, .js .cred-register.drawn .cred-row:nth-child(6) .cred-name { transition-delay: 525ms; }
+.js .cred-register.drawn .cred-row:nth-child(7) .cred-rule, .js .cred-register.drawn .cred-row:nth-child(7) .cred-name { transition-delay: 630ms; }
+.js .cred-register.drawn .cred-row:nth-child(8) .cred-rule, .js .cred-register.drawn .cred-row:nth-child(8) .cred-name { transition-delay: 735ms; }
+.js .cred-register.drawn .cred-row:nth-child(9) .cred-rule, .js .cred-register.drawn .cred-row:nth-child(9) .cred-name { transition-delay: 840ms; }
+.js .cred-register.drawn .cred-row:nth-child(10) .cred-rule, .js .cred-register.drawn .cred-row:nth-child(10) .cred-name { transition-delay: 945ms; }
+.js .cred-register.drawn .cred-row:nth-child(11) .cred-rule, .js .cred-register.drawn .cred-row:nth-child(11) .cred-name { transition-delay: 1050ms; }
+.js .cred-register.drawn .cred-row:nth-child(12) .cred-rule, .js .cred-register.drawn .cred-row:nth-child(12) .cred-name { transition-delay: 1155ms; }
 @media (prefers-reduced-motion: reduce) {
   .js .cred-register .cred-rule { transform: scaleX(1); }
   .js .cred-register .cred-name, .js .cred-register .cred-axis-h { opacity: 1; }
 }
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --ground: #141210;
+  --band: #1C1A17;
+  --fg-primary: #EDEBE6;
+  --fg-body: #D6D3CC;
+  --fg-muted: #9A948A;
+  --line: #C9C4BB;
+  --line-detail: #9A948A;
+  --line-strong: #EDEBE6;
+  --watermark: #22201C;
+  --frame-fill: transparent;
+}
+@media (min-width: 768px) {
+  :root[data-theme="dark"] { --frame-fill: var(--ground); }
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 var(--s-1);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  color: var(--fg-muted);
+  font-family: var(--font-grotesque);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+.theme-toggle:hover, .theme-toggle:focus-visible { color: var(--fg-primary); }
