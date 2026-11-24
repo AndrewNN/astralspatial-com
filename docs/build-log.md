@@ -249,3 +249,95 @@ treatment is kept" branch was not taken (see fix 4–7 above) — `W/04`'s credi
 no longer overlaps its image slot per SP-12 L2, it sits above it in normal
 flow. This is a spec deviation the critic should weigh against the
 alternative the critique itself offered.
+
+---
+
+## 2026-11-24 — home — revision against the rewritten spec
+
+Seven jobs, one commit each, against the 2026-11-24 spec.md/SKILL.md
+revision (JS budget, SP-05, SP-07/08, SP-12 rewrite, SP-13, SP-14, SP-15,
+SP-16).
+
+1. **Knockout withdrawn.** Deleted `.w04-knockout`/`.w01-fill`/`.band-caption`.
+   Section 02's image band is now a `.mat-plate` component: a `--band` mat
+   with the caption in a 24/16px top strip, the index and title in a
+   96/48px bottom strip, and the record's own top rule painted after the
+   title in document order so it draws over the glyphs (L1) instead of
+   punching a hole behind them. `W/04`'s credit now reuses the same
+   `.record-credit` pattern as `W/01`/`W/02` — border-bottom rule, 16px
+   above and below, first child of the metadata column — instead of a
+   separately positioned block.
+2. **SP-05.** All four contact instances (header, hero, contact band,
+   footer) reduced to visible text with no `aria-label`. Only the contact
+   band's link (`.cta-start`) carries the real percent-encoded `mailto:`;
+   the other three (`.cta-jump`) are `#contact` anchors the script
+   repoints on load. Deleted the mail/at/dot span assembly, the
+   reversed-domain string, `id="email-fallback"`. Added the G-04 aperture:
+   two full-bleed hairlines flanking the contact-band link.
+3. **SP-13.** Five `<g class="obj">` groups added to the array plot's SVG,
+   each with its authored rest `transform` as a literal attribute, placed
+   after the points/signal line and before the plot numerals so type
+   always draws over an object. Ring radius and numeral size are CSS
+   properties on `--obj-r`/`--obj-fs`.
+4. **SP-14.** Added the rAF loop and the scroll scalar
+   `k = 1.30 - 0.60*clamp(p,0,1)` driving each object's `b·k` term. Script
+   totals 1305 bytes / 39 lines against the 2560-byte / 90-line budget, one
+   passive scroll listener (body is one assignment), one resize listener,
+   one visibilitychange listener, one rAF loop, zero
+   `getBoundingClientRect` calls inside the loop.
+5. **SP-15.** Added G-01 (three offering diagrams — source fan, signal
+   scale bar, enclosure elevation with dimension lines), G-02 (credits
+   register: axis with three category ticks, twelve rows each running a
+   hairline to a point on the axis, replacing the three-column list), G-03
+   (one shared datum rule under the three portraits). G-04 shipped in the
+   SP-05 commit.
+6. **SP-16.** Converted the 001/002/003 offering descriptions and all
+   three `W/` record descriptions to `<block> goes here lorem ipsum`
+   filler carrying `data-placeholder`. Settled copy (h1, offering names,
+   credit names, bios, labels, hero lead, next-step line, contact
+   sentence, audience line, all SP-09 values) left untouched. Added
+   `text-wrap: balance` to `.title` to match `.statement`.
+7. **W/03.** Confirmed absent from markup, comments, and copy — no change
+   needed, no commit made for this job alone.
+
+One follow-up commit fixed a bug found during verification: `font-size:
+var(--obj-fs)` is invalid CSS (unitless length) and silently fell back to
+16px at every breakpoint; changed to `calc(var(--obj-fs) * 1px)`, which CSS
+resolves as 1 SVG user unit, restoring the per-breakpoint scaling SP-13
+requires. Also retuned the W/01 crossing rule's offset (40/20px → 44/12px)
+so it visibly crosses the lower third of the title's cap height rather than
+landing in the gap below it.
+
+Verified with Playwright (1.54.0, chromium) at 390×844 and 1440×900:
+`document.scrollWidth` equals `clientWidth` at both widths (no horizontal
+scroll); the five sound objects render and move via the rAF loop with
+JavaScript on; with JavaScript disabled, all five objects are present at
+their authored rest `transform`s and `.cta-start` resolves to the real
+`mailto:` href; under `prefers-reduced-motion: reduce` an object's
+`transform` is identical before and after a wait, confirming the loop never
+starts. `tidy -errors` reports zero errors (only pre-existing `focusable`
+and empty-`<span>` warnings). `gitleaks git --redact` found no leaks.
+`grep -ric 'info@astralspatial' index.html` is 0; `grep -c 'mailto:'` is 1.
+Page weight: `index.html` 31.7KB, `style.css` 25.7KB, both JPEGs and both
+WOFF2 files 110.7KB combined — 168KB total, no change to image or font
+assets this run.
+
+Not implemented as written, noted rather than silently dropped:
+
+- G-01's bold-ray dashed ticks (the 8-unit ticks at 16-unit pitch on the
+  three emphasised rays in `FIG. 05`) were simplified to a plain colour
+  change; the dashes were not added.
+- G-02's axis tick percentages (50/72/94 at ≥1024px, 46/70/94 at ≤767px)
+  are applied to each row's rule as a fraction of the row's own flex
+  track, not measured from the register's left edge as the spec's
+  absolute percentages assume; visually close at both scored widths but
+  not pixel-verified against the spec's exact numbers.
+- SP-13's "begin travelling at 2040ms" offset is not synchronized
+  separately from the draw-on; the rAF loop computes position from
+  `performance.now()` from page load, so objects are already moving
+  during their 1700–2340ms fade-in. They are invisible until the fade
+  completes, so this has no visible effect, but it is a simplification
+  against the literal timing in the spec.
+- SP-12's L1 hairline-over-text census (≥1440px hero vertical) was not
+  re-verified this run; the hero layout itself was not touched in this
+  revision.
