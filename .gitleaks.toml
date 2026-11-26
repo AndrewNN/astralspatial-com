@@ -1,0 +1,33 @@
+# Content identifiers, not credentials.
+#
+# Site text is edited in a Google Sheet and substituted into elements marked
+# with data-key. The attribute name contains "key" and its values carry
+# enough entropy that gitleaks' generic-api-key rule reports every one of
+# them, which would block every push on every keyed site.
+#
+# The allowlist below is deliberately narrow:
+#
+#   - it applies only to .html files
+#   - it matches only a data-key attribute whose value is shaped like a
+#     content key: lowercase, dotted or hyphenated, no slashes, no padding
+#   - every other rule, path and file type is untouched
+#
+# Verified 2026-11-26: with this config in place, a private key block is still
+# detected. The one thing it masks is a secret sharing a line with a data-key
+# attribute inside an HTML file. Keep secrets out of markup, which is the rule
+# anyway.
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "data-key attributes are content keys for site-content"
+# Matched against the whole line: the rule fires on the attribute's value, and
+# the value alone carries no sign of what it is.
+regexTarget = "line"
+paths = [
+  '''\.html$''',
+]
+regexes = [
+  '''data-key\s*=\s*"[a-z][a-z0-9]*(?:[.-][a-z0-9]+)*"''',
+]
