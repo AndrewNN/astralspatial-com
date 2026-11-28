@@ -26,3 +26,4 @@ docs/.needs-critique
 docs/.production-approved
 docs/screenshots/
 docs/.staging-auth
+.staging-build/
